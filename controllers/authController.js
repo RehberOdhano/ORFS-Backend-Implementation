@@ -44,8 +44,12 @@ exports.login = async(req, res) => {
     try {
         User.findOne({ email: req.body.email }, (err, user) => {
             if (user && bcrypt.compareSync(req.body.password, user.password)) {
+                payload = {
+                    role: user.role,
+                    _id: user.id
+                }
                 let successObject = {
-                    token: jwt.sign({ _id: user._id }, process.env.JWTSECRET, { expiresIn: '60m' }),
+                    token: jwt.sign(payload, process.env.JWTSECRET, { expiresIn: '1d' }),
                     user
                 }
                 res.json(successObject)
