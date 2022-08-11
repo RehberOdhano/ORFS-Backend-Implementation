@@ -1,104 +1,222 @@
-const SP = require('../models/serviceProvider');
-const Complaint = require('../models/complaint');
-const mongoose = require('mongoose');
+const SP = require("../models/serviceProvider");
+const Complaint = require("../models/complaint");
+const mongoose = require("mongoose");
 
 exports.getSpecificSP = (req, res) => {
-    try {
-        const user_id = mongoose.Types.ObjectId(req.params.id);
-        SP.findOne({ user_id: user_id }).exec((err, sp) => {
-            if (err) res.send("NOT ABLE TO FIND THE SERVICEPROVIDER!");
-            else res.send(sp);
+  try {
+    const id = req.params.id;
+    SP.findOne({ user_id: id }).exec((err, sp) => {
+      if (err) {
+        res.send({
+          status: 404,
+          success: false,
+          message: err.message,
         });
-    } catch (err) {
-        console.log(err);
-    }
-}
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: "SERVICEPROVIDER IS SUCCESSFULLY FETCHED!",
+          serviceprovider: sp,
+        });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR: ", err.message);
+  }
+};
 
 exports.getAssignedComplaints = (req, res) => {
-    try {
-        const sp_id = mongoose.Types.ObjectId(req.params.id);
-        SP.find({ _id: sp_id }).select('assignedComplaints').exec((err, result) => {
-            if (err) res.send("NOT ABLE TO GET THE ASSIGNED COMPLAINTS!");
-            else {
-                const complaint_ids = result[0].assignedComplaints;
-                Complaint.find({ _id: { "$in": complaint_ids } }).exec((err, result) => {
-                    if (err) res.send("NOT ABLE TO FIND ANY COMPLAINT!");
-                    else res.send(result);
+  try {
+    const id = req.params.id;
+    SP.find({ _id: id })
+      .select("assignedComplaints")
+      .exec((err, result) => {
+        if (err) {
+          res.send({
+            status: 404,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          const complaintIDs = result[0].assignedComplaints;
+          Complaint.find({ _id: { $in: complaintIDs } }).exec(
+            (err, complaints) => {
+              if (err) {
+                res.send({
+                  status: 404,
+                  success: false,
+                  message: err.message,
                 });
+              } else {
+                res.send({
+                  status: 200,
+                  success: true,
+                  message: "COMPLAINTS ARE SUCCESSFULLY FETCHED!",
+                  complaints: complaints,
+                });
+              }
             }
-        });
-
-    } catch (err) {
-        console.log(err);
-    }
-}
+          );
+        }
+      });
+  } catch (err) {
+    console.log("ERROR: ", err.message);
+  }
+};
 
 exports.updateComplaint = (req, res) => {
-    try {
-        const status = req.body.status;
-        const workUpdate = req.body.workUpdate;
-        const id = mongoose.Types.ObjectId(req.params.id);
-        Complaint.updateOne({ _id: id }, { status: status, workUpdate: workUpdate }).exec((err, complaint) => {
-            if (err) res.send("SERVICEPROVIDER ISN'T ABLE TO UPDATE THE COMPLAINT!");
-            else res.send("SERVICEPROVIDER HAS SUCCESSFULLY UPDATED THE COMPLAINT!");
+  try {
+    const status = req.body.status;
+    const workUpdate = req.body.workUpdate;
+    const id = req.params.id;
+    Complaint.updateOne(
+      { _id: id },
+      { status: status, workUpdate: workUpdate }
+    ).exec((err, complaint) => {
+      if (err) {
+        res.send({
+          status: 404,
+          success: false,
+          message: err.message,
         });
-    } catch (err) {
-        console.log(err);
-    }
-}
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: "COMPLAINT IS SUCCESSFULLY UPDATED!",
+        });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR: ", err.message);
+  }
+};
 
-exports.resolveComplaint = async(req, res) => {
-    try {
-        const sp_id = req.params.sp_id;
-        const c_id = req.params.c_id;
-        const status = req.body.status;
-        const query = { _id: sp_id, assignedComplaints: { c_id: c_id } };
-        await SP.findOneAndUpdate(query, { status: status }, async(err, result) => {
-            if (err) res.send("SA ISN'T ABLE TO UPDATE THE COMPLAINT!");
-            else if (result == null) res.send("COMPLAINT DOES NOT EXIST!");
-            else {
-                await Complaint.findOneAndUpdate({ _id: c_id }, { status: status }, (err, result) => {
-                    if (err) res.send("NOT ABLE TO UPDATE THE COMPLAINT!");
-                    else res.send("COMPALINT IS SUCCESSFULLY UPDATED!");
-                });
-            }
+exports.resolveComplaint = (req, res) => {
+  try {
+    const spID = req.params.spID;
+    const complaintID = req.params.ID;
+    const status = req.body.status;
+    const query = { _id: spID, assignedComplaints: { _id: complaintID } };
+    SP.findOneAndUpdate(query, { status: status }).exec((err, sp) => {
+      if (err) {
+        res.send({
+          status: 404,
+          success: false,
+          message: err.message,
         });
-    } catch (err) {
-        console.log(err);
-    }
-}
+      } else {
+        Complaint.findOneAndUpdate(
+          { _id: complaintID },
+          { status: status }
+        ).exec((err, complaint) => {
+          if (err) {
+            res.send({
+              status: 404,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            res.send({
+              status: 200,
+              success: true,
+              message: "COMPLAINT IS SUCCESSFULLY UPDATED!",
+            });
+          }
+        });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR: ", err.message);
+  }
+};
 
 exports.transferComplaint = (req, res) => {
-    try {
-        const complaint_id = mongoose.Types.ObjectId(req.params.id);
-        const sp_1 = mongoose.Types.ObjectId(req.body.id_1);
-        const sp_2 = mongoose.Types.ObjectId(req.body.id_2);
-        SP.findOne({ _id: sp_2 }).exec((err, sp) => {
-            if (err) res.send("NOT ABLE TO FIND THE SERVICEPROVIDER!");
-            else if (sp == null) res.send("SP_2 DOES NOT EXIST! NOT ABLE TO TRANSFER THE COMPLAINT!");
-            else {
-                SP.updateOne({ _id: sp_1 }, { $pull: { assignedComplaints: { _id: complaint_id } } }).exec((err, sp) => {
-                    if (err) res.send("NOT ABLE TO UPDATE THE SP_1!");
-                    else {
-                        SP.updateOne({ _id: sp_2 }, { $push: { assignedComplaints: { _id: complaint_id } } }).exec((err, sp) => {
-                            if (err) res.send("NOT ABLE TO UPDATE THE SP_2!");
-                            else {
-                                Complaint.updateOne({ _id: complaint_id }, { $pull: { assignedTo: { _id: sp_1 } } }).exec((err, result) => {
-                                    if (err) res.send("NOT ABLE TO REMOVE SP_1 FROM ASSIGNEDTO ARRAY!");
-                                    else {
-                                        Complaint.updateOne({ _id: complaint_id }, { $push: { assignedTo: { _id: sp_2 } } }).exec((err, result) => {
-                                            if (err) res.send("NOT ABLE TO ADD SP_2 IN ASSIGNEDTO ARRAY!1");
-                                            else res.send("COMPLAINT IS SUCCESSFULLY TRANSFERRED!");
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
+  try {
+    const complaintID = req.params.id;
+    const sp1_ID = mongoose.Types.ObjectId(req.body.sp1_ID);
+    const sp2_ID = mongoose.Types.ObjectId(req.body.sp2_ID);
+
+    SP.findOne({ _id: sp2_ID }).exec((err, sp) => {
+      if (err) {
+        res.send({
+          status: 404,
+          success: false,
+          message: err.message,
         });
-    } catch (err) {
-        console.log(err);
-    }
-}
+      } else {
+        SP.updateOne(
+          { _id: sp1_ID },
+          { $pull: { assignedComplaints: { _id: complaintID } } }
+        ).exec((err, sp) => {
+          if (err) {
+            res.send({
+              status: 404,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            SP.updateOne(
+              { _id: sp2_ID },
+              { $push: { assignedComplaints: { _id: complaintID } } }
+            ).exec((err, sp) => {
+              if (err) {
+                res.send({
+                  status: 404,
+                  success: false,
+                  message: err.message,
+                });
+              } else {
+                Complaint.updateOne(
+                  { _id: complaintID },
+                  { $pull: { assignedTo: { _id: sp1_ID } } }
+                ).exec((err, complaint) => {
+                  if (err) {
+                    res.send({
+                      status: 404,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    Complaint.updateOne(
+                      { _id: complaintID },
+                      { $push: { assignedTo: { _id: sp2_ID } } }
+                    ).exec((err, complaint) => {
+                      if (err) {
+                        res.send({
+                          status: 404,
+                          success: false,
+                          message: err.message,
+                        });
+                      } else {
+                        const userID = sp.user_id;
+                        User.findOne({ _id: userID }, (err, user) => {
+                          if (err) {
+                            res.send({
+                              status: 404,
+                              success: false,
+                              message: err.message,
+                            });
+                          } else {
+                            res.send({
+                              status: 200,
+                              success: true,
+                              message: `COMPLAINT IS SUCCESSFULLY TRANSFERRED TO ${user.name}!`,
+                            });
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR: ", err.message);
+  }
+};

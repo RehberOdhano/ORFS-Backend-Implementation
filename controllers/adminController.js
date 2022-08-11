@@ -86,7 +86,7 @@ exports.addSpecificUser = (req, res) => {
             password: bcrypt.hashSync("user", salt),
             role: role,
             sign_type: "PLATFORM",
-            company_id: mongoose.Types.ObjectId(req.params.id),
+            company_id: req.params.id,
           },
           (err, user) => {
             if (err) {
@@ -112,7 +112,7 @@ exports.addSpecificUser = (req, res) => {
                     Complainee.create(
                       {
                         _id: user_id,
-                        company_id: user.company_id,
+                        company_id: req.params.id,
                       },
                       (err, user) => {
                         if (err) {
@@ -135,7 +135,7 @@ exports.addSpecificUser = (req, res) => {
                     SP.create(
                       {
                         user_id: user_id,
-                        company_id: user.company_id,
+                        company_id: req.params.id,
                         averageRating: 0,
                       },
                       (err, user) => {
