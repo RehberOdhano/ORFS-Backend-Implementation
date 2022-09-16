@@ -13,6 +13,7 @@ const superadmin_routes = require("./routes/superadmin-routes");
 const user_routes = require("./routes/user-routes");
 const service_provider_routes = require("./routes/service-provider-routes");
 const analytics_routes = require("./routes/analytics-routes");
+const misc_routes = require("./routes/misc-routes");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(passport.initialize());
+
 app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use("/", auth_routes);
@@ -29,5 +31,6 @@ app.use("/superadmin", superadmin_routes);
 app.use("/user", user_routes);
 app.use("/serviceprovider", service_provider_routes);
 app.use("/analytics", analytics_routes);
+app.use("/api", misc_routes);
 
 module.exports = app;

@@ -4,7 +4,6 @@ const customerSchema = mongoose.Schema(
   {
     email: {
       type: String,
-      // index: false,
       unique: true,
       required: [true, "EMAIL IS REQUIRED!"],
       match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
@@ -15,6 +14,12 @@ const customerSchema = mongoose.Schema(
     },
     status: {
       type: String,
+      required: [true, "STATUS IS REQUIRED!"],
+      enum: ["ACTIVE", "ONBOARDING", "RENEWAL", "INACTIVE"],
+    },
+    pfp: {
+      data: Buffer,
+      contentType: String,
     },
     subscription_plan: {
       type: mongoose.Schema.Types.ObjectId,
@@ -34,6 +39,8 @@ const customerSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Addon",
+        required: [true, "ADDONS ARE REQUIRED!"],
+        default: [],
       },
     ],
     departments: [

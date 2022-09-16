@@ -62,6 +62,7 @@ exports.addCustomer = (req, res) => {
           {
             title: req.body.title,
             email: req.body.email,
+            status: req.body.status,
           },
           (err, customer) => {
             if (err) {

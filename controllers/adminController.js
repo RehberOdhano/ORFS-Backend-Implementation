@@ -1188,7 +1188,6 @@ exports.deleteCategory = (req, res) => {
 */
 
 exports.parseCSVFile = (req, res) => {
-  console.log(req.file);
   var records = [];
   try {
     fs.createReadStream(
@@ -1198,8 +1197,6 @@ exports.parseCSVFile = (req, res) => {
       .on("error", (err) => console.log(err))
       .on("data", (row) => records.push(row))
       .on("end", (rowCount) => {
-        console.log(rowCount);
-        console.log(records[0]);
         var serviceProviders = [],
           complainees = [];
         records.forEach((record) => {
@@ -1207,7 +1204,6 @@ exports.parseCSVFile = (req, res) => {
             ? serviceProviders.push(record)
             : complainees.push(record);
         });
-        console.log(serviceProviders, complainees);
 
         // Complainee.insertMany(complainees, (err, docs) => {
         //   if (!err) {
