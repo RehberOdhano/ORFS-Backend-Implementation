@@ -1,6 +1,5 @@
 // PACKAGES
 const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
 
 // MODELS
 const Customer = require("../models/customer");
@@ -31,7 +30,7 @@ exports.getAllCustomers = (req, res) => {
         res.send({
           status: 200,
           success: true,
-          customers: JSON.stringify(customers),
+          customers: customers,
         });
       }
     });
