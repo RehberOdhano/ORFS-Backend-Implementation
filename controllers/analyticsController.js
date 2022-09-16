@@ -1,6 +1,3 @@
-// PACKAGES
-const mongoose = require("mongoose");
-
 // MODELS
 const Customer = require("../models/customer");
 const User = require("../models/user");

@@ -1,6 +1,30 @@
 const express = require("express");
 const admin_router = express.Router();
+const path = require("path");
+const fs = require("fs");
 const adminController = require("../controllers/adminController");
+const multer = require("multer");
+
+const fileStorageEngine = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/csv-files");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({
+  storage: fileStorageEngine,
+  fileFilter: (req, file, cb) => {
+    var ext = path.extname(file.originalname);
+    if (ext !== ".csv") {
+      return cb(new Error("ONLY CSV FILES ARE ALLOWED!"));
+    }
+
+    cb(null, true);
+  },
+});
 
 // ADMIN USER ROUTES
 admin_router.get("/users/all/:id", adminController.getUsersList);
@@ -71,5 +95,12 @@ admin_router.get(
 admin_router.post("/categories/add/:id", adminController.addCategory);
 admin_router.put("/categories/dept/add/:id", adminController.addCategoryToDept);
 admin_router.delete("/categories/delete/:id", adminController.deleteCategory);
+
+// ADMIN CSV ROUTES
+admin_router.post(
+  "/upload/csv",
+  upload.single("csv_file"),
+  adminController.parseCSVFile
+);
 
 module.exports = admin_router;

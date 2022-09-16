@@ -1,8 +1,8 @@
-// imported the required packages and models...
-
-// PACKAGES
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
+const csv = require("fast-csv");
+const path = require("path");
+const fs = require("fs");
 
 // MODELS
 const User = require("../models/user");
@@ -1178,5 +1178,84 @@ exports.deleteCategory = (req, res) => {
     });
   } catch (err) {
     console.error("ERROR: " + err.message);
+  }
+};
+
+/*
+=============================================================================
+|                         ADMINS' CSV ROUTES                                |
+=============================================================================
+*/
+
+exports.parseCSVFile = (req, res) => {
+  console.log(req.file);
+  var records = [];
+  try {
+    fs.createReadStream(
+      path.join(__dirname, "../", "/public/csv-files/" + req.file.filename)
+    )
+      .pipe(csv.parse({ headers: true }))
+      .on("error", (err) => console.log(err))
+      .on("data", (row) => records.push(row))
+      .on("end", (rowCount) => {
+        console.log(rowCount);
+        console.log(records[0]);
+        var serviceProviders = [],
+          complainees = [];
+        records.forEach((record) => {
+          record.role === "SERVICEPROVIDER"
+            ? serviceProviders.push(record)
+            : complainees.push(record);
+        });
+        console.log(serviceProviders, complainees);
+
+        Complainee.insertMany(complainees, (err, docs) => {
+          if (!err) {
+            SP.insertMany(serviceProviders, (err, docs) => {
+              if (!err) {
+                res.send({
+                  status: 200,
+                  success: true,
+                  message: "USERS ARE SUCCESSFULLY ADDED!",
+                });
+              } else {
+                res.send({
+                  status: 404,
+                  success: false,
+                  message: err.message,
+                });
+              }
+            });
+          } else {
+            res.send({
+              status: 404,
+              success: false,
+              message: err.message,
+            });
+          }
+        });
+
+        // try {
+        //   Complainee.insertMany(complainees);
+        //   SP.insertMany(serviceProviders);
+        //   res.send({
+        //     status: 200,
+        //     success: true,
+        //     data: records,
+        //   });
+        // } catch (error) {
+        //   res.send({
+        //     status: 404,
+        //     success: false,
+        //     message: error.message,
+        //   });
+        // }
+      });
+  } catch (error) {
+    res.send({
+      status: 404,
+      success: false,
+      message: err.message,
+    });
   }
 };

@@ -1,50 +1,59 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const customerSchema = mongoose.Schema({
+const customerSchema = mongoose.Schema(
+  {
     email: {
-        type: String,
-        // index: false,
-        unique: true,
-        required: [true, "EMAIL IS REQUIRED!"],
-        match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+      type: String,
+      // index: false,
+      unique: true,
+      required: [true, "EMAIL IS REQUIRED!"],
+      match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
     },
     title: {
-        type: String,
-        required: [true, "TITLE IS REQUIRED!"],
+      type: String,
+      required: [true, "TITLE IS REQUIRED!"],
+    },
+    status: {
+      type: String,
     },
     subscription_plan: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Subscription"
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Subscription",
     },
-    employees: [{
+    employees: [
+      {
         _id: {
-            type: mongoose.Schema.Types.ObjectId
+          type: mongoose.Schema.Types.ObjectId,
         },
         email: {
-            type: String
-        }
-    }],
-    addons: [{
+          type: String,
+        },
+      },
+    ],
+    addons: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Addon"
-    }],
-    departments: [{
+        ref: "Addon",
+      },
+    ],
+    departments: [
+      {
         _id: {
-            type: mongoose.Schema.Types.ObjectId
+          type: mongoose.Schema.Types.ObjectId,
         },
         title: {
-            type: String
-        }
-    }],
+          type: String,
+        },
+      },
+    ],
     // analytics: {},
     billing_info: {
-        type: Object,
-        // required: true,
-        payment_method: { type: String },
-        // required: true,
-        payment_method: { type: String },
-    }
-
-}, { versionKey: false });
+      type: Object,
+      // required: true,
+      payment_method: { type: String },
+    },
+  },
+  { versionKey: false }
+);
 
 module.exports = mongoose.model("Customer", customerSchema);
