@@ -1209,31 +1209,31 @@ exports.parseCSVFile = (req, res) => {
         });
         console.log(serviceProviders, complainees);
 
-        Complainee.insertMany(complainees, (err, docs) => {
-          if (!err) {
-            SP.insertMany(serviceProviders, (err, docs) => {
-              if (!err) {
-                res.send({
-                  status: 200,
-                  success: true,
-                  message: "USERS ARE SUCCESSFULLY ADDED!",
-                });
-              } else {
-                res.send({
-                  status: 404,
-                  success: false,
-                  message: err.message,
-                });
-              }
-            });
-          } else {
-            res.send({
-              status: 404,
-              success: false,
-              message: err.message,
-            });
-          }
-        });
+        // Complainee.insertMany(complainees, (err, docs) => {
+        //   if (!err) {
+        //     SP.insertMany(serviceProviders, (err, docs) => {
+        //       if (!err) {
+        //         res.send({
+        //           status: 200,
+        //           success: true,
+        //           message: "USERS ARE SUCCESSFULLY ADDED!",
+        //         });
+        //       } else {
+        //         res.send({
+        //           status: 404,
+        //           success: false,
+        //           message: err.message,
+        //         });
+        //       }
+        //     });
+        //   } else {
+        //     res.send({
+        //       status: 404,
+        //       success: false,
+        //       message: err.message,
+        //     });
+        //   }
+        // });
 
         // try {
         //   Complainee.insertMany(complainees);

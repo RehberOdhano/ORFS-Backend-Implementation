@@ -1,7 +1,6 @@
 const express = require("express");
 const admin_router = express.Router();
 const path = require("path");
-const fs = require("fs");
 const adminController = require("../controllers/adminController");
 const multer = require("multer");
 
