@@ -21,4 +21,8 @@ superadmin_router.delete(
   superadminController.deleteAdmin
 );
 
+// SUPERADMIN CUSTOMER TYPE ROUTES
+superadmin_router.post("/customerType/add", superadminController.addCustomerType);
+superadmin_router.get("/customerType", superadminController.getCustomerTypes)
+
 module.exports = superadmin_router;

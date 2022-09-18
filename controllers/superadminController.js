@@ -9,6 +9,7 @@ const Complaint = require("../models/complaint");
 const Complainee = require("../models/complainee");
 const Category = require("../models/category");
 const SP = require("../models/serviceProvider");
+const CustomerType = require("../models/customerType");
 
 exports.getAllCustomers = (req, res) => {
   try {
@@ -351,5 +352,52 @@ exports.deleteAdmin = (req, res) => {
     });
   } catch (err) {
     console.log("ERROR: " + err.message);
+  }
+};
+
+exports.addCustomerType = (req, res) => {
+  try {
+    CustomerType.create({
+      title: req.body.title
+    }, (err, customerType) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message
+
+        })
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: "CUSTOMER TYPE ADDED"
+        })
+      }
+    })
+  } catch (err) {
+    console.log("ERROR:" + err.message);
+  }
+};
+
+exports.getCustomerTypes = (req, res) => {
+  try {
+    CustomerType.find({}).exec((err, customerTypes) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message
+        })
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          customerTypes: customerTypes
+        })
+      }
+    })
+  } catch (err) {
+    console.log("ERROR:" + err.message);
   }
 };
