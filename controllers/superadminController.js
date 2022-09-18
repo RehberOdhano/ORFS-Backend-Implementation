@@ -17,7 +17,7 @@ exports.getAllCustomers = (req, res) => {
     Customer.find({}).exec((err, customers) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -48,7 +48,7 @@ exports.addCustomer = (req, res) => {
     }).exec((err, customer) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -68,7 +68,7 @@ exports.addCustomer = (req, res) => {
           (err, customer) => {
             if (err) {
               res.send({
-                status: 404,
+                status: 500,
                 success: false,
                 message: err.message,
               });
@@ -77,7 +77,7 @@ exports.addCustomer = (req, res) => {
               User.findOne({ email: req.body.adminEmail }).exec((err, user) => {
                 if (err) {
                   res.send({
-                    status: 404,
+                    status: 500,
                     success: false,
                     message: err.message,
                   });
@@ -94,7 +94,7 @@ exports.addCustomer = (req, res) => {
                   ).exec((err, customer) => {
                     if (err) {
                       res.send({
-                        status: 404,
+                        status: 500,
                         success: false,
                         message: err.message,
                       });
@@ -111,7 +111,7 @@ exports.addCustomer = (req, res) => {
                         (err, user) => {
                           if (err) {
                             res.send({
-                              status: 404,
+                              status: 500,
                               success: false,
                               message: err.message,
                             });
@@ -145,7 +145,7 @@ exports.editCustomer = (req, res) => {
     Customer.findById({ _id: req.params.id }).exec((err, customer) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -159,7 +159,7 @@ exports.editCustomer = (req, res) => {
         }).exec((err, customer) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -183,7 +183,7 @@ exports.deleteCustomer = (req, res) => {
     Customer.findByIdAndDelete({ _id: req.params.id }).exec((err, customer) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -191,7 +191,7 @@ exports.deleteCustomer = (req, res) => {
         User.deleteMany({ company_id: customer._id }).exec((err, users) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -200,7 +200,7 @@ exports.deleteCustomer = (req, res) => {
               (err, complaints) => {
                 if (err) {
                   res.send({
-                    status: 404,
+                    status: 500,
                     success: false,
                     message: err.message,
                   });
@@ -209,7 +209,7 @@ exports.deleteCustomer = (req, res) => {
                     (err, complainees) => {
                       if (err) {
                         res.send({
-                          status: 404,
+                          status: 500,
                           success: false,
                           message: err.message,
                         });
@@ -218,7 +218,7 @@ exports.deleteCustomer = (req, res) => {
                           (err, sps) => {
                             if (err) {
                               res.send({
-                                status: 404,
+                                status: 500,
                                 success: false,
                                 message: err.message,
                               });
@@ -228,7 +228,7 @@ exports.deleteCustomer = (req, res) => {
                               }).exec((err, depts) => {
                                 if (err) {
                                   res.send({
-                                    status: 404,
+                                    status: 500,
                                     success: false,
                                     message: err.message,
                                   });
@@ -238,7 +238,7 @@ exports.deleteCustomer = (req, res) => {
                                   }).exec((err, categories) => {
                                     if (err) {
                                       res.send({
-                                        status: 404,
+                                        status: 500,
                                         success: false,
                                         message: err.message,
                                       });
@@ -288,7 +288,7 @@ exports.addAdmin = (req, res) => {
       (err, user) => {
         if (err) {
           res.send({
-            status: 404,
+            status: 500,
             success: false,
             message: err.message,
           });
@@ -299,7 +299,7 @@ exports.addAdmin = (req, res) => {
           ).exec((err, customer) => {
             if (err) {
               res.send({
-                status: 404,
+                status: 500,
                 success: false,
                 message: err.message,
               });
@@ -325,7 +325,7 @@ exports.deleteAdmin = (req, res) => {
     User.findByIdAndDelete({ _id: adminID }).exec((err, user) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -336,7 +336,7 @@ exports.deleteAdmin = (req, res) => {
         ).exec((err, customer) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -357,24 +357,26 @@ exports.deleteAdmin = (req, res) => {
 
 exports.addCustomerType = (req, res) => {
   try {
-    CustomerType.create({
-      title: req.body.title
-    }, (err, customerType) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message
-
-        })
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          message: "CUSTOMER TYPE ADDED"
-        })
+    CustomerType.create(
+      {
+        title: req.body.title,
+      },
+      (err, customerType) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            message: "CUSTOMER TYPE ADDED",
+          });
+        }
       }
-    })
+    );
   } catch (err) {
     console.log("ERROR:" + err.message);
   }
@@ -387,16 +389,16 @@ exports.getCustomerTypes = (req, res) => {
         res.send({
           status: 500,
           success: false,
-          message: err.message
-        })
+          message: err.message,
+        });
       } else {
         res.send({
           status: 200,
           success: true,
-          customerTypes: customerTypes
-        })
+          customerTypes: customerTypes,
+        });
       }
-    })
+    });
   } catch (err) {
     console.log("ERROR:" + err.message);
   }

@@ -7,7 +7,7 @@ exports.getCustomerCount = (req, res) => {
     Customer.count({}, (err, count) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -29,7 +29,7 @@ exports.getUserCount = (req, res) => {
     User.count({}, (err, count) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });

@@ -25,7 +25,7 @@ exports.getUsersList = (req, res) => {
     User.find({ company_id: company_id }).exec((err, users) => {
       if (err)
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -68,7 +68,7 @@ exports.addSpecificUser = (req, res) => {
     User.findOne({ email: email }).exec((err, user) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -91,7 +91,7 @@ exports.addSpecificUser = (req, res) => {
           (err, user) => {
             if (err) {
               res.send({
-                status: 404,
+                status: 500,
                 success: false,
                 message: err.message,
               });
@@ -103,7 +103,7 @@ exports.addSpecificUser = (req, res) => {
               ).exec((err, user) => {
                 if (err) {
                   res.send({
-                    status: 404,
+                    status: 500,
                     success: false,
                     message: err.message,
                   });
@@ -117,7 +117,7 @@ exports.addSpecificUser = (req, res) => {
                       (err, user) => {
                         if (err) {
                           res.send({
-                            status: 404,
+                            status: 500,
                             success: false,
                             message: err.message,
                           });
@@ -141,7 +141,7 @@ exports.addSpecificUser = (req, res) => {
                       (err, user) => {
                         if (err) {
                           res.send({
-                            status: 404,
+                            status: 500,
                             success: false,
                             message: err.message,
                           });
@@ -180,7 +180,7 @@ exports.updateSpecificUser = async (req, res) => {
       (err, user) => {
         if (err) {
           res.send({
-            status: 404,
+            status: 500,
             success: false,
             message: err.message,
           });
@@ -215,7 +215,7 @@ exports.deleteSpecificUser = (req, res) => {
     User.findById({ _id: user_id }, function (err, user) {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -238,7 +238,7 @@ exports.deleteSpecificUser = (req, res) => {
         ).exec((err, employee) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -290,7 +290,7 @@ exports.deleteMultipleUsers = (req, res) => {
         ).exec((err, users) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -304,7 +304,7 @@ exports.deleteMultipleUsers = (req, res) => {
         });
       } else {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: "NOT ABLE TO DELETE THE USERS!",
         });
@@ -368,7 +368,7 @@ exports.getComplaintsList = (req, res) => {
     Complaint.find({ company_id: company_id }).exec((err, complaints) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -415,7 +415,7 @@ exports.updateSpecificComplaint = (req, res) => {
     }).exec((err, complaint) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -439,7 +439,7 @@ exports.archiveSpecificComplaint = (req, res) => {
       (err, complaint) => {
         if (err) {
           res.send({
-            status: 404,
+            status: 500,
             success: false,
             message: err.message,
           });
@@ -463,7 +463,7 @@ exports.deleteSpecificComplaint = (req, res) => {
     Complaint.deleteOne({ _id: id }).exec((err, complaint) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -485,7 +485,7 @@ exports.getDeptsList = (req, res) => {
     Department.find({ company_id: req.params.id }).exec((err, depts) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -514,7 +514,7 @@ exports.getSpecificDept = (req, res) => {
     Department.findOne({ _id: id }).exec((err, dept) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -544,7 +544,7 @@ exports.addSpecificDept = (req, res) => {
     Department.findOne({ title: title }).exec((err, dept) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -563,7 +563,7 @@ exports.addSpecificDept = (req, res) => {
           (err, department) => {
             if (err) {
               res.send({
-                status: 404,
+                status: 500,
                 success: false,
                 message: err.message,
               });
@@ -578,7 +578,7 @@ exports.addSpecificDept = (req, res) => {
               ).exec((err, customer) => {
                 if (err) {
                   res.send({
-                    status: 404,
+                    status: 500,
                     success: false,
                     message: err.message,
                   });
@@ -610,7 +610,7 @@ exports.updateSpecificDept = (req, res) => {
     query.exec((err, dept) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -623,7 +623,7 @@ exports.updateSpecificDept = (req, res) => {
         ).exec((err, customer) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -655,7 +655,7 @@ exports.deleteSpecificDept = (req, res) => {
     Department.deleteOne({ _id: id }).exec((err, dept) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -668,7 +668,7 @@ exports.deleteSpecificDept = (req, res) => {
         ).exec((err, result) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -680,7 +680,7 @@ exports.deleteSpecificDept = (req, res) => {
             ).exec((err, result) => {
               if (err) {
                 res.send({
-                  status: 404,
+                  status: 500,
                   success: false,
                   message: err.message,
                 });
@@ -692,7 +692,7 @@ exports.deleteSpecificDept = (req, res) => {
                 ).exec((err, result) => {
                   if (err) {
                     res.send({
-                      status: 404,
+                      status: 500,
                       success: false,
                       message: err.message,
                     });
@@ -723,7 +723,7 @@ exports.addDeptEmployee = (req, res) => {
     User.findOne({ email: email }).exec((err, user) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -747,7 +747,7 @@ exports.addDeptEmployee = (req, res) => {
           (err, user) => {
             if (err) {
               res.send({
-                status: 404,
+                status: 500,
                 success: false,
                 message: err.message,
               });
@@ -759,7 +759,7 @@ exports.addDeptEmployee = (req, res) => {
               ).exec((err, dept) => {
                 if (err) {
                   res.send({
-                    status: 404,
+                    status: 500,
                     success: false,
                     message: err.message,
                   });
@@ -768,7 +768,7 @@ exports.addDeptEmployee = (req, res) => {
                     (err, sp) => {
                       if (err) {
                         res.send({
-                          status: 404,
+                          status: 500,
                           success: false,
                           message: err.message,
                         });
@@ -804,7 +804,7 @@ exports.deleteDeptEmployee = (req, res) => {
     ).exec((err, dept) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -812,7 +812,7 @@ exports.deleteDeptEmployee = (req, res) => {
         User.deleteOne({ _id: empID }).exec((err, user) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -820,7 +820,7 @@ exports.deleteDeptEmployee = (req, res) => {
             SP.deleteOne({ user_id: empID }).exec((err, sp) => {
               if (err) {
                 res.send({
-                  status: 404,
+                  status: 500,
                   success: false,
                   message: err.message,
                 });
@@ -847,7 +847,7 @@ exports.getAllDeptEmployees = (req, res) => {
     Department.findOne({ _id: id }, "employees").exec((err, dept) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -866,7 +866,7 @@ exports.getAllDeptEmployees = (req, res) => {
         User.find({ email: { $in: emails } }).exec((err, users) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -881,7 +881,7 @@ exports.getAllDeptEmployees = (req, res) => {
             SP.find({ user_id: { $in: spIDs } }).exec((err, sps) => {
               if (err) {
                 res.send({
-                  status: 404,
+                  status: 500,
                   success: false,
                   message: err.message,
                 });
@@ -928,7 +928,7 @@ exports.getAvailableEmployees = (req, res) => {
     SP.find({ company_id: company_id, department: null }).exec((err, sps) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -947,7 +947,7 @@ exports.getAvailableEmployees = (req, res) => {
         User.find({ _id: { $in: userIDs } }).exec((err, users) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -1007,7 +1007,7 @@ exports.getAllCategories = (req, res) => {
     Category.find({ company_id: company_id }).exec((err, categories) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -1032,7 +1032,7 @@ exports.getUnassignedCategories = (req, res) => {
       (err, categories) => {
         if (err) {
           res.send({
-            status: 404,
+            status: 500,
             success: false,
             message: err.message,
           });
@@ -1070,7 +1070,7 @@ exports.addCategory = (req, res) => {
       (err, category) => {
         if (err) {
           res.send({
-            status: 404,
+            status: 500,
             success: false,
             message: err.message,
           });
@@ -1097,7 +1097,7 @@ exports.addCategoryToDept = (req, res) => {
       (err, category) => {
         if (err) {
           res.send({
-            status: 404,
+            status: 500,
             success: false,
             message: err.message,
           });
@@ -1108,7 +1108,7 @@ exports.addCategoryToDept = (req, res) => {
           ).exec((err, dept) => {
             if (err) {
               res.send({
-                status: 404,
+                status: 500,
                 success: false,
                 message: err.message,
               });
@@ -1138,7 +1138,7 @@ exports.deleteCategory = (req, res) => {
     }).exec((err, category) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -1154,7 +1154,7 @@ exports.deleteCategory = (req, res) => {
           ).exec((err, dept) => {
             if (err) {
               res.send({
-                status: 404,
+                status: 500,
                 success: false,
                 message: err.message,
               });
@@ -1216,7 +1216,7 @@ exports.parseCSVFile = (req, res) => {
         //         });
         //       } else {
         //         res.send({
-        //           status: 404,
+        //           status: 500,
         //           success: false,
         //           message: err.message,
         //         });
@@ -1224,7 +1224,7 @@ exports.parseCSVFile = (req, res) => {
         //     });
         //   } else {
         //     res.send({
-        //       status: 404,
+        //       status: 500,
         //       success: false,
         //       message: err.message,
         //     });
@@ -1241,7 +1241,7 @@ exports.parseCSVFile = (req, res) => {
         //   });
         // } catch (error) {
         //   res.send({
-        //     status: 404,
+        //     status: 500,
         //     success: false,
         //     message: error.message,
         //   });
@@ -1249,7 +1249,7 @@ exports.parseCSVFile = (req, res) => {
       });
   } catch (error) {
     res.send({
-      status: 404,
+      status: 500,
       success: false,
       message: err.message,
     });

@@ -28,7 +28,7 @@ exports.getAllComplaints = (req, res) => {
     Complaint.find({ user_id: id }).exec((err, complaints) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -83,7 +83,7 @@ exports.fileNewComplaint = (req, res) => {
         Department.findOne({ _id: id }).exec((err, department) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -413,7 +413,7 @@ exports.updateComplaint = (req, res) => {
       (err, complaint) => {
         if (err) {
           res.send({
-            status: 404,
+            status: 500,
             success: false,
             message: err.message,
           });
@@ -436,7 +436,7 @@ exports.deleteComplaint = (req, res) => {
     Complaint.deleteOne(req.params.id).exec((err, result) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });

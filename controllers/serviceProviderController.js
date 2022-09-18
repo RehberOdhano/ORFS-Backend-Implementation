@@ -8,7 +8,7 @@ exports.getSpecificSP = (req, res) => {
     SP.findOne({ user_id: id }).exec((err, sp) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -34,7 +34,7 @@ exports.getAssignedComplaints = (req, res) => {
       .exec((err, result) => {
         if (err) {
           res.send({
-            status: 404,
+            status: 500,
             success: false,
             message: err.message,
           });
@@ -44,7 +44,7 @@ exports.getAssignedComplaints = (req, res) => {
             (err, complaints) => {
               if (err) {
                 res.send({
-                  status: 404,
+                  status: 500,
                   success: false,
                   message: err.message,
                 });
@@ -76,7 +76,7 @@ exports.updateComplaint = (req, res) => {
     ).exec((err, complaint) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -102,7 +102,7 @@ exports.resolveComplaint = (req, res) => {
     SP.findOneAndUpdate(query, { status: status }).exec((err, sp) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -113,7 +113,7 @@ exports.resolveComplaint = (req, res) => {
         ).exec((err, complaint) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -141,7 +141,7 @@ exports.transferComplaint = (req, res) => {
     SP.findOne({ _id: sp2_ID }).exec((err, sp) => {
       if (err) {
         res.send({
-          status: 404,
+          status: 500,
           success: false,
           message: err.message,
         });
@@ -152,7 +152,7 @@ exports.transferComplaint = (req, res) => {
         ).exec((err, sp) => {
           if (err) {
             res.send({
-              status: 404,
+              status: 500,
               success: false,
               message: err.message,
             });
@@ -163,7 +163,7 @@ exports.transferComplaint = (req, res) => {
             ).exec((err, sp) => {
               if (err) {
                 res.send({
-                  status: 404,
+                  status: 500,
                   success: false,
                   message: err.message,
                 });
@@ -174,7 +174,7 @@ exports.transferComplaint = (req, res) => {
                 ).exec((err, complaint) => {
                   if (err) {
                     res.send({
-                      status: 404,
+                      status: 500,
                       success: false,
                       message: err.message,
                     });
@@ -185,7 +185,7 @@ exports.transferComplaint = (req, res) => {
                     ).exec((err, complaint) => {
                       if (err) {
                         res.send({
-                          status: 404,
+                          status: 500,
                           success: false,
                           message: err.message,
                         });
@@ -194,7 +194,7 @@ exports.transferComplaint = (req, res) => {
                         User.findOne({ _id: userID }, (err, user) => {
                           if (err) {
                             res.send({
-                              status: 404,
+                              status: 500,
                               success: false,
                               message: err.message,
                             });

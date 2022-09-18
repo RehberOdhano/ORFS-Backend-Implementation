@@ -24,7 +24,7 @@ exports.uploadProfilePicture = (req, res) => {
     //   (err, customer) => {
     //     if (err) {
     //       res.send({
-    //         status: 404,
+    //         status: 500,
     //         success: true,
     //         message: err.message,
     //       });
