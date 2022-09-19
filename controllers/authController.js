@@ -63,6 +63,14 @@ exports.login = async (req, res) => {
   }
 };
 
+// exports.googleAuth = (req, res) => {
+//   try {
+//     console.log(req);
+//   } catch (error) {
+//     console.log("ERROR: " + error.message);
+//   }
+// };
+
 // exports.extra = async(req, res) => {
 //     let salt = bcrypt.genSaltSync(10);
 //     try{
