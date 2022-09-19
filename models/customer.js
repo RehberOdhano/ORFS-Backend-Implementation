@@ -21,6 +21,9 @@ const customerSchema = mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
+    dateRegistered: {
+      type: Date,
+    },
     subscription_plan: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subscription",

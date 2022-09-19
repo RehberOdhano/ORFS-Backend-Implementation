@@ -1,5 +1,6 @@
 // PACKAGES
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
 
 // MODELS
 const Customer = require("../models/customer");
@@ -85,7 +86,7 @@ exports.addCustomer = (req, res) => {
                   res.send({
                     status: 200,
                     success: true,
-                    message: `ADMIN WITH THIS EMAIL ${user.email} IS ALREADT EXISTS!`,
+                    message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS!`,
                   });
                 } else {
                   Customer.updateOne(
@@ -99,32 +100,65 @@ exports.addCustomer = (req, res) => {
                         message: err.message,
                       });
                     } else {
-                      User.create(
-                        {
-                          name: "UNDEFINED",
-                          email: req.body.adminEmail,
-                          password: bcrypt.hashSync("admin", salt),
-                          role: "ADMIN",
-                          sign_type: "PLATFORM",
-                          company_id: company_id,
+                      var transporter = nodemailer.createTransport({
+                        service: "gmail",
+                        auth: {
+                          user: process.env.MAIL_USERNAME,
+                          pass: process.env.MAIL_PASSWORD,
                         },
-                        (err, user) => {
-                          if (err) {
-                            res.send({
-                              status: 500,
-                              success: false,
-                              message: err.message,
-                            });
-                          } else {
-                            res.send({
-                              status: 200,
-                              success: true,
-                              message:
-                                "CUSTOMER & ADMIN ARE SUCCESSFULLY ADDED!",
-                            });
-                          }
+                      });
+
+                      var mailOptions = {
+                        from: process.env.MAIL_FROM_ADDRESS,
+                        to: req.body.adminEmail,
+                        subject: "Register new admin",
+                        text: `Hello there ✔... Welcome to QRFS...`,
+                        html: `<a href="http://localhost:3000/register">Register Here</a>`,
+                      };
+
+                      transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                          res.send({
+                            status: 500,
+                            success: false,
+                            message: error.message,
+                          });
+                        } else {
+                          console.log("Email sent: " + JSON.stringify(info));
+                          res.send({
+                            status: 200,
+                            success: true,
+                            message:
+                              "CUSTOMER IS SUCCESSFULLY CREATED AND EMAIL IS SUCCESSFULLY SENT TO THE ADMIN!",
+                          });
                         }
-                      );
+                      });
+                      // User.create(
+                      //   {
+                      //     name: "UNDEFINED",
+                      //     email: req.body.adminEmail,
+                      //     password: bcrypt.hashSync("admin", salt),
+                      //     role: "ADMIN",
+                      //     sign_type: "PLATFORM",
+                      //     company_id: company_id,
+                      //   },
+                      //   (err, user) => {
+                      //     if (err) {
+                      //       res.send({
+                      //         status: 500,
+                      //         success: false,
+                      //         message: err.message,
+                      //       });
+                      //     } else {
+                      //       res.send({
+                      //         status: 200,
+                      //         success: true,
+                      //         message:
+                      //           "CUSTOMER & ADMIN ARE SUCCESSFULLY ADDED!",
+                      //       });
+                      //     }
+                      //   }
+                      // );
                     }
                   });
                 }

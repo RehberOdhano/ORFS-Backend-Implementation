@@ -362,6 +362,12 @@ exports.deleteMultipleUsers = (req, res) => {
 //     });
 // }
 
+/*
+=============================================================================
+|                         ADMINS' COMPLAINTS ROUTES                         |
+=============================================================================
+*/
+
 exports.getComplaintsList = (req, res) => {
   try {
     const company_id = req.params.id;
@@ -479,6 +485,60 @@ exports.deleteSpecificComplaint = (req, res) => {
     console.error("ERROR:" + err.message);
   }
 };
+
+exports.assignComplaint = (req, res) => {
+  try {
+    const complaintID = req.params.id;
+    const spID = req.body.id;
+    Complaint.findByIdAndUpdate(
+      { _id: complaintID },
+      {
+        $push: {
+          assignedTo: { _id: spID },
+        },
+      }
+    ).exec((err, complaint) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        SP.findByIdAndUpdate(
+          { _id: spID },
+          {
+            $push: {
+              assignedComplaints: { _id: complaintID },
+            },
+          }
+        ).exec((err, result) => {
+          if (err) {
+            res.send({
+              status: 500,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            res.send({
+              status: 200,
+              success: true,
+              message: "COMPLAINT IS SUCCESSFULLY ASSIGNED!",
+            });
+          }
+        });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR:" + err.message);
+  }
+};
+
+/*
+=============================================================================
+|                         ADMINS' DEPARTMENT ROUTES                         |
+=============================================================================
+*/
 
 exports.getDeptsList = (req, res) => {
   try {

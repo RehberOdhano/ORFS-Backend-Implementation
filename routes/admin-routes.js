@@ -46,10 +46,11 @@ admin_router.delete(
 // ADMIN COMPLAINT ROUTES
 admin_router.get("/complaints/:id", adminController.getComplaintsList);
 // admin_router.get('/complaint/:id', adminController.getSpecificComplaint);
+admin_router.post("/assign/complaint/:id", adminController.assignComplaint);
 admin_router.put(
   "/complaints/update/:id",
   adminController.updateSpecificComplaint
-); //assign
+);
 admin_router.put(
   "/complaints/archive/:id",
   adminController.archiveSpecificComplaint
