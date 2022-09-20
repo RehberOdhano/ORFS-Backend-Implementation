@@ -4,7 +4,6 @@
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
-const session = require("express-session");
 const path = require("path");
 
 // require("./middlewares/google-auth")(passport);
@@ -17,7 +16,6 @@ app.use(cors());
 
 // PASSPORT MIDDLEWARE
 app.use(passport.initialize());
-app.use(passport.session());
 
 // STATIC FOLDER
 app.use("/public", express.static(path.join(__dirname, "public")));
