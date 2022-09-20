@@ -19,24 +19,14 @@ exports.uploadProfilePicture = (req, res) => {
       ),
       contentType: req.file.mimetype,
     };
-
-    // Customer.findByIdAndUpdate({ _id: company_id }, pfp).exec(
-    //   (err, customer) => {
-    //     if (err) {
-    //       res.send({
-    //         status: 500,
-    //         success: true,
-    //         message: err.message,
-    //       });
-    //     } else {
-    //       res.send({
-    //         status: 200,
-    //         success: true,
-    //         message: "IMAGE IS SUCCESSFULLY UPLOADED!",
-    //       });
-    //     }
-    //   }
-    // );
+    const imgPath = req.file.path;
+    res.send({
+      status: 200,
+      success: true,
+      data: {
+        imgPath: imgPath,
+      },
+    });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
