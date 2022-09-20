@@ -7,7 +7,7 @@ const passport = require("passport");
 const session = require("express-session");
 const path = require("path");
 
-require("./middlewares/google-auth")(passport);
+// require("./middlewares/google-auth")(passport);
 
 const app = express();
 
@@ -15,19 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-// SESSION
-app.use(
-  session({
-    secret: "QRFS",
-    resave: false, // this means that we don't want to save the session if nothing is modified
-    saveUninitialized: false, // this means that don't create a session until something
-    // is stored
-  })
-);
-
 // PASSPORT MIDDLEWARE
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 // STATIC FOLDER
 app.use("/public", express.static(path.join(__dirname, "public")));
