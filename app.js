@@ -6,8 +6,6 @@ const cors = require("cors");
 const passport = require("passport");
 const path = require("path");
 
-// require("./middlewares/google-auth")(passport);
-
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));

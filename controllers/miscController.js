@@ -40,6 +40,7 @@ exports.uploadProfilePicture = (req, res) => {
       contentType: req.file.mimetype,
     };
     const imgPath = req.file.path;
+    console.log(imgPath)
     res.send({
       status: 200,
       success: true,
