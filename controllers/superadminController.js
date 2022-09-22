@@ -100,6 +100,7 @@ exports.addCustomer = (req, res) => {
                         message: err.message,
                       });
                     } else {
+                      // SENDING EMAIL TO THE ADMIN
                       var transporter = nodemailer.createTransport({
                         service: "gmail",
                         auth: {
@@ -113,26 +114,45 @@ exports.addCustomer = (req, res) => {
                         to: req.body.adminEmail,
                         subject: "Register new admin",
                         text: `Hello there ✔... Welcome to QRFS...`,
-                        html: `<a href="http://localhost:3000/register">Register Here</a>`,
+                        html: `<a href="http://localhost:3000/register/${company_id}">Register Here</a>`,
                       };
 
-                      transporter.sendMail(mailOptions, function (error, info) {
-                        if (error) {
+                      // verifying the SMTP configuiration settings and if the settings
+                      // are fine, then it'll send an email to the specified email
+                      // address...
+                      transporter.verify((err) => {
+                        if (err) {
                           res.send({
                             status: 500,
                             success: false,
-                            message: error.message,
+                            message: err.message,
                           });
                         } else {
-                          console.log("Email sent: " + JSON.stringify(info));
-                          res.send({
-                            status: 200,
-                            success: true,
-                            message:
-                              "CUSTOMER IS SUCCESSFULLY CREATED AND EMAIL IS SUCCESSFULLY SENT TO THE ADMIN!",
-                          });
+                          transporter.sendMail(
+                            mailOptions,
+                            function (error, info) {
+                              if (error) {
+                                res.send({
+                                  status: 500,
+                                  success: false,
+                                  message: error.message,
+                                });
+                              } else {
+                                console.log(
+                                  "Email sent: " + JSON.stringify(info)
+                                );
+                                res.send({
+                                  status: 200,
+                                  success: true,
+                                  message:
+                                    "CUSTOMER IS SUCCESSFULLY CREATED AND EMAIL IS SUCCESSFULLY SENT TO THE ADMIN!",
+                                });
+                              }
+                            }
+                          );
                         }
                       });
+
                       // User.create(
                       //   {
                       //     name: "UNDEFINED",

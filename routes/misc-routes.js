@@ -1,8 +1,10 @@
 const express = require("express");
 const misc_router = express.Router();
-const miscController = require("../controllers/miscController");
 const multer = require("multer");
 const path = require("path");
+
+// CONTROLLERS
+const miscController = require("../controllers/miscController");
 
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -34,5 +36,8 @@ misc_router.post(
   upload.single("img"),
   miscController.uploadProfilePicture
 );
+
+// DATABASE CLEANING ROUTES
+// misc_router.delete("/deleteAll", miscController.deleteAll);
 
 module.exports = misc_router;

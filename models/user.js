@@ -4,9 +4,7 @@ const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      // required: [true, "NAME IS REQUIRED!"],
-      min: [5, "MINIMUM 10 CHARACTERS ARE REQUIRED!"],
-      max: [10, "USERNAME CAN'T EXCEED 10 CHARACTERS!"],
+      required: [true, "NAME IS REQUIRED!"],
     },
     email: {
       type: String,
@@ -17,8 +15,7 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, "PASSWORD IS REQUIRED!"],
-      // min: [12, "MINIMUM 12 CHARACTERS ARE REQUIRED!"],
-      // max: [20, "PASSWORD CAN'T EXCEED 20 CHARACTERS!"],
+      min: [5, "MINIMUM 5 CHARACTERS ARE REQUIRED!"],
     },
     googleID: {
       type: String,
@@ -33,8 +30,6 @@ const userSchema = mongoose.Schema(
     },
     company_id: {
       type: mongoose.Schema.Types.ObjectId,
-      // ref: "Customer",
-      // required: true
     },
     pfp: {
       data: Buffer,

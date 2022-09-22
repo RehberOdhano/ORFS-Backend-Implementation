@@ -3,7 +3,27 @@ const fs = require("fs");
 const path = require("path");
 
 // MODELS
-const Customer = require("../models/customer");
+// const Customer = require("../models/customer");
+// const Category = require("../models/category");
+// const User = require("../models/user");
+
+/*
+=============================================================================
+|                         DATABASE CLEANING ROUTES                          |
+=============================================================================
+*/
+
+// FOR DATABASE CLEANSING...
+// exports.deleteAll = (req, res) => {
+//   try {
+//     Category.deleteMany({}).exec((err, result) => {
+//       if (err) throw err;
+//       else res.send("SUCCESSFULLY DELETED");
+//     });
+//   } catch (err) {
+//     console.log("ERROR: " + err.message);
+//   }
+// };
 
 /*
 =============================================================================
