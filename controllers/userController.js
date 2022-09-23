@@ -7,21 +7,6 @@ const Complainee = require("../models/complainee");
 const Department = require("../models/department");
 const SP = require("../models/serviceProvider");
 
-// const Category = require("../models/category");
-// const User = require("../models/user");
-
-// FOR DATABASE CLEANSING...
-// exports.deleteAll = (req, res) => {
-//   try {
-//     Category.deleteMany({}).exec((err, result) => {
-//       if (err) throw err;
-//       else res.send("SUCCESSFULLY DELETED");
-//     });
-//   } catch (err) {
-//     console.log("ERROR: " + err.message);
-//   }
-// };
-
 exports.getAllComplaints = (req, res) => {
   try {
     const id = req.params.id;
@@ -52,6 +37,7 @@ exports.getAllComplaints = (req, res) => {
   }
 };
 
+// REWRITE THIS FUNCTION
 exports.fileNewComplaint = (req, res) => {
   // REMODEL USING QUERY ORDERING (!IMPORTANT)
 

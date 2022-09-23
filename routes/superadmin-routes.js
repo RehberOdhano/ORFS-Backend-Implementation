@@ -22,7 +22,16 @@ superadmin_router.delete(
 );
 
 // SUPERADMIN CUSTOMER TYPE ROUTES
-superadmin_router.post("/customerType/add", superadminController.addCustomerType);
-superadmin_router.get("/customerType", superadminController.getCustomerTypes)
+superadmin_router.post(
+  "/customerType/add",
+  superadminController.addCustomerType
+);
+superadmin_router.get("/customerType", superadminController.getCustomerTypes);
+
+// EMAIL VERIFICATION ROUTE
+superadmin_router.get(
+  "/admin/verify/:id/:token",
+  superadminController.verifyEmail
+);
 
 module.exports = superadmin_router;

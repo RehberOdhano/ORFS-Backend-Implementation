@@ -1243,13 +1243,13 @@ exports.deleteCategory = (req, res) => {
 
 /*
 =============================================================================
-|                         ADMINS' CSV ROUTES                                |
+|             ADMINS' IMPORT, EXPORT & DELETE CSV ROUTES                    |
 =============================================================================
 */
 
 exports.parseCSVFile = (req, res) => {
-  var records = [];
   try {
+    var records = [];
     fs.createReadStream(
       path.join(__dirname, "../", "/public/csv-files/" + req.file.filename)
     )
@@ -1264,32 +1264,6 @@ exports.parseCSVFile = (req, res) => {
             ? serviceProviders.push(record)
             : complainees.push(record);
         });
-
-        // Complainee.insertMany(complainees, (err, docs) => {
-        //   if (!err) {
-        //     SP.insertMany(serviceProviders, (err, docs) => {
-        //       if (!err) {
-        //         res.send({
-        //           status: 200,
-        //           success: true,
-        //           message: "USERS ARE SUCCESSFULLY ADDED!",
-        //         });
-        //       } else {
-        //         res.send({
-        //           status: 500,
-        //           success: false,
-        //           message: err.message,
-        //         });
-        //       }
-        //     });
-        //   } else {
-        //     res.send({
-        //       status: 500,
-        //       success: false,
-        //       message: err.message,
-        //     });
-        //   }
-        // });
 
         // try {
         //   Complainee.insertMany(complainees);
@@ -1313,5 +1287,30 @@ exports.parseCSVFile = (req, res) => {
       success: false,
       message: err.message,
     });
+  }
+};
+
+exports.deleteUploadedCSVFile = (req, res) => {
+  try {
+    if (!req.params.csv_file) {
+      res.send({
+        status: 500,
+        success: false,
+        message: err.message,
+      });
+    } else {
+      const directory = path.join(
+        __dirname,
+        "../" + "/public/csv-files/" + req.params.csv_file
+      );
+      fs.unlinkSync(directory);
+      res.send({
+        status: 200,
+        success: true,
+        message: "CSV FILE IS SUCCESSFULLY DELETED!",
+      });
+    }
+  } catch (error) {
+    console.log("ERROR: " + error.message);
   }
 };

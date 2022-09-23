@@ -18,8 +18,7 @@ const customerSchema = mongoose.Schema(
       enum: ["ACTIVE", "ONBOARDING", "RENEWAL", "INACTIVE"],
     },
     pfp: {
-      data: Buffer,
-      contentType: String,
+      type: String,
     },
     dateRegistered: {
       type: Date,
