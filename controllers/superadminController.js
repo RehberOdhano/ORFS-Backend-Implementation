@@ -80,7 +80,9 @@ exports.addCustomer = (req, res) => {
               });
             } else {
               const company_id = customer._id;
-              User.findOne({ email: req.body.adminEmail }).exec((err, user) => {
+              User.findOne({
+                $and: [{ email: req.body.email }, { verified: true }],
+              }).exec((err, user) => {
                 if (err) {
                   res.send({
                     status: 500,
@@ -91,7 +93,7 @@ exports.addCustomer = (req, res) => {
                   res.send({
                     status: 200,
                     success: true,
-                    message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS!`,
+                    message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS & VERIFIED HIS/HER ACCOUNT!`,
                   });
                 } else {
                   Customer.updateOne(
@@ -130,7 +132,7 @@ exports.addCustomer = (req, res) => {
                                     message: err.message,
                                   });
                                 } else {
-                                  const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${token.token}`;
+                                  const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.adminEmail}/${token.token}`;
                                   await sendEmail(
                                     req.body.adminEmail,
                                     "Verify Email",

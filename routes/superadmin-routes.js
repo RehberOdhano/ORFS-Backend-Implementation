@@ -30,7 +30,7 @@ superadmin_router.get("/customerType", superadminController.getCustomerTypes);
 
 // EMAIL VERIFICATION ROUTE
 superadmin_router.get(
-  "/admin/verify/:id/:token",
+  "/admin/verify/:id/:email/:token",
   superadminController.verifyEmail
 );
 

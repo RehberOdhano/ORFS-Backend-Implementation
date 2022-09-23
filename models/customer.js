@@ -2,11 +2,10 @@ const mongoose = require("mongoose");
 
 const customerSchema = mongoose.Schema(
   {
-    email: {
+    website: {
       type: String,
       unique: true,
-      required: [true, "EMAIL IS REQUIRED!"],
-      match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      required: [true, "WEBSITE IS REQUIRED!"],
     },
     title: {
       type: String,
@@ -16,6 +15,10 @@ const customerSchema = mongoose.Schema(
       type: String,
       required: [true, "STATUS IS REQUIRED!"],
       enum: ["ACTIVE", "ONBOARDING", "RENEWAL", "INACTIVE"],
+    },
+    customerTypeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "customer",
     },
     pfp: {
       type: String,

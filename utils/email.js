@@ -2,7 +2,6 @@ const nodemailer = require("nodemailer");
 
 const sendEmail = async (email, subject, text) => {
   try {
-    // SENDING EMAIL TO THE ADMIN
     const transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
       service: "gmail",
