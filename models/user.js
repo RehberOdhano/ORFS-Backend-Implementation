@@ -22,6 +22,10 @@ const userSchema = mongoose.Schema(
     googleID: {
       type: String,
     },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
     signin_type: {
       type: String,
     },

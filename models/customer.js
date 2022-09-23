@@ -23,10 +23,6 @@ const customerSchema = mongoose.Schema(
     dateRegistered: {
       type: Date,
     },
-    verified: {
-      type: Boolean,
-      default: false,
-    },
     subscription_plan: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subscription",

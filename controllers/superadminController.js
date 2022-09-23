@@ -1,6 +1,10 @@
 // PACKAGES
 const bcrypt = require("bcryptjs");
-const nodemailer = require("nodemailer");
+const crypto = require("crypto");
+const mongoose = require("mongoose");
+
+// UTILITY/HELPER FUNCTIONS
+const sendEmail = require("../utils/email");
 
 // MODELS
 const Customer = require("../models/customer");
@@ -11,6 +15,7 @@ const Complainee = require("../models/complainee");
 const Category = require("../models/category");
 const SP = require("../models/serviceProvider");
 const CustomerType = require("../models/customerType");
+const Token = require("../models/token");
 
 exports.getAllCustomers = (req, res) => {
   try {
@@ -100,89 +105,126 @@ exports.addCustomer = (req, res) => {
                         message: err.message,
                       });
                     } else {
-                      // SENDING EMAIL TO THE ADMIN
-                      var transporter = nodemailer.createTransport({
-                        service: "gmail",
-                        auth: {
-                          user: process.env.MAIL_USERNAME,
-                          pass: process.env.MAIL_PASSWORD,
-                        },
-                      });
-
-                      var mailOptions = {
-                        from: process.env.MAIL_FROM_ADDRESS,
-                        to: req.body.adminEmail,
-                        subject: "Register new admin",
-                        text: `Hello there ✔... Welcome to QRFS...`,
-                        html: `<a href="http://localhost:3000/register/${company_id}">Register Here</a>`,
-                      };
-
-                      // verifying the SMTP configuiration settings and if the settings
-                      // are fine, then it'll send an email to the specified email
-                      // address otherwise it'll send an error message as a response...
-                      transporter.verify((err) => {
-                        if (err) {
-                          res.send({
-                            status: 500,
-                            success: false,
-                            message: err.message,
-                          });
-                        } else {
-                          transporter.sendMail(
-                            mailOptions,
-                            function (error, info) {
-                              if (error) {
-                                res.send({
-                                  status: 500,
-                                  success: false,
-                                  message: error.message,
-                                });
-                              } else {
-                                console.log(
-                                  "Email sent: " + JSON.stringify(info)
-                                );
-                                res.send({
-                                  status: 200,
-                                  success: true,
-                                  message:
-                                    "CUSTOMER IS SUCCESSFULLY CREATED AND EMAIL IS SUCCESSFULLY SENT TO THE ADMIN!",
-                                });
+                      const query = { email: req.body.adminEmail },
+                        update = { email: req.body.adminEmail, role: "ADMIN" },
+                        options = { new: true, upsert: true };
+                      User.findOneAndUpdate(query, update, options).exec(
+                        (err, user) => {
+                          if (err) {
+                            res.send({
+                              status: 500,
+                              success: false,
+                              message: err.message,
+                            });
+                          } else {
+                            Token.create(
+                              {
+                                userId: user._id,
+                                token: crypto.randomBytes(32).toString("hex"),
+                              },
+                              async (err, token) => {
+                                if (err) {
+                                  res.send({
+                                    status: 500,
+                                    success: false,
+                                    message: err.message,
+                                  });
+                                } else {
+                                  const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${token.token}`;
+                                  await sendEmail(
+                                    req.body.adminEmail,
+                                    "Verify Email",
+                                    message
+                                  );
+                                  res.send({
+                                    status: 200,
+                                    success: true,
+                                    message:
+                                      "An email is sent to the admin... please verify...",
+                                  });
+                                }
                               }
-                            }
-                          );
+                            );
+                          }
                         }
-                      });
-
-                      // User.create(
-                      //   {
-                      //     name: "UNDEFINED",
-                      //     email: req.body.adminEmail,
-                      //     password: bcrypt.hashSync("admin", salt),
-                      //     role: "ADMIN",
-                      //     sign_type: "PLATFORM",
-                      //     company_id: company_id,
-                      //   },
-                      //   (err, user) => {
-                      //     if (err) {
-                      //       res.send({
-                      //         status: 500,
-                      //         success: false,
-                      //         message: err.message,
-                      //       });
-                      //     } else {
-                      //       res.send({
-                      //         status: 200,
-                      //         success: true,
-                      //         message:
-                      //           "CUSTOMER & ADMIN ARE SUCCESSFULLY ADDED!",
-                      //       });
-                      //     }
-                      //   }
-                      // );
+                      );
                     }
                   });
                 }
               });
+            }
+          }
+        );
+      }
+    });
+  } catch (err) {
+    console.log("ERROR: " + err.message);
+    res.send({
+      status: 500,
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+exports.verifyEmail = (req, res) => {
+  try {
+    User.findOne({ _id: req.params.id }).exec((err, user) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (!user) {
+        res.send({
+          status: 400,
+          success: false,
+          message: "USER DOES NOT EXIST!",
+        });
+      } else {
+        Token.findOne({ userId: user._id, token: req.params.token }).exec(
+          (err, token) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else if (!token) {
+              res.send({
+                status: 400,
+                success: false,
+                message: "INVALID REQUEST - TOKEN DOES NOT EXIST!",
+              });
+            } else {
+              User.updateOne({ _id: user._id }, { verified: true }).exec(
+                (err, user) => {
+                  if (err) {
+                    res.send({
+                      status: 500,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    Token.findByIdAndRemove(token._id).exec((err, token) => {
+                      if (err) {
+                        res.send({
+                          status: 500,
+                          success: false,
+                          message: err.message,
+                        });
+                      } else {
+                        res.send({
+                          status: 200,
+                          success: true,
+                          message: "EMAIL IS SUCCESSFULLY VERIFIED!",
+                        });
+                      }
+                    });
+                  }
+                }
+              );
             }
           }
         );
