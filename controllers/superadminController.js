@@ -49,7 +49,7 @@ exports.getAllCustomers = (req, res) => {
 exports.addCustomer = (req, res) => {
   try {
     Customer.findOne({
-      $or: [{ email: req.body.email }, { title: req.body.title }],
+      $or: [{ website: req.body.website }, { title: req.body.title }],
     }).exec((err, customer) => {
       if (err) {
         res.send({
@@ -59,7 +59,7 @@ exports.addCustomer = (req, res) => {
         });
       } else if (customer) {
         res.send({
-          status: 200,
+          status: 500,
           success: true,
           message: "CUSTOMER WITH THIS EMAIL/TITLE IS ALREADY EXISTS!",
         });
@@ -67,8 +67,8 @@ exports.addCustomer = (req, res) => {
         Customer.create(
           {
             title: req.body.title,
-            email: req.body.email,
-            status: req.body.status,
+            website: req.body.website,
+            status: "ONBOARDING",
             pfp: req.body.pfp,
           },
           (err, customer) => {
@@ -97,8 +97,8 @@ exports.addCustomer = (req, res) => {
                   });
                 } else {
                   Customer.updateOne(
-                    { email: req.body.email },
-                    { $push: { employees: { email: req.body.adminEmail } } }
+                    { website: req.body.website },
+                    { $push: { employees: { email: req.body.email } } }
                   ).exec((err, customer) => {
                     if (err) {
                       res.send({
@@ -107,8 +107,8 @@ exports.addCustomer = (req, res) => {
                         message: err.message,
                       });
                     } else {
-                      const query = { email: req.body.adminEmail },
-                        update = { email: req.body.adminEmail, role: "ADMIN" },
+                      const query = { email: req.body.email },
+                        update = { email: req.body.email, role: "ADMIN" },
                         options = { new: true, upsert: true };
                       User.findOneAndUpdate(query, update, options).exec(
                         (err, user) => {
@@ -134,7 +134,7 @@ exports.addCustomer = (req, res) => {
                                 } else {
                                   const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.adminEmail}/${token.token}`;
                                   await sendEmail(
-                                    req.body.adminEmail,
+                                    req.body.email,
                                     "Verify Email",
                                     message
                                   );
