@@ -6,6 +6,7 @@ const path = require("path");
 // CONTROLLERS
 const miscController = require("../controllers/miscController");
 
+// HELPER FUNCTIONS FOR IMAGE UPLOAD
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/static");

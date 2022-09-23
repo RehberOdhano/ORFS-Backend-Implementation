@@ -1,9 +1,13 @@
+// IMPORTED THE REQUIRED PACKAGES
 const express = require("express");
 const admin_router = express.Router();
 const path = require("path");
-const adminController = require("../controllers/adminController");
 const multer = require("multer");
 
+// CONTROLLERS
+const adminController = require("../controllers/adminController");
+
+// HELPER FUNCTIONS FOR IMPORTING & EXPORTING CSV FILES
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/csv-files");
@@ -96,7 +100,7 @@ admin_router.post("/categories/add/:id", adminController.addCategory);
 admin_router.put("/categories/dept/add/:id", adminController.addCategoryToDept);
 admin_router.delete("/categories/delete/:id", adminController.deleteCategory);
 
-// ADMIN CSV ROUTES
+// ADMIN IMPORT & EXPORT CSV FILE ROUTES
 admin_router.post(
   "/upload/csv",
   upload.single("csv_file"),

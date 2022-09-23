@@ -1248,8 +1248,8 @@ exports.deleteCategory = (req, res) => {
 */
 
 exports.parseCSVFile = (req, res) => {
-  var records = [];
   try {
+    var records = [];
     fs.createReadStream(
       path.join(__dirname, "../", "/public/csv-files/" + req.file.filename)
     )

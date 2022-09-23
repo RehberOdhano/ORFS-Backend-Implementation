@@ -8,7 +8,6 @@ const userSchema = mongoose.Schema(
     },
     email: {
       type: String,
-      // index: false,
       required: [true, "EMAIL IS REQUIRED!"],
       unique: true,
     },
@@ -16,6 +15,9 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "PASSWORD IS REQUIRED!"],
       min: [5, "MINIMUM 5 CHARACTERS ARE REQUIRED!"],
+    },
+    company_id: {
+      type: mongoose.Schema.Types.ObjectId,
     },
     googleID: {
       type: String,
@@ -27,9 +29,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "USER ROLE IS REQUIRED!"],
       enum: ["SUPERADMIN", "ADMIN", "COMPLAINEE", "SERVICEPROVIDER"],
-    },
-    company_id: {
-      type: mongoose.Schema.Types.ObjectId,
     },
     pfp: {
       data: Buffer,

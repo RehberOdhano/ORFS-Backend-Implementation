@@ -119,7 +119,7 @@ exports.addCustomer = (req, res) => {
 
                       // verifying the SMTP configuiration settings and if the settings
                       // are fine, then it'll send an email to the specified email
-                      // address...
+                      // address otherwise it'll send an error message as a response...
                       transporter.verify((err) => {
                         if (err) {
                           res.send({
