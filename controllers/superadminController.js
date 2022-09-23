@@ -61,7 +61,7 @@ exports.addCustomer = (req, res) => {
         res.send({
           status: 500,
           success: true,
-          message: "CUSTOMER WITH THIS EMAIL/TITLE IS ALREADY EXISTS!",
+          message: "CUSTOMER WITH THIS WEBSITE/TITLE ALREADY EXISTS!",
         });
       } else {
         Customer.create(
@@ -71,7 +71,7 @@ exports.addCustomer = (req, res) => {
             status: "ONBOARDING",
             customerTypeId: req.body.customer_type._id,
             pfp: req.body.pfp,
-            dateRegistered: Date.now("DD/MM/YYYY"),
+            dateRegistered: Date.now("DD-MM-YYYY"),
           },
           (err, customer) => {
             if (err) {
@@ -95,7 +95,7 @@ exports.addCustomer = (req, res) => {
                   res.send({
                     status: 200,
                     success: true,
-                    message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS & VERIFIED HIS/HER ACCOUNT!`,
+                    message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS & HAS VERIFIED HIS/HER ACCOUNT!`,
                   });
                 } else {
                   Customer.updateOne(
@@ -134,7 +134,7 @@ exports.addCustomer = (req, res) => {
                                     message: err.message,
                                   });
                                 } else {
-                                  const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.adminEmail}/${token.token}`;
+                                  const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
                                   await sendEmail(
                                     req.body.email,
                                     "Verify Email",
