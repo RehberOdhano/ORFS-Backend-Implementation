@@ -43,7 +43,6 @@ exports.getAllCustomers = (req, res) => {
 
 exports.addCustomer = (req, res) => {
   try {
-    let salt = bcrypt.genSaltSync(10);
     Customer.findOne({
       $or: [{ email: req.body.email }, { title: req.body.title }],
     }).exec((err, customer) => {
@@ -65,6 +64,7 @@ exports.addCustomer = (req, res) => {
             title: req.body.title,
             email: req.body.email,
             status: req.body.status,
+            pfp: req.body.pfp,
           },
           (err, customer) => {
             if (err) {

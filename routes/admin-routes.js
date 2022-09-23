@@ -19,13 +19,18 @@ const fileStorageEngine = multer.diskStorage({
 
 const upload = multer({
   storage: fileStorageEngine,
+  limits: { fileSize: 1024 * 1024 * 5 },
   fileFilter: (req, file, cb) => {
     var ext = path.extname(file.originalname);
-    if (ext !== ".csv") {
-      return cb(new Error("ONLY CSV FILES ARE ALLOWED!"));
+    if (file.size > limits.fileSize) {
+      return cb(new Error("FILES SIZE SHOULD NOT BE MORE THAN 5MBs!"));
+    } else {
+      if (ext !== ".csv") {
+        return cb(new Error("ONLY CSV FILES ARE ALLOWED!"));
+      } else {
+        cb(null, true);
+      }
     }
-
-    cb(null, true);
   },
 });
 
@@ -100,11 +105,22 @@ admin_router.post("/categories/add/:id", adminController.addCategory);
 admin_router.put("/categories/dept/add/:id", adminController.addCategoryToDept);
 admin_router.delete("/categories/delete/:id", adminController.deleteCategory);
 
-// ADMIN IMPORT & EXPORT CSV FILE ROUTES
+// ADMIN IMPORT, EXPORT & DELETE CSV FILE ROUTES
 admin_router.post(
   "/upload/csv",
   upload.single("csv_file"),
   adminController.parseCSVFile
+);
+
+admin_router.post(
+  "/upload/csv",
+  upload.single("csv_file"),
+  adminController.parseCSVFile
+);
+
+admin_router.delete(
+  "/delete/csv/:csv_file",
+  adminController.deleteUploadedCSVFile
 );
 
 module.exports = admin_router;

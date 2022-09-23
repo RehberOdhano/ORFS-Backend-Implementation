@@ -18,25 +18,34 @@ const fileStorageEngine = multer.diskStorage({
 
 const upload = multer({
   storage: fileStorageEngine,
+  limits: {
+    fileSize: 1024 * 1024 * 5, // 5 MBs
+  },
   fileFilter: (req, file, cb) => {
-    if (
-      file.mimetype === "image/jpg" ||
-      file.mimetype === "image/png" ||
-      file.mimetype === "image/jpeg"
-    ) {
-      cb(null, true);
+    if (file.size > 1024 * 1024 * 5) {
+      return cb(new Error("FILES SIZE SHOULD NOT BE MORE THAN 5MBs!"));
     } else {
-      cb(null, false);
+      if (
+        file.mimetype === "image/jpg" ||
+        file.mimetype === "image/png" ||
+        file.mimetype === "image/jpeg"
+      ) {
+        cb(null, true);
+      } else {
+        return cb(new Error("ONLY PNG/JPG/JPEG FILES ARE ALLOWED!"));
+      }
     }
   },
 });
 
-// UPLOAD IMAGE ROUTE
+// UPLOADING & DELETEING IMAGE ROUTES
 misc_router.post(
   "/upload/images",
   upload.single("img"),
   miscController.uploadProfilePicture
 );
+
+misc_router.delete("/delete/image/:img", miscController.deleteUploadedImage);
 
 // DATABASE CLEANING ROUTES
 // misc_router.delete("/deleteAll", miscController.deleteAll);
