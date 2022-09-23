@@ -64,6 +64,7 @@ exports.addCustomer = (req, res) => {
           message: "CUSTOMER WITH THIS WEBSITE/TITLE ALREADY EXISTS!",
         });
       } else {
+        // const today
         Customer.create(
           {
             title: req.body.title,
@@ -71,7 +72,7 @@ exports.addCustomer = (req, res) => {
             status: "ONBOARDING",
             customerTypeId: req.body.customer_type._id,
             pfp: req.body.pfp,
-            dateRegistered: Date.now("DD-MM-YYYY"),
+            dateRegistered: new Date().toLocaleString("en-GB"), // date in dd/mm/yyyy format
           },
           (err, customer) => {
             if (err) {
