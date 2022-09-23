@@ -69,7 +69,9 @@ exports.addCustomer = (req, res) => {
             title: req.body.title,
             website: req.body.website,
             status: "ONBOARDING",
+            customerTypeId: req.body.customer_type._id,
             pfp: req.body.pfp,
+            dateRegistered: Date.now("DD/MM/YYYY"),
           },
           (err, customer) => {
             if (err) {
