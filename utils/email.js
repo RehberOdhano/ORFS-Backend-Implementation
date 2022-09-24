@@ -20,17 +20,7 @@ const sendEmail = async (email, subject, text) => {
       text: text,
     };
 
-    transporter.verify(async (err) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else {
-        await transporter.sendMail(mailOptions);
-      }
-    });
+    await transporter.sendMail(mailOptions);
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
