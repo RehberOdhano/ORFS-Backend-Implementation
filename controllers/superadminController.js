@@ -72,7 +72,8 @@ exports.addCustomer = (req, res) => {
             status: "ONBOARDING",
             customerTypeId: req.body.customer_type._id,
             pfp: req.body.pfp,
-            dateRegistered: new Date().toLocaleString("en-GB"), // date in dd/mm/yyyy format
+            // dateRegistered: new Date().toLocaleString("en-GB"), // date in dd/mm/yyyy format
+            dateRegistered: Date.now(),
           },
           (err, customer) => {
             if (err) {

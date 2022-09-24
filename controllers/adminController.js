@@ -74,9 +74,9 @@ exports.addSpecificUser = (req, res) => {
         });
       } else if (user) {
         res.send({
-          status: 200,
-          success: true,
-          message: "USER WITH THIS NAME & EMAIL IS ALREADY EXISTS!",
+          status: 500,
+          success: false,
+          message: "USER WITH THIS EMAIL IS ALREADY EXISTS!",
         });
       } else {
         User.create(
