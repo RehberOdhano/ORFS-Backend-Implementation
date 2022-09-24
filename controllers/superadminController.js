@@ -64,7 +64,6 @@ exports.addCustomer = (req, res) => {
           message: "CUSTOMER WITH THIS WEBSITE/TITLE ALREADY EXISTS!",
         });
       } else {
-        // const today
         Customer.create(
           {
             title: req.body.title,
@@ -140,7 +139,9 @@ exports.addCustomer = (req, res) => {
                                   await sendEmail(
                                     req.body.email,
                                     "Verify Email",
-                                    message
+                                    message,
+                                    req,
+                                    res
                                   );
                                   res.send({
                                     status: 200,

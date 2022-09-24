@@ -12,6 +12,7 @@ const Customer = require("../models/customer");
 const Department = require("../models/department");
 const Complainee = require("../models/complainee");
 const SP = require("../models/serviceProvider");
+const Token = require("../models/token");
 
 /*
 =============================================================================
