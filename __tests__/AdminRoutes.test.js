@@ -6,83 +6,41 @@ require("dotenv").config();
 const { setupDB } = require("../utils/test-setup");
 setupDB(process.env.URL);
 
-describe("GET ROUTES", () => {
+describe("USER ROUTES TESTS", () => {
   const company_id = "632487b2bed27ddbe46afd68";
-  describe("get users' list", () => {
+  describe("GET ALL USERS", () => {
     test("It should respond with a status code 200", (done) => {
       request.get("/admin/users/all/" + company_id).expect(200, done);
     });
   });
 
-  describe("get complaints' list", () => {
-    test("It should respond with a status code 200", (done) => {
-      request.get("/admin/complaints/" + company_id).expect(200, done);
-    });
-  });
-
-  describe("get departments' list", () => {
-    test("It should respond with a status code 200", (done) => {
-      request.get("/admin/depts/all/" + company_id).expect(200, done);
-    });
-  });
-
-  describe("get departments' list", () => {
-    test("It should respond with a status code 200", (done) => {
-      request.get("/admin/categories/all/" + company_id).expect(200, done);
-    });
-  });
-
-  describe("get departments' list", () => {
-    test("It should respond with a status code 200", (done) => {
-      request.get("/admin/categories/all/" + company_id).expect(200, done);
-    });
-  });
-});
-
-describe("POST ROUTES", () => {
-  const company_id = "632487b2bed27ddbe46afd68";
-  describe("get users' list", () => {
-    // test("It should successfully create a user & respond with a status code 200", async () => {
-    //   const res = await request.post("/admin/users/add/" + company_id).send({
-    //     name: "Karen",
-    //     email: "karen@example.com",
-    //     role: "COMPLAINEE",
-    //   });
-    //   expect(res.body.status).toEqual(200);
-    // });
-
-    // user with same email already exists!
-    test("It should respond with a status code 500", async () => {
-      const res = await request.post("/admin/users/add/" + company_id).send({
+  describe("ADD A USER", () => {
+    const testcases = [
+      {
         name: "Karen",
-        email: "admin1260@gmail.com",
+        email: "karen@example.com",
         role: "COMPLAINEE",
+        status: 200,
+        test: "It should successfully create a new user if it's already not exists & respond with a status code 200",
+      },
+      {
+        name: "Karen",
+        email: "karen@example.com",
+        role: "COMPLAINEE",
+        status: 500,
+        test: "It should respond with a status code 500",
+      },
+    ];
+
+    testcases.forEach((testcase) => {
+      test(testcase.test, async () => {
+        const res = await request.post("/admin/users/add/" + company_id).send({
+          name: testcase.name,
+          email: testcase.email,
+          role: testcase.role,
+        });
+        expect(testcase.status).toBe(res.body.status);
       });
-      expect(res.body.status).toEqual(500);
     });
   });
-
-  //   describe("get complaints' list", () => {
-  //     test("It should respond with a status code 200", (done) => {
-  //       request.get("/admin/complaints/" + company_id).expect(200, done);
-  //     });
-  //   });
-
-  //   describe("get departments' list", () => {
-  //     test("It should respond with a status code 200", (done) => {
-  //       request.get("/admin/depts/all/" + company_id).expect(200, done);
-  //     });
-  //   });
-
-  //   describe("get departments' list", () => {
-  //     test("It should respond with a status code 200", (done) => {
-  //       request.get("/admin/categories/all/" + company_id).expect(200, done);
-  //     });
-  //   });
-
-  //   describe("get departments' list", () => {
-  //     test("It should respond with a status code 200", (done) => {
-  //       request.get("/admin/categories/all/" + company_id).expect(200, done);
-  //     });
-  //   });
 });

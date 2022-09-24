@@ -139,9 +139,7 @@ exports.addCustomer = (req, res) => {
                                   await sendEmail(
                                     req.body.email,
                                     "Verify Email",
-                                    message,
-                                    req,
-                                    res
+                                    message
                                   );
                                   res.send({
                                     status: 200,

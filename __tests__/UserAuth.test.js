@@ -36,7 +36,7 @@ describe("POST /login", () => {
         {},
       ];
       for (const param of parameters) {
-        request.post("/login").send(param).expect(200);
+        request.post("/login").send(param).expect(500);
       }
       done();
     });

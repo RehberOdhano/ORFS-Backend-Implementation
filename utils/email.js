@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const sendEmail = async (email, subject, text, req, res) => {
+const sendEmail = async (email, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
@@ -28,23 +28,7 @@ const sendEmail = async (email, subject, text, req, res) => {
           message: err.message,
         });
       } else {
-        await transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            res.send({
-              status: 500,
-              success: false,
-              message: error.message,
-            });
-          } else {
-            console.log("Email sent: " + JSON.stringify(info));
-            res.send({
-              status: 200,
-              success: true,
-              message:
-                "CUSTOMER IS SUCCESSFULLY CREATED AND EMAIL IS SUCCESSFULLY SENT TO THE ADMIN!",
-            });
-          }
-        });
+        await transporter.sendMail(mailOptions);
       }
     });
   } catch (err) {
