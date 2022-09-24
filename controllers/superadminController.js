@@ -136,17 +136,17 @@ exports.addCustomer = (req, res) => {
                                   });
                                 } else {
                                   const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
-                                  await sendEmail(
-                                    req.body.email,
-                                    "Verify Email",
-                                    message
-                                  );
                                   res.send({
                                     status: 200,
                                     success: true,
                                     message:
                                       "An email is sent to the admin... please verify...",
                                   });
+                                  await sendEmail(
+                                    req.body.email,
+                                    "Verify Email",
+                                    message
+                                  );
                                 }
                               }
                             );
