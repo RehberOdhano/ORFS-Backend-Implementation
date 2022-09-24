@@ -41,9 +41,9 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+exports.login = (req, res) => {
   try {
-    User.findOne({ email: req.body.email }, (err, user) => {
+    User.findOne({ email: req.body.email }).exec((err, user) => {
       if (user && bcrypt.compareSync(req.body.password, user.password)) {
         payload = {
           role: user.role,
@@ -55,11 +55,19 @@ exports.login = async (req, res) => {
         };
         res.json(successObject);
       } else {
-        res.send(err);
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
       }
     });
   } catch (err) {
-    res.send(err);
+    res.send({
+      status: 500,
+      success: false,
+      message: err.message,
+    });
   }
 };
 
