@@ -1,8 +1,13 @@
+// IMPORTED/REQUIRED NECESSARY PACKAGES
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const csv = require("fast-csv");
 const path = require("path");
 const fs = require("fs");
+const multer = require("multer");
+
+// UTILITY FUNCTIONS
+const { upload } = require("../utils/fileUpload");
 
 // MODELS
 const User = require("../models/user");
@@ -12,7 +17,6 @@ const Customer = require("../models/customer");
 const Department = require("../models/department");
 const Complainee = require("../models/complainee");
 const SP = require("../models/serviceProvider");
-const Token = require("../models/token");
 
 /*
 =============================================================================
@@ -44,7 +48,7 @@ exports.getUsersList = (req, res) => {
         });
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -75,9 +79,10 @@ exports.addSpecificUser = (req, res) => {
         });
       } else if (user) {
         res.send({
-          status: 500,
-          success: false,
+          status: 200,
+          success: true,
           message: "USER WITH THIS EMAIL IS ALREADY EXISTS!",
+          user: user,
         });
       } else {
         User.create(
@@ -166,7 +171,7 @@ exports.addSpecificUser = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
     return;
   }
 };
@@ -201,7 +206,7 @@ exports.updateSpecificUser = async (req, res) => {
       }
     );
   } catch (err) {
-    console.error("ERROR: " + err);
+    console.log("ERROR: " + err);
   }
 };
 
@@ -254,7 +259,7 @@ exports.deleteSpecificUser = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -312,7 +317,7 @@ exports.deleteMultipleUsers = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -388,7 +393,7 @@ exports.getComplaintsList = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -435,7 +440,7 @@ exports.updateSpecificComplaint = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR:" + err.message);
+    console.log("ERROR:" + err.message);
   }
 };
 
@@ -460,7 +465,7 @@ exports.archiveSpecificComplaint = (req, res) => {
       }
     );
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -483,7 +488,7 @@ exports.deleteSpecificComplaint = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR:" + err.message);
+    console.log("ERROR:" + err.message);
   }
 };
 
@@ -565,7 +570,7 @@ exports.getDeptsList = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -594,7 +599,7 @@ exports.getSpecificDept = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -614,6 +619,7 @@ exports.addSpecificDept = (req, res) => {
           status: 200,
           success: true,
           message: `${title.toUpperCase()} DEPARTMENT ALREADY EXISTS!`,
+          id: dept._id,
         });
       } else {
         Department.create(
@@ -657,7 +663,7 @@ exports.addSpecificDept = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -705,7 +711,7 @@ exports.updateSpecificDept = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -722,7 +728,6 @@ exports.deleteSpecificDept = (req, res) => {
         });
       } else {
         JSON.stringify(dept);
-        console.log("dept: " + dept);
         Customer.updateOne(
           { _id: dept.company_id },
           { $pull: { departments: { _id: id } } }
@@ -773,7 +778,7 @@ exports.deleteSpecificDept = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -850,7 +855,7 @@ exports.addDeptEmployee = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -898,7 +903,7 @@ exports.deleteDeptEmployee = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -977,7 +982,7 @@ exports.getAllDeptEmployees = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -1051,7 +1056,7 @@ exports.getAvailableEmployees = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -1081,7 +1086,7 @@ exports.getAllCategories = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -1114,7 +1119,7 @@ exports.getUnassignedCategories = (req, res) => {
       }
     );
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -1145,7 +1150,7 @@ exports.addCategory = (req, res) => {
       }
     );
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -1185,7 +1190,7 @@ exports.addCategoryToDept = (req, res) => {
       }
     );
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -1238,7 +1243,7 @@ exports.deleteCategory = (req, res) => {
       }
     });
   } catch (err) {
-    console.error("ERROR: " + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -1250,43 +1255,42 @@ exports.deleteCategory = (req, res) => {
 
 exports.parseCSVFile = (req, res) => {
   try {
-    var records = [];
-    fs.createReadStream(
-      path.join(__dirname, "../", "/public/csv-files/" + req.file.filename)
-    )
-      .pipe(csv.parse({ headers: true }))
-      .on("error", (err) => console.log(err))
-      .on("data", (row) => records.push(row))
-      .on("end", (rowCount) => {
-        var serviceProviders = [],
-          complainees = [];
-        records.forEach((record) => {
-          record.role === "SERVICEPROVIDER"
-            ? serviceProviders.push(record)
-            : complainees.push(record);
+    upload(req, res, (err) => {
+      if (err instanceof multer.MulterError || err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
         });
-
-        // try {
-        //   Complainee.insertMany(complainees);
-        //   SP.insertMany(serviceProviders);
-        //   res.send({
-        //     status: 200,
-        //     success: true,
-        //     data: records,
-        //   });
-        // } catch (error) {
-        //   res.send({
-        //     status: 500,
-        //     success: false,
-        //     message: error.message,
-        //   });
-        // }
-      });
+      } else {
+        var records = [];
+        fs.createReadStream(
+          path.join(__dirname, "../", "/public/csv-files/" + req.file.filename)
+        )
+          .pipe(csv.parse({ headers: true }))
+          .on("error", (err) => console.log(err))
+          .on("data", (row) => records.push(row))
+          .on("end", (rowCount) => {
+            var serviceProviders = [],
+              complainees = [];
+            records.forEach((record) => {
+              record.role === "SERVICEPROVIDER"
+                ? serviceProviders.push(record)
+                : complainees.push(record);
+            });
+            res.send({
+              status: 200,
+              success: true,
+              file: req.file.filename,
+            });
+          });
+      }
+    });
   } catch (error) {
     res.send({
       status: 500,
       success: false,
-      message: err.message,
+      message: error.message,
     });
   }
 };

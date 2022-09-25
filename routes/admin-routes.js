@@ -1,38 +1,9 @@
 // IMPORTED THE REQUIRED PACKAGES
 const express = require("express");
 const admin_router = express.Router();
-const path = require("path");
-const multer = require("multer");
 
 // CONTROLLERS
 const adminController = require("../controllers/adminController");
-
-// HELPER FUNCTIONS FOR IMPORTING & EXPORTING CSV FILES
-const fileStorageEngine = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/csv-files");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + file.originalname);
-  },
-});
-
-const upload = multer({
-  storage: fileStorageEngine,
-  limits: { fileSize: 1024 * 1024 * 5 },
-  fileFilter: (req, file, cb) => {
-    var ext = path.extname(file.originalname);
-    if (file.size > limits.fileSize) {
-      return cb(new Error("FILES SIZE SHOULD NOT BE MORE THAN 5MBs!"));
-    } else {
-      if (ext !== ".csv") {
-        return cb(new Error("ONLY CSV FILES ARE ALLOWED!"));
-      } else {
-        cb(null, true);
-      }
-    }
-  },
-});
 
 // ADMIN USER ROUTES
 admin_router.get("/users/all/:id", adminController.getUsersList);
@@ -106,18 +77,17 @@ admin_router.put("/categories/dept/add/:id", adminController.addCategoryToDept);
 admin_router.delete("/categories/delete/:id", adminController.deleteCategory);
 
 // ADMIN IMPORT, EXPORT & DELETE CSV FILE ROUTES
-admin_router.post(
-  "/upload/csv",
-  upload.single("csv_file"),
-  adminController.parseCSVFile
-);
 
-admin_router.post(
-  "/upload/csv",
-  upload.single("csv_file"),
-  adminController.parseCSVFile
-);
+const extendTimeOut = (req, res, next) => {
+  res.setTimeout(65000, function () {
+    console.log("Request has timed out.");
+    res.send(408);
+  });
 
+  next();
+};
+
+admin_router.post("/upload/csv", extendTimeOut, adminController.parseCSVFile);
 admin_router.delete(
   "/delete/csv/:csv_file",
   adminController.deleteUploadedCSVFile

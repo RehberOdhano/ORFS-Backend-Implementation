@@ -105,6 +105,8 @@ dist
 
 # test files
 __tests__
+coverage
+jest-stare
 
 # public foler
-public
+# public

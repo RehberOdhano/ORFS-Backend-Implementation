@@ -1,38 +1,34 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const complaineeSchema = mongoose.Schema({
+const complaineeSchema = mongoose.Schema(
+  {
     user_id: {
-        type: mongoose.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
     },
     company_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        // ref: "Customer",
-        // required: true
+      type: mongoose.Schema.Types.ObjectId,
+      // ref: "Customer",
+      // required: true
     },
-    complaints: [{
-        // type: Object,
-        // title: { type: String },
-        // description: { type: String },
-        // category: { type: String },
-        // status: { type: String },
-        // assignedTo: [{
-        //     ID: { type: String },
-        //     username: { type: String },
-        //     email: { type: String },
-        // }],
+    complaints: [
+      {
         _id: {
-            type: mongoose.Schema.Types.ObjectId
-        }
-    }],
-    feedback: [{
+          type: mongoose.Schema.Types.ObjectId,
+        },
+      },
+    ],
+    feedback: [
+      {
         type: Object,
         complaint_id: String,
         response: String,
-    }],
+      },
+    ],
     rating: { type: Number },
     level: { type: Number },
     points: { type: Number },
+  },
+  { versionKey: false }
+);
 
-}, { versionKey: false });
-
-module.exports = mongoose.model('Complainee', complaineeSchema);
+module.exports = mongoose.model("Complainee", complaineeSchema);

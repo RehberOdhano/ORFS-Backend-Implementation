@@ -1,7 +1,6 @@
 // PACKAGES
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
-const mongoose = require("mongoose");
 
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
@@ -59,7 +58,7 @@ exports.addCustomer = (req, res) => {
         });
       } else if (customer) {
         res.send({
-          status: 500,
+          status: 200,
           success: true,
           message: "CUSTOMER WITH THIS WEBSITE/TITLE ALREADY EXISTS!",
         });
@@ -83,9 +82,7 @@ exports.addCustomer = (req, res) => {
               });
             } else {
               const company_id = customer._id;
-              User.findOne({
-                $and: [{ email: req.body.email }, { verified: true }],
-              }).exec((err, user) => {
+              User.findOne({ email: req.body.email }).exec((err, user) => {
                 if (err) {
                   res.send({
                     status: 500,
@@ -96,7 +93,9 @@ exports.addCustomer = (req, res) => {
                   res.send({
                     status: 200,
                     success: true,
-                    message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS & HAS VERIFIED HIS/HER ACCOUNT!`,
+                    message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS!`,
+                    user_id: user._id,
+                    company_id: customer._id,
                   });
                 } else {
                   Customer.updateOne(
@@ -141,6 +140,8 @@ exports.addCustomer = (req, res) => {
                                     success: true,
                                     message:
                                       "An email is sent to the admin... please verify...",
+                                    company_id: company_id,
+                                    user_id: user._id,
                                   });
                                   await sendEmail(
                                     req.body.email,
