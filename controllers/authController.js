@@ -22,7 +22,7 @@ exports.register = (req, res) => {
             message: err.message,
           });
         } else {
-          User.updateOne(
+          User.findOneAndUpdate(
             { email: email },
             {
               name: req.body.firstName + " " + req.body.lastName,
@@ -44,10 +44,11 @@ exports.register = (req, res) => {
                 user,
                 message: "An email is sent to the admin... please verify...",
               };
-              Token.create({
-                userId: user._id,
-                token: crypto.randomBytes(32).toString("hex"),
-              }),
+              Token.create(
+                {
+                  userId: user._id,
+                  token: crypto.randomBytes(32).toString("hex"),
+                },
                 async (err, token) => {
                   if (err) {
                     res.send({
@@ -60,7 +61,8 @@ exports.register = (req, res) => {
                     const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
                     await sendEmail(req.body.email, "Verify Email", message);
                   }
-                };
+                }
+              );
             }
           });
         }
