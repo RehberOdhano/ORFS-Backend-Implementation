@@ -6,6 +6,9 @@ const crypto = require("crypto");
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
 
+// MODELS
+const Token = require("../models/token");
+
 exports.register = (req, res) => {
   try {
     let salt = bcrypt.genSaltSync(10);
