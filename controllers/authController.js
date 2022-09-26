@@ -1,6 +1,10 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+
+// UTILITY/HELPER FUNCTIONS
+const sendEmail = require("../utils/email");
 
 exports.register = (req, res) => {
   try {
@@ -35,8 +39,25 @@ exports.register = (req, res) => {
                   expiresIn: "60m",
                 }),
                 user,
+                message: "An email is sent to the admin... please verify...",
               };
-              res.json(successObject);
+              Token.create({
+                userId: user._id,
+                token: crypto.randomBytes(32).toString("hex"),
+              }),
+                async (err, token) => {
+                  if (err) {
+                    res.send({
+                      status: 500,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    res.json(successObject);
+                    const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
+                    await sendEmail(req.body.email, "Verify Email", message);
+                  }
+                };
             }
           });
         }

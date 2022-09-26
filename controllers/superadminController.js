@@ -1,6 +1,5 @@
 // PACKAGES
 const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
 
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
@@ -117,7 +116,7 @@ exports.addCustomer = (req, res) => {
                         },
                         options = { new: true, upsert: true };
                       User.findOneAndUpdate(query, update, options).exec(
-                        (err, user) => {
+                        async (err, user) => {
                           if (err) {
                             res.send({
                               status: 500,
@@ -125,35 +124,19 @@ exports.addCustomer = (req, res) => {
                               message: err.message,
                             });
                           } else {
-                            Token.create(
-                              {
-                                userId: user._id,
-                                token: crypto.randomBytes(32).toString("hex"),
-                              },
-                              async (err, token) => {
-                                if (err) {
-                                  res.send({
-                                    status: 500,
-                                    success: false,
-                                    message: err.message,
-                                  });
-                                } else {
-                                  const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
-                                  res.send({
-                                    status: 200,
-                                    success: true,
-                                    message:
-                                      "An email is sent to the admin... please verify...",
-                                    company_id: company_id,
-                                    user_id: user._id,
-                                  });
-                                  await sendEmail(
-                                    req.body.email,
-                                    "Verify Email",
-                                    message
-                                  );
-                                }
-                              }
+                            const message = `${process.env.FRONTEND_REGISTER}`;
+                            res.send({
+                              status: 200,
+                              success: true,
+                              message:
+                                "An email is sent to the admin... please register here...",
+                              company_id: company_id,
+                              user_id: user._id,
+                            });
+                            await sendEmail(
+                              req.body.email,
+                              "User Registration",
+                              message
                             );
                           }
                         }
