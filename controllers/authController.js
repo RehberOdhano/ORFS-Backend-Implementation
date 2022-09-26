@@ -7,14 +7,23 @@ exports.register = async (req, res) => {
     let salt = bcrypt.genSaltSync(10);
     const email = req.body.email;
     await User.findOne({ email: email }, async (err, user) => {
-      if (err) console.log(err);
-      else if (user) res.send("USER ALREADY EXISTS!");
-      else {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (user) {
+        res.send({
+          status: 200,
+          success: true,
+          message: "USER ALREADY EXISTS!",
+        });
+      } else {
         await User.create(
           {
             name: req.body.firstName + " " + req.body.lastName,
             email: req.body.email,
-            // hashing password
             password: bcrypt.hashSync(req.body.password, salt),
             role: "COMPLAINEE",
             sign_type: req.body.sign_type,
@@ -31,20 +40,29 @@ exports.register = async (req, res) => {
               user,
             };
             res.json(successObject);
-            console.log(user);
           }
         );
       }
     }).clone();
   } catch (err) {
-    console.log(err);
+    res.send({
+      status: 500,
+      success: false,
+      message: err.message,
+    });
   }
 };
 
 exports.login = (req, res) => {
   try {
     User.findOne({ email: req.body.email }).exec((err, user) => {
-      if (user && bcrypt.compareSync(req.body.password, user.password)) {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (user && bcrypt.compareSync(req.body.password, user.password)) {
         payload = {
           role: user.role,
           _id: user.id,
