@@ -2,48 +2,46 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-exports.register = async (req, res) => {
+exports.register = (req, res) => {
   try {
     let salt = bcrypt.genSaltSync(10);
     const email = req.body.email;
-    await User.findOne({ email: email }, async (err, user) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (user) {
-        res.send({
-          status: 200,
-          success: true,
-          message: "USER ALREADY EXISTS!",
-        });
-      } else {
-        await User.create(
-          {
-            name: req.body.firstName + " " + req.body.lastName,
-            email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, salt),
-            role: "COMPLAINEE",
-            sign_type: req.body.sign_type,
-          },
-          (err, user) => {
-            if (err) {
-              console.log("\n\n" + err);
-              res.send("NOT ABLE TO ADD THE USER!");
+    User.findOne({ email: email, verified: false })
+      .exec((err, user) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          User.updateOne(
+            { email: email },
+            {
+              name: req.body.firstName + " " + req.body.lastName,
+              password: bcrypt.hashSync(req.body.password, salt),
+              sign_type: "PLATFORM",
             }
-            let successObject = {
-              token: jwt.sign({ _id: user._id }, process.env.JWTSECRET, {
-                expiresIn: "60m",
-              }),
-              user,
-            };
-            res.json(successObject);
-          }
-        );
-      }
-    }).clone();
+          ).exec((err, user) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              let successObject = {
+                token: jwt.sign({ _id: user._id }, process.env.JWTSECRET, {
+                  expiresIn: "60m",
+                }),
+                user,
+              };
+              res.json(successObject);
+            }
+          });
+        }
+      })
+      .clone();
   } catch (err) {
     res.send({
       status: 500,
@@ -76,7 +74,7 @@ exports.login = (req, res) => {
         res.send({
           status: 500,
           success: false,
-          message: err.message,
+          message: "INCORRECT CREDENTIALS!",
         });
       }
     });

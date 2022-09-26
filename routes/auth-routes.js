@@ -1,5 +1,4 @@
 const express = require("express");
-const passport = require("passport");
 const auth_router = express.Router();
 const authController = require("../controllers/authController");
 
@@ -11,8 +10,8 @@ auth_router.post("/register", authController.register);
 
 // TEST DEPLOY ROUTES
 auth_router.get("/", (req, res) => {
-    res.send("THIS IS WORKING");
-})
+  res.send("THIS IS WORKING");
+});
 
 // auth_router.post('/extra', authController.extra);
 

@@ -110,7 +110,11 @@ exports.addCustomer = (req, res) => {
                       });
                     } else {
                       const query = { email: req.body.email },
-                        update = { email: req.body.email, role: "ADMIN" },
+                        update = {
+                          email: req.body.email,
+                          role: "ADMIN",
+                          company_id: company_id,
+                        },
                         options = { new: true, upsert: true };
                       User.findOneAndUpdate(query, update, options).exec(
                         (err, user) => {
