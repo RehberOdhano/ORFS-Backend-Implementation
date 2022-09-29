@@ -17,7 +17,6 @@ exports.upload = multer({
   limits: { fileSize: fileSize },
   fileFilter: (req, file, cb) => {
     var ext = path.extname(file.originalname);
-    console.log(ext);
     if (file.size > fileSize) {
       return cb(new Error("FILE SIZE SHOULD NOT BE MORE THAN 5MBs!"));
     } else {

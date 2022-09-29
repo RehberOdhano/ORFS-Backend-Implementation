@@ -124,7 +124,7 @@ exports.addCustomer = (req, res) => {
                               message: err.message,
                             });
                           } else {
-                            const message = `${process.env.FRONTEND}/register`;
+                            const message = `Click this link to register: ${process.env.FRONTEND}/register`;
                             res.send({
                               status: 200,
                               success: true,

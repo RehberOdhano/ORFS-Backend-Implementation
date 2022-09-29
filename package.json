@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "test": "jest --reporters default jest-stare --coverage --detectOpenHandles --runInBand --testTimeout=60000",
-        "test:watch": "jest --watchAll --reporters default jest-stare --coverage --runInBand --testTimeout=60000",
+        "test:watch": "jest --watchAll --coverage --runInBand --testTimeout=60000",
+        "jest:debug": "node --nolazy --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --colors --verbose",
         "start": "nodemon server"
     },
     "jest": {
