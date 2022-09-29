@@ -7,6 +7,12 @@ const Complainee = require("../models/complainee");
 const Department = require("../models/department");
 const SP = require("../models/serviceProvider");
 
+/*
+=============================================================================
+|                             USERS' ROUTES                                 |
+=============================================================================
+*/
+
 exports.getAllComplaints = (req, res) => {
   try {
     const id = req.params.id;

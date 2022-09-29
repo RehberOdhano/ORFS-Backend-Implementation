@@ -1,10 +1,5 @@
 // imported the required packages and routes...
-
-// PACKAGES
-const express = require("express");
-const cors = require("cors");
-const passport = require("passport");
-const path = require("path");
+const { express, cors, passport, path } = require("./utils/packages");
 
 const app = express();
 

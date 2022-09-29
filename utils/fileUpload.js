@@ -1,5 +1,4 @@
-const path = require("path");
-const multer = require("multer");
+const { path, multer } = require("../utils/packages");
 
 const fileSize = 1024 * 1024 * 5;
 

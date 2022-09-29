@@ -15,6 +15,12 @@ const SP = require("../models/serviceProvider");
 const CustomerType = require("../models/customerType");
 const Token = require("../models/token");
 
+/*
+=============================================================================
+|                         SUPERADMINS' ROUTES                               |
+=============================================================================
+*/
+
 exports.getAllCustomers = (req, res) => {
   try {
     // getting all the registered customers
@@ -241,7 +247,7 @@ exports.editCustomer = (req, res) => {
       } else {
         const updatedCustomerObj = {
           title: req.body.title == "" ? customer.title : req.body.title,
-          email: req.body.email == "" ? customer.email : req.body.email,
+          website: req.body.website == "" ? customer.website : req.body.website,
         };
         Customer.updateOne({ _id: company_id }, updatedCustomerObj, {
           upsert: true,

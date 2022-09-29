@@ -8,6 +8,12 @@ const sendEmail = require("../utils/email");
 const Token = require("../models/token");
 const User = require("../models/user");
 
+/*
+=============================================================================
+|                                 AUTH ROUTES                               |
+=============================================================================
+*/
+
 exports.register = (req, res) => {
   try {
     let salt = bcrypt.genSaltSync(10);

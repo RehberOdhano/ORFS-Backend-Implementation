@@ -1,9 +1,17 @@
-// IMPORTED THE REQUIRED PACKAGES
-const express = require("express");
+// IMPORTED THE REQUIRED PACKAGE(S)
+const { express } = require("../utils/packages");
+
+// ROUTER
 const admin_router = express.Router();
 
 // CONTROLLERS
 const adminController = require("../controllers/adminController");
+
+/*
+=============================================================================
+|                                   ROUTES                                  |
+=============================================================================
+*/
 
 // ADMIN USER ROUTES
 admin_router.get("/users/all/:id", adminController.getUsersList);
@@ -78,16 +86,16 @@ admin_router.delete("/categories/delete/:id", adminController.deleteCategory);
 
 // ADMIN IMPORT, EXPORT & DELETE CSV FILE ROUTES
 
-const extendTimeOut = (req, res, next) => {
-  res.setTimeout(65000, function () {
-    console.log("Request has timed out.");
-    res.send(408);
-  });
+// const extendTimeOut = (req, res, next) => {
+//   res.setTimeout(65000, function () {
+//     console.log("Request has timed out.");
+//     res.send(408);
+//   });
 
-  next();
-};
+//   next();
+// };
 
-admin_router.post("/upload/csv", extendTimeOut, adminController.parseCSVFile);
+admin_router.post("/upload/csv", adminController.parseCSVFile);
 admin_router.delete(
   "/delete/csv/:csv_file",
   adminController.deleteUploadedCSVFile

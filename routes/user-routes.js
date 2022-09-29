@@ -1,6 +1,17 @@
-const express = require("express");
+// IMPORTED REQUIRED PACKAGES
+const { express } = require("../utils/packages");
+
+// ROUTER
 const user_router = express.Router();
+
+// CONTROLLERS
 const userController = require("../controllers/userController");
+
+/*
+=============================================================================
+|                                   ROUTES                                  |
+=============================================================================
+*/
 
 // USERS COMPLAINT ROUTES
 user_router.get("/complaints/:id", userController.getAllComplaints);

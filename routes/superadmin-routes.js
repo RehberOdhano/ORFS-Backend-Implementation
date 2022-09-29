@@ -1,6 +1,17 @@
-const express = require("express");
+// IMPORTED REQUIRED PACKAGES
+const { express } = require("../utils/packages");
+
+// ROUTER
 const superadmin_router = express.Router();
+
+// CONTROLLERS
 const superadminController = require("../controllers/superadminController");
+
+/*
+=============================================================================
+|                                   ROUTES                                  |
+=============================================================================
+*/
 
 // SUPERADMIN CUSTOMER ROUTES
 superadmin_router.get("/customers", superadminController.getAllCustomers);

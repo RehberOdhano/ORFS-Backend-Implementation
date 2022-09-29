@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const { mongoose } = require("./packages");
 
 exports.setupDB = (databaseURL) => {
   // connecting to the database before testing the endpoint...

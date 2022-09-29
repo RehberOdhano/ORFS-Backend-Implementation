@@ -2,6 +2,11 @@
 const Customer = require("../models/customer");
 const User = require("../models/user");
 
+/*
+=============================================================================
+|                             ANALYTICS ROUTES                              |
+=============================================================================
+*/
 exports.getCustomerCount = (req, res) => {
   try {
     Customer.count({}, (err, count) => {

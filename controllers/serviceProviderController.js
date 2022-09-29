@@ -1,6 +1,15 @@
+// IMPORTED REQUIRED PACKAGES
+const mongoose = require("../utils/packages");
+
+// MODELS
 const SP = require("../models/serviceProvider");
 const Complaint = require("../models/complaint");
-const mongoose = require("mongoose");
+
+/*
+=============================================================================
+|                         SERVICEPROVIDERS'' ROUTES                         |
+=============================================================================
+*/
 
 exports.getSpecificSP = (req, res) => {
   try {
