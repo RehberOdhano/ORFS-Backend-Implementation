@@ -1,4 +1,3 @@
-const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
@@ -8,6 +7,7 @@ const sendEmail = require("../utils/email");
 
 // MODELS
 const Token = require("../models/token");
+const User = require("../models/user");
 
 exports.register = (req, res) => {
   try {
@@ -19,6 +19,12 @@ exports.register = (req, res) => {
           status: 500,
           success: false,
           message: err.message,
+        });
+      } else if (!user) {
+        res.send({
+          status: 200,
+          success: true,
+          message: "USER DOES NOT EXIST!",
         });
       } else {
         User.findOneAndUpdate(
