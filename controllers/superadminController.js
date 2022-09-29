@@ -1,5 +1,5 @@
-// PACKAGES
-const bcrypt = require("bcryptjs");
+// IMPORTED REQUIRED PACKAGES
+const bcrypt = require("../utils/packages");
 
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");

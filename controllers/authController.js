@@ -1,6 +1,5 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
+// IMPORTED REQUIRED PACKAGES
+const { jwt, bcrypt, crypto } = require("../utils/packages");
 
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
@@ -22,7 +21,7 @@ exports.register = (req, res) => {
         });
       } else if (!user) {
         res.send({
-          status: 200,
+          status: 403, // forbidden
           success: true,
           message: "USER DOES NOT EXIST!",
         });

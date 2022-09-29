@@ -1,6 +1,5 @@
-// PACKAGES
-const fs = require("fs");
-const path = require("path");
+// IMPORTED REQUIRED PACKAGES
+const { fs, path } = require("../utils/packages");
 
 // MODELS
 // const Customer = require("../models/customer");

@@ -1,10 +1,12 @@
-// IMPORTED/REQUIRED NECESSARY PACKAGES
-const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
-const csv = require("fast-csv");
-const path = require("path");
-const fs = require("fs");
-const multer = require("multer");
+// IMPORTED REQUIRED PACKAGES
+const {
+  bcrypt,
+  mongoose,
+  csv,
+  path,
+  fs,
+  multer,
+} = require("../utils/packages");
 
 // UTILITY FUNCTIONS
 const { upload } = require("../utils/fileUpload");

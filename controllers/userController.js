@@ -1,5 +1,5 @@
-// imported/required necessary packages...
-const mongoose = require("mongoose");
+// IMPORTED REQUIRED PACKAGES
+const mongoose = require("../utils/packages");
 
 // MODELS
 const Complaint = require("../models/complaint");
