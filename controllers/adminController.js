@@ -8,6 +8,9 @@ const {
   multer,
 } = require("../utils/packages");
 
+// UTILITY/HELPER FUNCTIONS
+const sendEmail = require("../utils/email");
+
 // UTILITY FUNCTIONS
 // const { upload } = require("../utils/fileUpload");
 
@@ -95,7 +98,7 @@ exports.getUsersList = (req, res) => {
 // particular collection...
 exports.addSpecificUser = (req, res) => {
   try {
-    let salt = bcrypt.genSaltSync(10);
+    // let salt = bcrypt.genSaltSync(10);
     const name = req.body.name;
     const email = req.body.email;
     const role = req.body.role;
@@ -111,93 +114,104 @@ exports.addSpecificUser = (req, res) => {
         res.send({
           status: 200,
           success: true,
-          message: "USER WITH THIS EMAIL IS ALREADY EXISTS!",
+          message: "USER WITH THIS EMAIL ALREADY EXISTS!",
           user: user,
         });
       } else {
-        User.create(
-          {
+        const query = { email: req.body.email },
+          update = {
             name: name,
             email: email,
-            password: bcrypt.hashSync("user", salt),
+            // password: bcrypt.hashSync("user", salt),
             role: role,
             sign_type: "PLATFORM",
             company_id: req.params.id,
           },
-          (err, user) => {
-            if (err) {
-              res.send({
-                status: 500,
-                success: false,
-                message: err.message,
-              });
-            } else {
-              user_id = user.id;
-              Customer.updateOne(
-                { _id: user.company_id },
-                { $push: { employees: { email: user.email, _id: user_id } } }
-              ).exec((err, user) => {
-                if (err) {
-                  res.send({
-                    status: 500,
-                    success: false,
-                    message: err.message,
-                  });
-                } else {
-                  if (role == "COMPLAINEE") {
-                    Complainee.create(
-                      {
-                        _id: user_id,
-                        company_id: req.params.id,
-                      },
-                      (err, user) => {
-                        if (err) {
-                          res.send({
-                            status: 500,
-                            success: false,
-                            message: err.message,
-                          });
-                        } else {
-                          res.send({
-                            status: 200,
-                            success: true,
-                            message: "BOTH USER AND COMPLAINEE ARE CREATED!",
-                            user: user,
-                          });
-                        }
+          options = { new: true, upsert: true };
+        User.findOneAndUpdate(query, update, options, (err, user) => {
+          if (err) {
+            res.send({
+              status: 500,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            user_id = user.id;
+            Customer.updateOne(
+              { _id: user.company_id },
+              { $push: { employees: { email: user.email, _id: user_id } } }
+            ).exec((err, user) => {
+              if (err) {
+                res.send({
+                  status: 500,
+                  success: false,
+                  message: err.message,
+                });
+              } else {
+                if (role == "COMPLAINEE") {
+                  Complainee.create(
+                    {
+                      _id: user_id,
+                      company_id: req.params.id,
+                    },
+                    async (err, user) => {
+                      if (err) {
+                        res.send({
+                          status: 500,
+                          success: false,
+                          message: err.message,
+                        });
+                      } else {
+                        res.send({
+                          status: 200,
+                          success: true,
+                          message: `An email is sent to the ${role}... Please register here...`,
+                          user: user,
+                        });
+                        const message = `Click this link to register: ${process.env.FRONTEND}/register`;
+                        await sendEmail(
+                          req.body.email,
+                          "User Registration",
+                          message
+                        );
                       }
-                    );
-                  } else if (role == "SERVICEPROVIDER") {
-                    SP.create(
-                      {
-                        user_id: user_id,
-                        company_id: req.params.id,
-                        averageRating: 0,
-                      },
-                      (err, user) => {
-                        if (err) {
-                          res.send({
-                            status: 500,
-                            success: false,
-                            message: err.message,
-                          });
-                        } else {
-                          res.send({
-                            status: 200,
-                            success: true,
-                            message:
-                              "BOTH USER AND SERVICEPROVIDER ARE CREATED!",
-                            user: user,
-                          });
-                        }
+                    }
+                  );
+                } else if (role == "SERVICEPROVIDER") {
+                  SP.create(
+                    {
+                      user_id: user_id,
+                      company_id: req.params.id,
+                      averageRating: 0,
+                    },
+                    async (err, user) => {
+                      if (err) {
+                        res.send({
+                          status: 500,
+                          success: false,
+                          message: err.message,
+                        });
+                      } else {
+                        res.send({
+                          status: 200,
+                          success: true,
+                          message: `An email is sent to the ${role}... Please register here...`,
+                          user: user,
+                        });
+                        const message = `Click this link to register: ${process.env.FRONTEND}/register`;
+                        await sendEmail(
+                          req.body.email,
+                          "User Registration",
+                          message
+                        );
                       }
-                    );
-                  }
+                    }
+                  );
                 }
-              });
-            }
+              }
+            });
           }
-        );
+        });
       }
     });
   } catch (err) {
