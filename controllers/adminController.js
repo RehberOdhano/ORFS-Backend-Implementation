@@ -100,7 +100,6 @@ exports.addSpecificUser = (req, res) => {
   try {
     const email = req.body.email;
     const role = req.body.role;
-    var user_id = "";
     User.findOne({ email: email }).exec((err, user) => {
       if (err) {
         res.send({
@@ -118,6 +117,7 @@ exports.addSpecificUser = (req, res) => {
       } else {
         const query = { email: req.body.email },
           update = {
+            name: "N/A",
             email: email,
             role: role,
             sign_type: "PLATFORM",
@@ -133,10 +133,9 @@ exports.addSpecificUser = (req, res) => {
               message: err.message,
             });
           } else {
-            user_id = user.id;
             Customer.updateOne(
               { _id: user.company_id },
-              { $push: { employees: { email: user.email, _id: user_id } } }
+              { $push: { employees: { email: user.email, _id: user._id } } }
             ).exec((err, user) => {
               if (err) {
                 res.send({
@@ -148,7 +147,7 @@ exports.addSpecificUser = (req, res) => {
                 if (role == "COMPLAINEE") {
                   Complainee.create(
                     {
-                      _id: user_id,
+                      _id: user._id,
                       company_id: req.params.id,
                     },
                     async (err, user) => {
@@ -177,7 +176,7 @@ exports.addSpecificUser = (req, res) => {
                 } else if (role == "SERVICEPROVIDER") {
                   SP.create(
                     {
-                      user_id: user_id,
+                      user_id: user._id,
                       company_id: req.params.id,
                       averageRating: 0,
                     },
