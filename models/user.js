@@ -26,6 +26,11 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    status: {
+      type: String,
+      required: [true, "USER STATUS IS REQUIRED!"],
+      enum: ["ACTIVE", "INACTIVE", "UNREGISTERED"],
+    },
     signin_type: {
       type: String,
     },
