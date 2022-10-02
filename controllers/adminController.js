@@ -98,8 +98,6 @@ exports.getUsersList = (req, res) => {
 // particular collection...
 exports.addSpecificUser = (req, res) => {
   try {
-    // let salt = bcrypt.genSaltSync(10);
-    const name = req.body.name;
     const email = req.body.email;
     const role = req.body.role;
     var user_id = "";
@@ -120,11 +118,10 @@ exports.addSpecificUser = (req, res) => {
       } else {
         const query = { email: req.body.email },
           update = {
-            name: name,
             email: email,
-            // password: bcrypt.hashSync("user", salt),
             role: role,
             sign_type: "PLATFORM",
+            status: "UNREGISTERED",
             company_id: req.params.id,
           },
           options = { new: true, upsert: true };
@@ -226,29 +223,32 @@ exports.updateSpecificUser = async (req, res) => {
     const id = req.params.id;
     const name = req.body.name;
     const email = req.body.email;
-    User.findByIdAndUpdate(id, { name: name, email: email }).exec(
-      (err, user) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else if (user == null) {
-          res.send({
-            status: 200,
-            success: true,
-            message: "USER DOES NOT EXIST!",
-          });
-        } else {
-          res.send({
-            status: 200,
-            success: true,
-            message: "USER IS SUCCESSFULLY UPDATED!",
-          });
-        }
+    const status = req.body.status;
+    User.findByIdAndUpdate(id, {
+      name: name,
+      email: email,
+      status: status,
+    }).exec((err, user) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (user == null) {
+        res.send({
+          status: 200,
+          success: true,
+          message: "USER DOES NOT EXIST!",
+        });
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: "USER IS SUCCESSFULLY UPDATED!",
+        });
       }
-    );
+    });
   } catch (err) {
     console.log("ERROR: " + err);
   }
