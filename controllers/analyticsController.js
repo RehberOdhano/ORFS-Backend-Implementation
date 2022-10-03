@@ -80,7 +80,7 @@ exports.getUserAnalytics = (req, res) => {
             });
           } else {
             analytics.registeredUsers =
-              totalUsers != 0 ? (count / totalUsers) * 100 : 0;
+              totalUsers != 0 ? Math.round((count / totalUsers) * 100) : 0;
             SP.count({ company_id: company_id }, (err, count) => {
               if (err) {
                 res.send({
