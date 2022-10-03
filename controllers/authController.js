@@ -38,6 +38,7 @@ exports.register = (req, res) => {
             name: req.body.firstName + " " + req.body.lastName,
             password: bcrypt.hashSync(req.body.password, salt),
             sign_type: "PLATFORM",
+            status: "ACTIVE"
           }
         ).exec((err, user) => {
           if (err) {
