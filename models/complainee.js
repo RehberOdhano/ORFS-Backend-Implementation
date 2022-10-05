@@ -4,24 +4,16 @@ const complaineeSchema = mongoose.Schema(
   {
     user_id: {
       type: mongoose.Types.ObjectId,
+      ref: "User",
     },
     company_id: {
       type: mongoose.Schema.Types.ObjectId,
-      // ref: "Customer",
-      // required: true
+      ref: "Customer",
     },
     complaints: [
       {
-        _id: {
-          type: mongoose.Schema.Types.ObjectId,
-        },
-      },
-    ],
-    feedback: [
-      {
-        type: Object,
-        complaint_id: String,
-        response: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Complaint",
       },
     ],
     rating: { type: Number },

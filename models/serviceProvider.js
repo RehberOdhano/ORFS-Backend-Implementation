@@ -1,51 +1,38 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const service_providers_schema = mongoose.Schema({
+const service_providers_schema = mongoose.Schema(
+  {
     user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        // ref: "User"
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     company_id: {
-        type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Customer",
     },
-    assignedComplaints: [{
-        _id: {
-            type: mongoose.Schema.Types.ObjectId,
-        }
-        // ref: "Complaint"
-    }],
-    feedbackGiven: [{
-        type: Object,
-        complaint_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Complaint"
-        },
-        response: String,
-    }],
+    assignedComplaints: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Complaint",
+      },
+    ],
     department: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: null
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Department",
     },
-    ratings: [{
-        type: Object,
-        complaint_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Complaint"
-        },
-        complainee_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Complainee"
-        }
-    }],
+    ratings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Rating",
+      },
+    ],
     averageRating: {
-        type: Number,
+      type: Number,
     },
     level: { type: Number },
     points: { type: Number },
-    // inventory: [{
-    //     type: Object,
-    // }]
-
-}, { versionKey: false });
+  },
+  { versionKey: false }
+);
 
 module.exports = mongoose.model("ServiceProvider", service_providers_schema);

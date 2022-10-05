@@ -1,71 +1,60 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const complaintSchema = mongoose.Schema({
+const complaintSchema = mongoose.Schema(
+  {
     title: {
-        type: String,
-        // required: [true, "TITLE IS REQUIRED!"],
-        min: [5, "MINIMUM 10 CHARACTERS ARE REQUIRED!"],
-        max: [10, "TITLE CAN'T EXCEED 10 CHARACTERS!"],
+      type: String,
+      min: [5, "MINIMUM 10 CHARACTERS ARE REQUIRED!"],
+      max: [10, "TITLE CAN'T EXCEED 10 CHARACTERS!"],
     },
     user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     complainee_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Complainee",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Complainee",
     },
     company_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Customer",
-        // required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Customer",
     },
     description: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     category: {
-        // type: String,
-        // required: true
-        _id: {
-            type: mongoose.Schema.Types.ObjectId,
-        }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
     },
     workUpdate: {
-        type: String
+      type: String,
     },
     media: {
-        data: Buffer,
-        contentType: String
+      data: Buffer,
+      contentType: String,
     },
     dateCreated: {
-        type: Date
+      type: Date,
     },
     dateUpdated: {
-        type: Date
+      type: Date,
     },
     dateResolved: {
-        type: Date
+      type: Date,
     },
     status: { type: String },
-    // assignedTo: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'ServiceProvider'
-    // }],
-    assignedTo: [{
-        _id: {
-            type: mongoose.Schema.Types.ObjectId,
-        }
-        // ref: "Category"
-    }],
-    // geolocation: {
-    //     latitude: { type: Number },
-    //     longitude: { type: Number }
-    // },
+    assignedTo: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ServiceProvider",
+      },
+    ],
     rating: {
-        type: Number,
-    }
-
-}, { versionKey: false });
+      type: Number,
+    },
+  },
+  { versionKey: false }
+);
 
 module.exports = mongoose.model("Complaint", complaintSchema);

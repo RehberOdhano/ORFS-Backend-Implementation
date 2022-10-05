@@ -1,35 +1,30 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const deptSchema = mongoose.Schema({
+const deptSchema = mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: [true, "TITLE IS REQUIRED!"],
-        min: [1, "MINIMUM 10 CHARACTERS ARE REQUIRED!"],
-        max: [10, "TITLE CAN'T EXCEED 10 CHARACTERS!"],
+      type: String,
+      required: [true, "TITLE IS REQUIRED!"],
+      min: [1, "MINIMUM 10 CHARACTERS ARE REQUIRED!"],
+      max: [10, "TITLE CAN'T EXCEED 10 CHARACTERS!"],
     },
-    // complaints: { type: complaintsSchema },
-    // category: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Category"
-    // }],
-    category: [{
-        _id: {
-            type: mongoose.Schema.Types.ObjectId,
-        }
-        // ref: "Category"
-    }],
-    company_id: {
+    category: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        // required: true 
+        ref: "Category",
+      },
+    ],
+    company_id: {
+      type: mongoose.Schema.Types.ObjectId,
     },
-    employees: [{
-        _id: {
-            type: mongoose.Schema.Types.ObjectId
-        },
-        email: {
-            type: String
-        }
-    }],
-}, { versionKey: false });
+    employees: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+  },
+  { versionKey: false }
+);
 
 module.exports = mongoose.model("Department", deptSchema);

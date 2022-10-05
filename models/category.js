@@ -11,7 +11,7 @@ const category_schema = mongoose.Schema(
     },
     assignedDepartment: {
       type: mongoose.Schema.Types.ObjectId,
-      // ref: "Department"
+      ref: "Department",
     },
   },
   { versionKey: false }

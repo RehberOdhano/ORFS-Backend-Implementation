@@ -18,7 +18,7 @@ const customerSchema = mongoose.Schema(
     },
     customerTypeId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "customer",
+      ref: "CustomerType",
     },
     pfp: {
       type: String,
@@ -30,16 +30,7 @@ const customerSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subscription",
     },
-    employees: [
-      {
-        _id: {
-          type: mongoose.Schema.Types.ObjectId,
-        },
-        email: {
-          type: String,
-        },
-      },
-    ],
+    employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     addons: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -48,20 +39,9 @@ const customerSchema = mongoose.Schema(
         default: [],
       },
     ],
-    departments: [
-      {
-        _id: {
-          type: mongoose.Schema.Types.ObjectId,
-        },
-        title: {
-          type: String,
-        },
-      },
-    ],
-    // analytics: {},
+    departments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Department" }],
     billing_info: {
       type: Object,
-      // required: true,
       payment_method: { type: String },
     },
   },
