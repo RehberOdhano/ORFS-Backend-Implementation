@@ -4,7 +4,11 @@ const category_schema = mongoose.Schema(
   {
     company_id: {
       type: mongoose.Schema.Types.ObjectId,
+<<<<<<< HEAD
       ref: "Customer",
+=======
+      ref: "Customer"
+>>>>>>> 7fb886ded24ba9e27b31ab9887b71e71ea63da73
     },
     title: {
       type: String,
