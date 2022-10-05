@@ -275,40 +275,39 @@ exports.editCustomer = (req, res) => {
 
 exports.updateCustomerStatus = (req, res) => {
   try {
-    const company_id = req.params.company_id;
+    const company_id = req.params.id;
     const updatedStatus = req.body.status;
-    Customer.updateOne(
-      { _id: company_id },
-      { status: updatedStatus },
-      { upsert: true }
-    ).exec((err, customer) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else {
-        User.updateMany(
-          { company_id: company_id },
-          { status: updatedStatus }
-        ).exec((err, updatedUsers) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
-            });
-          } else {
-            res.send({
-              status: 200,
-              success: true,
-              message: "STATUS IS SUCCESSFULLY UPDATED!",
-            });
-          }
-        });
+
+    Customer.updateOne({ _id: company_id }, { status: updatedStatus }).exec(
+      (err, customer) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          User.updateMany(
+            { company_id: company_id },
+            { status: updatedStatus }
+          ).exec((err, updatedUsers) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              res.send({
+                status: 200,
+                success: true,
+                message: "STATUS IS SUCCESSFULLY UPDATED!",
+              });
+            }
+          });
+        }
       }
-    });
+    );
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
