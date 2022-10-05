@@ -75,7 +75,6 @@ exports.addCustomer = (req, res) => {
             status: "ONBOARDING",
             customerTypeId: req.body.customer_type._id,
             pfp: req.body.pfp,
-            // dateRegistered: new Date().toLocaleString("en-GB"), // date in dd/mm/yyyy format
             dateRegistered: Date.now(),
           },
           (err, customer) => {
@@ -103,26 +102,26 @@ exports.addCustomer = (req, res) => {
                     company_id: customer._id,
                   });
                 } else {
-                  Customer.updateOne(
-                    { website: req.body.website },
-                    { $push: { employees: { email: req.body.email } } }
-                  ).exec((err, customer) => {
-                    if (err) {
-                      res.send({
-                        status: 500,
-                        success: false,
-                        message: err.message,
-                      });
-                    } else {
-                      const query = { email: req.body.email },
-                        update = {
-                          email: req.body.email,
-                          role: "ADMIN",
-                          company_id: company_id,
-                        },
-                        options = { new: true, upsert: true };
-                      User.findOneAndUpdate(query, update, options).exec(
-                        async (err, user) => {
+                  const query = { email: req.body.email },
+                    update = {
+                      email: req.body.email,
+                      role: "ADMIN",
+                      company_id: company_id,
+                    },
+                    options = { new: true, upsert: true };
+                  User.findOneAndUpdate(query, update, options).exec(
+                    (err, user) => {
+                      if (err) {
+                        res.send({
+                          status: 500,
+                          success: false,
+                          message: err.message,
+                        });
+                      } else {
+                        Customer.updateOne(
+                          { website: req.body.website },
+                          { $push: { employees: { _id: user._id } } }
+                        ).exec(async (err, customer) => {
                           if (err) {
                             res.send({
                               status: 500,
@@ -145,10 +144,10 @@ exports.addCustomer = (req, res) => {
                               message
                             );
                           }
-                        }
-                      );
+                        });
+                      }
                     }
-                  });
+                  );
                 }
               });
             }

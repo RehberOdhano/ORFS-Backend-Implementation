@@ -30,7 +30,12 @@ const customerSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subscription",
     },
-    employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    employees: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     addons: [
       {
         type: mongoose.Schema.Types.ObjectId,
