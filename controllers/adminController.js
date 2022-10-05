@@ -135,7 +135,7 @@ exports.addSpecificUser = (req, res) => {
           } else {
             Customer.updateOne(
               { _id: user.company_id },
-              { $push: { employees: { email: user.email, _id: user._id } } }
+              { $push: { employees: { _id: user._id } } }
             ).exec((err, user) => {
               if (err) {
                 res.send({

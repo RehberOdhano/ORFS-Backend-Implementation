@@ -23,27 +23,29 @@ const Token = require("../models/token");
 
 exports.getAllCustomers = (req, res) => {
   try {
-    Customer.find({}).exec((err, customers) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (customers == null || !customers.length) {
-        res.send({
-          status: 200,
-          success: true,
-          message: "CUSTOMERS AREN'T REGISTERED YET!",
-        });
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          customers: customers,
-        });
-      }
-    });
+    Customer.find({})
+      .populate("employee")
+      .exec((err, customers) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else if (customers == null || !customers.length) {
+          res.send({
+            status: 200,
+            success: true,
+            message: "CUSTOMERS AREN'T REGISTERED YET!",
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            customers: customers,
+          });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
@@ -266,6 +268,45 @@ exports.editCustomer = (req, res) => {
         });
       }
     });
+  } catch (err) {
+    console.log("ERROR: " + err.message);
+  }
+};
+
+exports.updateCustomerStatus = (req, res) => {
+  try {
+    const company_id = req.params.company_id;
+    const updatedStatus = req.body.status;
+    Customer.updateOne({ _id: company_id }, { status: updatedStatus }).exec(
+      (err, customer) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          User.updateMany(
+            { company_id: company_id },
+            { status: updatedStatus }
+          ).exec((err, updatedUsers) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              res.send({
+                status: 200,
+                success: true,
+                message: "STATUS IS SUCCESSFULLY UPDATED!",
+              });
+            }
+          });
+        }
+      }
+    );
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
