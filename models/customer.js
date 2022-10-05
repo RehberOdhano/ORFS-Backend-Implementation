@@ -35,8 +35,6 @@ const customerSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Addon",
-        required: [true, "ADDONS ARE REQUIRED!"],
-        default: [],
       },
     ],
     departments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Department" }],
