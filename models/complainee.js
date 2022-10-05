@@ -16,9 +16,6 @@ const complaineeSchema = mongoose.Schema(
         ref: "Complaint",
       },
     ],
-    rating: { type: Number },
-    level: { type: Number },
-    points: { type: Number },
   },
   { versionKey: false }
 );

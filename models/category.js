@@ -4,6 +4,7 @@ const category_schema = mongoose.Schema(
   {
     company_id: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "Customer",
     },
     title: {
       type: String,
