@@ -23,7 +23,6 @@ const Token = require("../models/token");
 
 exports.getAllCustomers = (req, res) => {
   try {
-    // getting all the registered customers
     Customer.find({}).exec((err, customers) => {
       if (err) {
         res.send({
