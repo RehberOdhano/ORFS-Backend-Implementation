@@ -24,7 +24,7 @@ const Token = require("../models/token");
 exports.getAllCustomers = (req, res) => {
   try {
     Customer.find({})
-      .populate("employee")
+      .populate("employees")
       .exec((err, customers) => {
         if (err) {
           res.send({
