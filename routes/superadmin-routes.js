@@ -20,6 +20,10 @@ superadmin_router.put(
   "/customers/update/:id",
   superadminController.editCustomer
 );
+superadmin_router.put(
+  "/customers/update/status/:id",
+  superadminController.updateCustomerStatus
+);
 superadmin_router.delete(
   "/customers/delete/:id",
   superadminController.deleteCustomer

@@ -85,24 +85,24 @@ exports.getUsersList = (req, res) => {
   }
 };
 
-exports.getSpecificUser = async (req, res) => {
-  const user_id = req.params.id;
-  await User.findOne({ id: user_id }, (err, user) => {
-    if (err) {
-      res.send({
-        status: 500,
-        success: false,
-        message: err.message,
-      });
-    } else {
-      res.send({
-        status: 200,
-        success: true,
-        user: user,
-      });
-    }
-  });
-};
+// exports.getSpecificUser = async (req, res) => {
+//   const user_id = req.params.id;
+//   await User.findOne({ id: user_id }, (err, user) => {
+//     if (err) {
+//       res.send({
+//         status: 500,
+//         success: false,
+//         message: err.message,
+//       });
+//     } else {
+//       res.send({
+//         status: 200,
+//         success: true,
+//         user: user,
+//       });
+//     }
+//   });
+// };
 
 // this will add a new user... and based on it's role, i.e. either the user
 // is complainee or serviceprovider, a new document will also be created in that
