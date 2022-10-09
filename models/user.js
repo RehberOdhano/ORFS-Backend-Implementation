@@ -18,6 +18,7 @@ const userSchema = mongoose.Schema(
     },
     company_id: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "Customer",
     },
     googleID: {
       type: String,
@@ -40,8 +41,7 @@ const userSchema = mongoose.Schema(
       enum: ["SUPERADMIN", "ADMIN", "COMPLAINEE", "SERVICEPROVIDER"],
     },
     pfp: {
-      data: Buffer,
-      contentType: String,
+      type: String,
     },
   },
   { versionKey: false }

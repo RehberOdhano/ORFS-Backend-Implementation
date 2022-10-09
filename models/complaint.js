@@ -23,12 +23,15 @@ const complaintSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    priority: {
+      type: String,
+      enum: ["LOW", "MEDIUM", "HIGH"],
+    },
     workUpdate: {
       type: String,
     },
     media: {
-      data: Buffer,
-      contentType: String,
+      type: String,
     },
     dateCreated: {
       type: Date,
@@ -39,13 +42,14 @@ const complaintSchema = mongoose.Schema(
     dateResolved: {
       type: Date,
     },
-    status: { type: String },
-    assignedTo: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ServiceProvider",
-      },
-    ],
+    status: {
+      type: String,
+      enum: ["RESOLVED", "INPROGRESS", "UNASSIGNED", "STOPPED", "ARCHIVED"],
+    },
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ServiceProvider",
+    },
     rating: {
       type: Number,
     },

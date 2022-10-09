@@ -3,6 +3,7 @@ const Customer = require("../models/customer");
 const User = require("../models/user");
 const SP = require("../models/serviceProvider");
 const Complainee = require("../models/complainee");
+const Department = require("../models/department");
 
 /*
 =============================================================================
@@ -114,5 +115,13 @@ exports.getUserAnalytics = (req, res) => {
     });
   } catch (error) {
     console.log("ERROR: " + error.message);
+  }
+};
+
+exports.getDeptAnalytics = (req, res) => {
+  try {
+    const deptID = req.params.id;
+  } catch (err) {
+    console.log("ERROR: " + err.message);
   }
 };

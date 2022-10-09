@@ -11,9 +11,6 @@ const {
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
 
-// UTILITY FUNCTIONS
-// const { upload } = require("../utils/fileUpload");
-
 const fileSize = 1024 * 1024 * 5;
 
 const fileStorageEngine = multer.diskStorage({
@@ -56,30 +53,33 @@ const SP = require("../models/serviceProvider");
 |                         ADMINS' USERS' ROUTES                             |
 =============================================================================
 */
-// this will return a list of all the registered users...
+
 exports.getUsersList = (req, res) => {
   try {
-    const company_id = mongoose.Types.ObjectId(req.params.id);
-    User.find({ company_id: company_id }).exec((err, users) => {
-      if (err)
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      else if (users == null)
-        res.send({
-          status: 200,
-          success: true,
-          message: "USERS DOES NOT EXIST!",
-        });
-      else
-        res.send({
-          status: 200,
-          success: true,
-          users: users,
-        });
-    });
+    const company_id = req.params.id;
+    User.find({ company_id: company_id })
+      .populate("company_id")
+      .exec((err, users) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else if (users == null) {
+          res.send({
+            status: 200,
+            success: true,
+            message: "USERS DOES NOT EXIST!",
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            data: users,
+          });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
@@ -107,6 +107,8 @@ exports.getUsersList = (req, res) => {
 // this will add a new user... and based on it's role, i.e. either the user
 // is complainee or serviceprovider, a new document will also be created in that
 // particular collection...
+
+// SP/complainee not added to the customer's employees list... check later
 exports.addSpecificUser = (req, res) => {
   try {
     const email = req.body.email;
@@ -136,89 +138,92 @@ exports.addSpecificUser = (req, res) => {
             company_id: req.params.id,
           },
           options = { new: true, upsert: true };
-        User.findOneAndUpdate(query, update, options, (err, user) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
-            });
-          } else {
-            Customer.updateOne(
-              { _id: user.company_id },
-              { $push: { employees: { _id: user._id } } }
-            ).exec((err, user) => {
-              if (err) {
-                res.send({
-                  status: 500,
-                  success: false,
-                  message: err.message,
-                });
-              } else {
-                if (role == "COMPLAINEE") {
-                  Complainee.create(
-                    {
-                      _id: user._id,
-                      company_id: req.params.id,
-                    },
-                    async (err, user) => {
-                      if (err) {
-                        res.send({
-                          status: 500,
-                          success: false,
-                          message: err.message,
-                        });
-                      } else {
-                        res.send({
-                          status: 200,
-                          success: true,
-                          message: `An email is sent to the ${role}... Please register here...`,
-                          user: user,
-                        });
-                        const message = `Click this link to register: ${process.env.FRONTEND}/register`;
-                        await sendEmail(
-                          req.body.email,
-                          "User Registration",
-                          message
-                        );
+        User.findOneAndUpdate(query, update, options).exec(
+          (err, updatedUser) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              const userID = updatedUser._id;
+              Customer.updateOne(
+                { _id: updatedUser.company_id },
+                { $push: { employees: { _id: userID } } }
+              ).exec((err, user) => {
+                if (err) {
+                  res.send({
+                    status: 500,
+                    success: false,
+                    message: err.message,
+                  });
+                } else {
+                  if (role === "COMPLAINEE") {
+                    Complainee.create(
+                      {
+                        user_id: userID,
+                        company_id: req.params.id,
+                      },
+                      async (err, user) => {
+                        if (err) {
+                          res.send({
+                            status: 500,
+                            success: false,
+                            message: err.message,
+                          });
+                        } else {
+                          res.send({
+                            status: 200,
+                            success: true,
+                            message: `An email is sent to the ${role}... Please register here...`,
+                            user: user,
+                          });
+                          const message = `Click this link to register: ${process.env.FRONTEND}/register`;
+                          await sendEmail(
+                            req.body.email,
+                            "User Registration",
+                            message
+                          );
+                        }
                       }
-                    }
-                  );
-                } else if (role == "SERVICEPROVIDER") {
-                  SP.create(
-                    {
-                      user_id: user._id,
-                      company_id: req.params.id,
-                      averageRating: 0,
-                    },
-                    async (err, user) => {
-                      if (err) {
-                        res.send({
-                          status: 500,
-                          success: false,
-                          message: err.message,
-                        });
-                      } else {
-                        res.send({
-                          status: 200,
-                          success: true,
-                          message: `An email is sent to the ${role}... Please register here...`,
-                          user: user,
-                        });
-                        const message = `Click this link to register: ${process.env.FRONTEND}/register`;
-                        await sendEmail(
-                          req.body.email,
-                          "User Registration",
-                          message
-                        );
+                    );
+                  } else if (role === "SERVICEPROVIDER") {
+                    SP.create(
+                      {
+                        user_id: userID,
+                        company_id: req.params.id,
+                        averageRating: 0,
+                      },
+                      async (err, user) => {
+                        if (err) {
+                          res.send({
+                            status: 500,
+                            success: false,
+                            message: err.message,
+                          });
+                        } else {
+                          res.send({
+                            status: 200,
+                            success: true,
+                            message: `An email is sent to the ${role}... Please register here...`,
+                            user: user,
+                          });
+                          const message = `Click this link to register: ${process.env.FRONTEND}/register`;
+                          await sendEmail(
+                            req.body.email,
+                            "User Registration",
+                            message
+                          );
+                        }
                       }
-                    }
-                  );
+                    );
+                  }
                 }
-              }
-            });
+              });
+            }
           }
-        });
+        );
       }
     });
   } catch (err) {
@@ -244,12 +249,6 @@ exports.updateSpecificUser = async (req, res) => {
           status: 500,
           success: false,
           message: err.message,
-        });
-      } else if (user == null) {
-        res.send({
-          status: 200,
-          success: true,
-          message: "USER DOES NOT EXIST!",
         });
       } else {
         res.send({
@@ -279,19 +278,12 @@ exports.deleteSpecificUser = (req, res) => {
           success: false,
           message: err.message,
         });
-      } else if (user == null) {
-        res.send({
-          status: 200,
-          success: true,
-          message: "USER DOES NOT EXIST!",
-        });
       } else {
         user.remove();
-        if (user.role == "COMPLAINEE") {
-          Complainee.deleteOne({ _id: user._id }).exec();
-        } else if (user.role == "SERVICEPROVIDER") {
-          SP.deleteOne({ user_id: user._id }).exec();
-        }
+        user.role == "COMPLAINEE"
+          ? Complainee.deleteOne({ _id: user._id }).exec()
+          : SP.deleteOne({ user_id: user._id }).exec();
+
         Customer.updateOne(
           { _id: company_id },
           { $pull: { employees: { _id: user_id } } }
@@ -602,27 +594,29 @@ exports.assignComplaint = (req, res) => {
 
 exports.getDeptsList = (req, res) => {
   try {
-    Department.find({ company_id: req.params.id }).exec((err, depts) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (depts == null) {
-        res.send({
-          status: 200,
-          success: true,
-          message: "DEPARTMENTS NOT FOUND",
-        });
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          departments: depts,
-        });
-      }
-    });
+    Department.find({ company_id: req.params.id })
+      .populate("employees")
+      .exec((err, depts) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else if (depts == null) {
+          res.send({
+            status: 200,
+            success: true,
+            message: "DEPARTMENTS NOT FOUND",
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            departments: depts,
+          });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
@@ -630,7 +624,7 @@ exports.getDeptsList = (req, res) => {
 
 exports.getSpecificDept = (req, res) => {
   try {
-    const id = mongoose.Types.ObjectId(req.params.id);
+    const id = req.params.id;
     Department.findOne({ _id: id }).exec((err, dept) => {
       if (err) {
         res.send({
@@ -693,7 +687,7 @@ exports.addSpecificDept = (req, res) => {
                 { _id: company_id },
                 {
                   $push: {
-                    departments: { title: title, _id: department._id },
+                    departments: { _id: department._id },
                   },
                 }
               ).exec((err, customer) => {
@@ -726,9 +720,7 @@ exports.updateSpecificDept = (req, res) => {
     const id = req.params.id;
     const title = req.body.title;
 
-    let query = Department.findOne({ _id: id });
-    query.select(["company_id"]);
-    query.exec((err, dept) => {
+    Department.updateOne({ _id: id }, { title: title }).exec((err, dept) => {
       if (err) {
         res.send({
           status: 500,
@@ -736,31 +728,10 @@ exports.updateSpecificDept = (req, res) => {
           message: err.message,
         });
       } else {
-        JSON.stringify(dept);
-        const company_id = dept.company_id;
-        Customer.updateOne(
-          { _id: company_id, "departments._id": id },
-          { $set: { "departments.$.title": title } }
-        ).exec((err, customer) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
-            });
-          } else {
-            Department.updateOne({ _id: id }, { title: title }).exec(
-              (err, dept) => {
-                if (!err) {
-                  res.send({
-                    status: 200,
-                    success: true,
-                    message: "DEPARTMENT IS SUCCESSFULLY UPDATED!",
-                  });
-                }
-              }
-            );
-          }
+        res.send({
+          status: 200,
+          success: true,
+          message: "DEPARTMENT IS SUCCESSFULLY UPDATED!",
         });
       }
     });
@@ -784,7 +755,7 @@ exports.deleteSpecificDept = (req, res) => {
         JSON.stringify(dept);
         Customer.updateOne(
           { _id: dept.company_id },
-          { $pull: { departments: { _id: id } } }
+          { $pull: { departments: id } }
         ).exec((err, result) => {
           if (err) {
             res.send({
@@ -793,9 +764,8 @@ exports.deleteSpecificDept = (req, res) => {
               message: err.message,
             });
           } else {
-            console.log("customer: " + result);
             Category.updateOne(
-              { assignedDepartment: dept._id },
+              { company_id: dept.company_id },
               { assignedDepartment: null }
             ).exec((err, result) => {
               if (err) {
@@ -805,7 +775,6 @@ exports.deleteSpecificDept = (req, res) => {
                   message: err.message,
                 });
               } else {
-                console.log("category: " + result);
                 SP.updateOne(
                   { department: dept._id },
                   { department: null }
@@ -836,35 +805,23 @@ exports.deleteSpecificDept = (req, res) => {
   }
 };
 
-exports.addDeptEmployee = (req, res) => {
+exports.addEmployeesToDept = (req, res) => {
   try {
-    const email = req.body.email;
-    const id = req.params.id;
-    User.findOne({ email: email }).exec((err, user) => {
+    const spID = req.body.id;
+    const deptID = req.params.id;
+    Department.updateOne(
+      { _id: deptID },
+      { $push: { employees: { _id: spID } } }
+    ).exec((err, result) => {
       if (err) {
         res.send({
           status: 500,
           success: false,
           message: err.message,
         });
-      } else if (user != null) {
-        res.send({
-          status: 200,
-          success: true,
-          message: `USER WITH EMAIL: ${user.email} ALREADY EXISTS!`,
-        });
       } else {
-        let salt = bcrypt.genSaltSync(10);
-        User.create(
-          {
-            name: req.body.name,
-            email: req.body.email,
-            password: bcrypt.hashSync("sp123", salt),
-            role: "SERVICEPROVIDER",
-            sign_type: "PLATFORM",
-            company_id: mongoose.Types.ObjectId(req.body.company_id),
-          },
-          (err, user) => {
+        SP.updateOne({ _id: spID }, { department: deptID }).exec(
+          (err, result) => {
             if (err) {
               res.send({
                 status: 500,
@@ -872,36 +829,11 @@ exports.addDeptEmployee = (req, res) => {
                 message: err.message,
               });
             } else {
-              const spID = user._id;
-              Department.updateOne(
-                { _id: id },
-                { $push: { employees: { _id: spID, email: email } } }
-              ).exec((err, dept) => {
-                if (err) {
-                  res.send({
-                    status: 500,
-                    success: false,
-                    message: err.message,
-                  });
-                } else {
-                  SP.updateOne({ user_id: spID }, { department: id }).exec(
-                    (err, sp) => {
-                      if (err) {
-                        res.send({
-                          status: 500,
-                          success: false,
-                          message: err.message,
-                        });
-                      } else {
-                        res.send({
-                          status: 200,
-                          success: true,
-                          message: "EMPLOYEE IS SUCCESSFULLY ADDED!",
-                        });
-                      }
-                    }
-                  );
-                }
+              res.send({
+                status: 200,
+                success: true,
+                message:
+                  "SERVICEPROVIDER IS SUCCESSFULLY ADDED TO THE DEPARTMENT!",
               });
             }
           }
@@ -913,31 +845,22 @@ exports.addDeptEmployee = (req, res) => {
   }
 };
 
-exports.deleteDeptEmployee = (req, res) => {
+exports.removeEmployeesFromDept = (req, res) => {
   try {
     const deptID = req.params.id;
-    const empID = mongoose.Types.ObjectId(req.body.id);
+    const spID = req.body.id;
 
-    Department.updateOne(
-      { _id: deptID },
-      { $pull: { employees: { _id: empID } } }
-    ).exec((err, dept) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else {
-        User.deleteOne({ _id: empID }).exec((err, user) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
-            });
-          } else {
-            SP.deleteOne({ user_id: empID }).exec((err, sp) => {
+    Department.updateOne({ _id: deptID }, { $pull: { employees: spID } }).exec(
+      (err, dept) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          SP.updateOne({ _id: spID }, { department: null }).exec(
+            (err, result) => {
               if (err) {
                 res.send({
                   status: 500,
@@ -948,14 +871,15 @@ exports.deleteDeptEmployee = (req, res) => {
                 res.send({
                   status: 200,
                   success: true,
-                  message: "EMPLOYEE IS SUCCESSFULLY DELETED!",
+                  message:
+                    "SERVICEPROVIDER IS SUCCESSFULLY REMOVED FROM THE DEPARTMENT!",
                 });
               }
-            });
-          }
-        });
+            }
+          );
+        }
       }
-    });
+    );
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
@@ -964,77 +888,83 @@ exports.deleteDeptEmployee = (req, res) => {
 exports.getAllDeptEmployees = (req, res) => {
   try {
     const id = req.params.id;
-    Department.findOne({ _id: id }, "employees").exec((err, dept) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (dept == null) {
-        res.send({
-          status: 200,
-          success: true,
-          message: "THIS DEPARTMENT DON'T HAVE ANY EMPLOYEES YET!",
-        });
-      } else {
-        const employees = dept.employees;
-        var emails = [],
-          spIDs = [],
-          names = [];
-        employees.forEach((employee) => emails.push(employee.email));
-        User.find({ email: { $in: emails } }).exec((err, users) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
-            });
-          } else {
-            // based on the emails, we'll get all the users in a list
-            // and from that list we'll extract all the names and ids
-            users.forEach((user) => {
-              spIDs.push(user._id);
-              names.push(user.name);
-            });
-            // based on the extracted ids, we'll find the serviceproviders
-            SP.find({ user_id: { $in: spIDs } }).exec((err, sps) => {
-              if (err) {
-                res.send({
-                  status: 500,
-                  success: false,
-                  message: err.message,
-                });
-              } else {
-                var listOfUsers = [];
-                var i = 0;
-                sps.forEach((sp) => {
-                  var userObj = {
-                    userID: spIDs[i],
-                    company_id: sp.company_id,
-                    name: names[i],
-                    email: emails[i],
-                    feedbackGiven: sp.feedbackGiven,
-                    ratings: sp.ratings,
-                    avgRating: sp.avgRating,
-                    department: sp.department,
-                    assignedComplaints: sp.assignedComplaints,
-                    pfp: sp.pfp || null,
-                  };
-                  listOfUsers.push(userObj);
-                  i++;
-                });
-                res.send({
-                  status: 200,
-                  success: true,
-                  data: listOfUsers,
-                });
-              }
-            });
-          }
-        });
-      }
-    });
+    Department.findOne({ _id: id })
+      .populate("employees")
+      .exec((err, dept) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else if (dept.employees.length == 0) {
+          res.send({
+            status: 200,
+            success: true,
+            message: "THIS DEPARTMENT DON'T HAVE ANY EMPLOYEES YET!",
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            employees: dept.employees,
+          });
+          // var emails = [],
+          //   spIDs = [],
+          //   names = [];
+          // employees.forEach((employee) => emails.push(employee.email));
+          // User.find({ email: { $in: emails } }).exec((err, users) => {
+          //   if (err) {
+          //     res.send({
+          //       status: 500,
+          //       success: false,
+          //       message: err.message,
+          //     });
+          //   } else {
+          //     // based on the emails, we'll get all the users in a list
+          //     // and from that list we'll extract all the names and ids
+          //     users.forEach((user) => {
+          //       spIDs.push(user._id);
+          //       names.push(user.name);
+          //     });
+          //     // based on the extracted ids, we'll find the serviceproviders
+          //     SP.find({ user_id: { $in: spIDs } }).exec((err, sps) => {
+          //       if (err) {
+          //         res.send({
+          //           status: 500,
+          //           success: false,
+          //           message: err.message,
+          //         });
+          //       } else {
+          //         var listOfUsers = [];
+          //         var i = 0;
+          //         sps.forEach((sp) => {
+          //           var userObj = {
+          //             userID: spIDs[i],
+          //             company_id: sp.company_id,
+          //             name: names[i],
+          //             email: emails[i],
+          //             feedbackGiven: sp.feedbackGiven,
+          //             ratings: sp.ratings,
+          //             avgRating: sp.avgRating,
+          //             department: sp.department,
+          //             assignedComplaints: sp.assignedComplaints,
+          //             pfp: sp.pfp || null,
+          //           };
+          //           listOfUsers.push(userObj);
+          //           i++;
+          //         });
+          //         res.send({
+          //           status: 200,
+          //           success: true,
+          //           data: listOfUsers,
+          //         });
+          //       }
+          //     });
+          //   }
+          // });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
@@ -1045,70 +975,77 @@ exports.getAllDeptEmployees = (req, res) => {
 exports.getAvailableEmployees = (req, res) => {
   try {
     const company_id = req.params.id;
-    SP.find({ company_id: company_id, department: null }).exec((err, sps) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (sps == null) {
-        // this means all serviceproviders are assigned to some departments...
-        res.send({
-          status: 200,
-          success: false,
-          message: "ALL SERVICEPROVIDERS ARE UNAVAILABLE!",
-        });
-      } else {
-        // extracting the ids of the available serviceproviders...
-        var userIDs = [];
-        sps.forEach((sp) => userIDs.push(sp.user_id));
-        // based on these extracted ids, we'll get the user's data...
-        User.find({ _id: { $in: userIDs } }).exec((err, users) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
-            });
-          } else {
-            // based on the ids, extracted earlier, we'll get the user's data
-            // and from that data, here we're extracting the names and emails...
-            var names = [];
-            var emails = [];
-            users.forEach((user) => {
-              names.push(user.name);
-              emails.push(user.email);
-            });
-            // making a list of user's objects, in which each object will contain
-            // the entire data like id, company_id, name, email, etc...
-            var listOfSPs = [];
-            var counter = 0;
-            sps.forEach((sp) => {
-              const obj = {
-                user_id: sp.user_id,
-                company_id: sp.company_id,
-                name: names[counter],
-                email: emails[counter],
-                feedbackGiven: sp.feedbackGiven,
-                ratings: sp.ratings,
-                department: sp.department,
-                avgRating: sp.averageRating,
-                assignedComplaints: sp.assignedComplaints,
-                pfp: sp.pfp || null,
-              };
-              listOfSPs.push(obj);
-              counter++;
-            });
-            res.send({
-              status: 200,
-              success: true,
-              data: listOfSPs,
-            });
-          }
-        });
-      }
-    });
+    SP.find({ company_id: company_id, department: null })
+      .populate("user_id")
+      .exec((err, sps) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else if (sps.length == 0) {
+          // this means all serviceproviders are assigned to some departments...
+          res.send({
+            status: 200,
+            success: true,
+            message: "ALL SERVICEPROVIDERS ARE UNAVAILABLE!",
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            data: sps,
+          });
+          // // extracting the ids of the available serviceproviders...
+          // var userIDs = [];
+          // sps.forEach((sp) => userIDs.push(sp.user_id));
+          // // based on these extracted ids, we'll get the user's data...
+          // User.find({ _id: { $in: userIDs } }).exec((err, users) => {
+          //   if (err) {
+          //     res.send({
+          //       status: 500,
+          //       success: false,
+          //       message: err.message,
+          //     });
+          //   } else {
+          //     // based on the ids, extracted earlier, we'll get the user's data
+          //     // and from that data, here we're extracting the names and emails...
+          //     var names = [];
+          //     var emails = [];
+          //     users.forEach((user) => {
+          //       names.push(user.name);
+          //       emails.push(user.email);
+          //     });
+          //     // making a list of user's objects, in which each object will contain
+          //     // the entire data like id, company_id, name, email, etc...
+          //     var listOfSPs = [];
+          //     var counter = 0;
+          //     sps.forEach((sp) => {
+          //       const obj = {
+          //         user_id: sp.user_id,
+          //         company_id: sp.company_id,
+          //         name: names[counter],
+          //         email: emails[counter],
+          //         feedbackGiven: sp.feedbackGiven,
+          //         ratings: sp.ratings,
+          //         department: sp.department,
+          //         avgRating: sp.averageRating,
+          //         assignedComplaints: sp.assignedComplaints,
+          //         pfp: sp.pfp || null,
+          //       };
+          //       listOfSPs.push(obj);
+          //       counter++;
+          //     });
+          //     res.send({
+          //       status: 200,
+          //       success: true,
+          //       data: listOfSPs,
+          //     });
+          //   }
+          // });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
