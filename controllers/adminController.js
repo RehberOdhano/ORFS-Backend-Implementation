@@ -458,19 +458,7 @@ exports.getComplaintsList = (req, res) => {
 exports.updateSpecificComplaint = (req, res) => {
   try {
     const id = req.params.id;
-    const title = req.body.title;
-    const description = req.body.description;
-    const category = req.body.category;
-    const workUpdate = req.body.workUpdate;
-    const status = req.body.status;
-
-    Complaint.findByIdAndUpdate(id, {
-      title: title,
-      description: description,
-      category: category,
-      workUpdate: workUpdate,
-      status: status,
-    }).exec((err, complaint) => {
+    Complaint.findById(id).exec((err, complaint) => {
       if (err) {
         res.send({
           status: 500,
@@ -478,10 +466,29 @@ exports.updateSpecificComplaint = (req, res) => {
           message: err.message,
         });
       } else {
-        res.send({
-          status: 200,
-          success: true,
-          message: "COMPLAINT IS SUCCESSFULLY UPDATED!",
+        const workUpdate =
+          req.body.workUpdate == ""
+            ? complaint.workUpdate
+            : req.body.workUpdate;
+        const status =
+          req.body.status == "" ? complaint.status : req.body.status;
+        Complaint.updateOne(id, {
+          workUpdate: workUpdate,
+          status: status,
+        }).exec((err, complaint) => {
+          if (err) {
+            res.send({
+              status: 500,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            res.send({
+              status: 200,
+              success: true,
+              message: "COMPLAINT IS SUCCESSFULLY UPDATED!",
+            });
+          }
         });
       }
     });
@@ -493,32 +500,7 @@ exports.updateSpecificComplaint = (req, res) => {
 exports.archiveSpecificComplaint = (req, res) => {
   try {
     const id = req.params.id;
-    Complaint.findByIdAndUpdate(id, { status: "ARCHIVED" }).exec(
-      (err, complaint) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else {
-          res.send({
-            status: 200,
-            success: true,
-            message: "COMPLAINT IS SUCCESSFULLY ARCHIVED!",
-          });
-        }
-      }
-    );
-  } catch (err) {
-    console.log("ERROR: " + err.message);
-  }
-};
-
-exports.deleteSpecificComplaint = (req, res) => {
-  try {
-    const id = req.params.id;
-    Complaint.deleteOne({ _id: id }).exec((err, complaint) => {
+    Complaint.updateOne(id, { status: "ARCHIVED" }).exec((err, complaint) => {
       if (err) {
         res.send({
           status: 500,
@@ -529,12 +511,12 @@ exports.deleteSpecificComplaint = (req, res) => {
         res.send({
           status: 200,
           success: true,
-          message: "COMPLAINT IS SUCCESSFULLY DELETED!",
+          message: "COMPLAINT IS SUCCESSFULLY ARCHIVED!",
         });
       }
     });
   } catch (err) {
-    console.log("ERROR:" + err.message);
+    console.log("ERROR: " + err.message);
   }
 };
 
@@ -542,7 +524,7 @@ exports.assignComplaint = (req, res) => {
   try {
     const complaintID = req.params.id;
     const spID = req.body.id;
-    Complaint.findByIdAndUpdate(
+    Complaint.updateOne(
       { _id: complaintID },
       {
         $push: {
@@ -557,7 +539,7 @@ exports.assignComplaint = (req, res) => {
           message: err.message,
         });
       } else {
-        SP.findByIdAndUpdate(
+        SP.updateOne(
           { _id: spID },
           {
             $push: {

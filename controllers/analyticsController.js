@@ -120,9 +120,45 @@ exports.getUserDashboardAnalytics = (req, res) => {
   }
 };
 
-exports.getDeptAnalytics = (req, res) => {
+exports.getDeptDashboardAnalytics = (req, res) => {
   try {
-    const deptID = req.params.id;
+    const company_id = req.params.id;
+    const analytics = {};
+    Department.find({ company_id: company_id })
+      .populate("employees")
+      .exec((err, departments) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          var count = 0,
+            totalRating = 0,
+            numOfServiceProviders = 0;
+
+          // getting total number of departments, serviceproviders, and average
+          // rating of all the service providers of all the departments...
+          for (var dept of departments) {
+            for (var employee of dept.employees) {
+              totalRating += employee.averageRating;
+              numOfServiceProviders++;
+            }
+            count++;
+          }
+
+          analytics.numberOfDepartments = count;
+          analytics.numberOfServiceProviders = numOfServiceProviders;
+          analytics.averageRating =
+            count !== (0 || null) ? totalRating / count : 0;
+          res.send({
+            status: 200,
+            success: true,
+            data: analytics,
+          });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }

@@ -43,10 +43,6 @@ admin_router.put(
   "/complaints/archive/:id",
   adminController.archiveSpecificComplaint
 );
-admin_router.delete(
-  "/complaints/delete/:id",
-  adminController.deleteSpecificComplaint
-);
 
 // ADMIN DEPARTMENTS ROUTES
 admin_router.get("/depts/all/:id", adminController.getDeptsList);

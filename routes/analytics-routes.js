@@ -20,5 +20,9 @@ analytics_controller.get(
   "/user-analytics/:id",
   analyticsController.getUserDashboardAnalytics
 );
+analytics_controller.get(
+  "/department-analytics/:id",
+  analyticsController.getDeptDashboardAnalytics
+);
 
 module.exports = analytics_controller;
