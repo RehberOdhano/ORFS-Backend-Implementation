@@ -608,8 +608,8 @@ exports.addSpecificDept = (req, res) => {
   try {
     const company_id = req.params.id;
     const title = req.body.title;
-    const categories = req.body.categories;
-    const employees = req.body.employees;
+    const categories = req.body.selectedCategories;
+    const employees = req.body.selectedEmployees;
 
     Department.findOne({ company_id: company_id, title: title }).exec(
       (err, dept) => {
@@ -631,7 +631,7 @@ exports.addSpecificDept = (req, res) => {
             {
               title: title,
               company_id: company_id,
-              categories: categories.length == 0 ? [] : categories,
+              category: categories.length == 0 ? [] : categories,
               employees: employees.length == 0 ? [] : employees,
             },
             (err, department) => {
