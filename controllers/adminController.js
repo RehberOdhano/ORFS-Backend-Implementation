@@ -606,63 +606,83 @@ exports.getDeptsList = (req, res) => {
 
 exports.addSpecificDept = (req, res) => {
   try {
-    const title = req.body.title;
     const company_id = req.params.id;
-    Department.findOne({ title: title }).exec((err, dept) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (dept != null) {
-        res.send({
-          status: 200,
-          success: true,
-          message: `${title.toUpperCase()} DEPARTMENT ALREADY EXISTS!`,
-          id: dept._id,
-        });
-      } else {
-        Department.create(
-          {
-            title: title,
-            company_id: company_id,
-          },
-          (err, department) => {
-            if (err) {
-              res.send({
-                status: 500,
-                success: false,
-                message: err.message,
-              });
-            } else {
-              Customer.updateOne(
-                { _id: company_id },
-                {
-                  $push: {
-                    departments: { _id: department._id },
-                  },
-                }
-              ).exec((err, customer) => {
-                if (err) {
-                  res.send({
-                    status: 500,
-                    success: false,
-                    message: err.message,
-                  });
-                } else {
-                  res.send({
-                    status: 200,
-                    success: true,
-                    message: "DEPARTMENT IS SUCCESSFULLY ADDED!",
-                  });
-                }
-              });
+    const title = req.body.title;
+    const categories = req.body.categories;
+    const employees = req.body.employees;
+
+    Department.findOne({ company_id: company_id, title: title }).exec(
+      (err, dept) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else if (dept != null) {
+          res.send({
+            status: 200,
+            success: true,
+            message: `${title.toUpperCase()} DEPARTMENT ALREADY EXISTS!`,
+            id: dept._id,
+          });
+        } else {
+          Department.create(
+            {
+              title: title,
+              company_id: company_id,
+              categories: categories.length == 0 ? [] : categories,
+              employees: employees.length == 0 ? [] : employees,
+            },
+            (err, department) => {
+              if (err) {
+                res.send({
+                  status: 500,
+                  success: false,
+                  message: err.message,
+                });
+              } else {
+                Customer.updateOne(
+                  { _id: company_id },
+                  {
+                    $push: {
+                      departments: { _id: department._id },
+                    },
+                  }
+                ).exec((err, customer) => {
+                  if (err) {
+                    res.send({
+                      status: 500,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    SP.updateMany(
+                      { _id: { $in: employees } },
+                      { department: department._id }
+                    ).exec((err, result) => {
+                      if (err) {
+                        res.send({
+                          status: 500,
+                          success: false,
+                          message: err.message,
+                        });
+                      } else {
+                        res.send({
+                          status: 200,
+                          success: true,
+                          message: "DEPARTMENT IS SUCCESSFULLY ADDED!",
+                        });
+                      }
+                    });
+                  }
+                });
+              }
             }
-          }
-        );
+          );
+        }
       }
-    });
+    );
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
