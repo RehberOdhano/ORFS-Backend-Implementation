@@ -578,6 +578,7 @@ exports.getDeptsList = (req, res) => {
   try {
     Department.find({ company_id: req.params.id })
       .populate("employees")
+      .populate("category")
       .exec((err, depts) => {
         if (err) {
           res.send({
@@ -592,10 +593,43 @@ exports.getDeptsList = (req, res) => {
             message: "DEPARTMENTS NOT FOUND",
           });
         } else {
+          var deptAnalytics = [];
+          depts.forEach((dept) => {
+            var tempObj = {};
+            var totalComplaints = 0,
+              resolvedComplaints = 0,
+              unresolvedComplaints = 0;
+
+            // for each dept, we select it's employees property, which is an array,
+            // and for each employee in that array, we select it's assignedComplaints
+            // property, which is also an array, and based on the status of each complaint
+            // in that array, we calculate the total number of complaints, resolved and
+            // unresolved complaints respectively...
+            dept.employees.forEach((employee) => {
+              totalComplaints += employee.assignedComplaints.length;
+              employee.assignedComplaints.forEach((assignedComplaint) => {
+                if (assignedComplaint.status === "RESOLVED") {
+                  resolvedComplaints++;
+                } else {
+                  unresolvedComplaints++;
+                }
+              });
+            });
+
+            const analyticsObj = {
+              totalComplaints: totalComplaints,
+              resolvedComplaints: resolvedComplaints,
+              unresolvedComplaints: unresolvedComplaints,
+            };
+            tempObj.department = dept;
+            tempObj.complaintsAnalytics = [analyticsObj];
+            deptAnalytics.push(tempObj);
+          });
+
           res.send({
             status: 200,
             success: true,
-            departments: depts,
+            departments: deptAnalytics,
           });
         }
       });
