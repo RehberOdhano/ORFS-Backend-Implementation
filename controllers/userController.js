@@ -66,9 +66,7 @@ const complaintAssignment = (category_id, complaint_id) => {
                     SP.updateOne(
                       { _id: employees[0]._id },
                       { $push: { assignedComplaints: { _id: complaint_id } } }
-                    ).exec((err, sp) => {
-                      if (!err) return;
-                    });
+                    ).exec();
                   }
                 });
               }

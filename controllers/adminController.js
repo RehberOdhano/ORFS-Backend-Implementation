@@ -622,35 +622,6 @@ exports.getDeptsList = (req, res) => {
   }
 };
 
-exports.getSpecificDept = (req, res) => {
-  try {
-    const id = req.params.id;
-    Department.findOne({ _id: id }).exec((err, dept) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (dept == null) {
-        res.send({
-          status: 200,
-          success: true,
-          message: "DEPARTMENTS NOT FOUND",
-        });
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          departments: dept,
-        });
-      }
-    });
-  } catch (err) {
-    console.log("ERROR: " + err.message);
-  }
-};
-
 exports.addSpecificDept = (req, res) => {
   try {
     const title = req.body.title;
@@ -708,6 +679,35 @@ exports.addSpecificDept = (req, res) => {
             }
           }
         );
+      }
+    });
+  } catch (err) {
+    console.log("ERROR: " + err.message);
+  }
+};
+
+exports.getSpecificDept = (req, res) => {
+  try {
+    const id = req.params.id;
+    Department.findOne({ _id: id }).exec((err, dept) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (dept == null) {
+        res.send({
+          status: 200,
+          success: true,
+          message: "DEPARTMENTS NOT FOUND",
+        });
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          departments: dept,
+        });
       }
     });
   } catch (err) {
@@ -807,8 +807,8 @@ exports.deleteSpecificDept = (req, res) => {
 
 exports.addEmployeesToDept = (req, res) => {
   try {
-    const spID = req.body.id;
     const deptID = req.params.id;
+    const spID = req.body.id;
     Department.updateOne(
       { _id: deptID },
       { $push: { employees: { _id: spID } } }
@@ -887,17 +887,19 @@ exports.removeEmployeesFromDept = (req, res) => {
 
 exports.getAllDeptEmployees = (req, res) => {
   try {
-    const id = req.params.id;
-    Department.findOne({ _id: id })
-      .populate("employees")
-      .exec((err, dept) => {
+    const deptID = req.params.id;
+    SP.findOne({ department: deptID })
+      .populate("user_id")
+      .populate("assignedComplaints")
+      .populate("ratings")
+      .exec((err, data) => {
         if (err) {
           res.send({
             status: 500,
             success: false,
             message: err.message,
           });
-        } else if (dept.employees.length == 0) {
+        } else if (data == null) {
           res.send({
             status: 200,
             success: true,
@@ -907,62 +909,8 @@ exports.getAllDeptEmployees = (req, res) => {
           res.send({
             status: 200,
             success: true,
-            employees: dept.employees,
+            data: data,
           });
-          // var emails = [],
-          //   spIDs = [],
-          //   names = [];
-          // employees.forEach((employee) => emails.push(employee.email));
-          // User.find({ email: { $in: emails } }).exec((err, users) => {
-          //   if (err) {
-          //     res.send({
-          //       status: 500,
-          //       success: false,
-          //       message: err.message,
-          //     });
-          //   } else {
-          //     // based on the emails, we'll get all the users in a list
-          //     // and from that list we'll extract all the names and ids
-          //     users.forEach((user) => {
-          //       spIDs.push(user._id);
-          //       names.push(user.name);
-          //     });
-          //     // based on the extracted ids, we'll find the serviceproviders
-          //     SP.find({ user_id: { $in: spIDs } }).exec((err, sps) => {
-          //       if (err) {
-          //         res.send({
-          //           status: 500,
-          //           success: false,
-          //           message: err.message,
-          //         });
-          //       } else {
-          //         var listOfUsers = [];
-          //         var i = 0;
-          //         sps.forEach((sp) => {
-          //           var userObj = {
-          //             userID: spIDs[i],
-          //             company_id: sp.company_id,
-          //             name: names[i],
-          //             email: emails[i],
-          //             feedbackGiven: sp.feedbackGiven,
-          //             ratings: sp.ratings,
-          //             avgRating: sp.avgRating,
-          //             department: sp.department,
-          //             assignedComplaints: sp.assignedComplaints,
-          //             pfp: sp.pfp || null,
-          //           };
-          //           listOfUsers.push(userObj);
-          //           i++;
-          //         });
-          //         res.send({
-          //           status: 200,
-          //           success: true,
-          //           data: listOfUsers,
-          //         });
-          //       }
-          //     });
-          //   }
-          // });
         }
       });
   } catch (err) {
@@ -985,7 +933,7 @@ exports.getAvailableEmployees = (req, res) => {
             message: err.message,
           });
         } else if (sps.length == 0) {
-          // this means all serviceproviders are assigned to some departments...
+          // if all the serviceproviders are assigned to some departments...
           res.send({
             status: 200,
             success: true,
@@ -997,53 +945,6 @@ exports.getAvailableEmployees = (req, res) => {
             success: true,
             data: sps,
           });
-          // // extracting the ids of the available serviceproviders...
-          // var userIDs = [];
-          // sps.forEach((sp) => userIDs.push(sp.user_id));
-          // // based on these extracted ids, we'll get the user's data...
-          // User.find({ _id: { $in: userIDs } }).exec((err, users) => {
-          //   if (err) {
-          //     res.send({
-          //       status: 500,
-          //       success: false,
-          //       message: err.message,
-          //     });
-          //   } else {
-          //     // based on the ids, extracted earlier, we'll get the user's data
-          //     // and from that data, here we're extracting the names and emails...
-          //     var names = [];
-          //     var emails = [];
-          //     users.forEach((user) => {
-          //       names.push(user.name);
-          //       emails.push(user.email);
-          //     });
-          //     // making a list of user's objects, in which each object will contain
-          //     // the entire data like id, company_id, name, email, etc...
-          //     var listOfSPs = [];
-          //     var counter = 0;
-          //     sps.forEach((sp) => {
-          //       const obj = {
-          //         user_id: sp.user_id,
-          //         company_id: sp.company_id,
-          //         name: names[counter],
-          //         email: emails[counter],
-          //         feedbackGiven: sp.feedbackGiven,
-          //         ratings: sp.ratings,
-          //         department: sp.department,
-          //         avgRating: sp.averageRating,
-          //         assignedComplaints: sp.assignedComplaints,
-          //         pfp: sp.pfp || null,
-          //       };
-          //       listOfSPs.push(obj);
-          //       counter++;
-          //     });
-          //     res.send({
-          //       status: 200,
-          //       success: true,
-          //       data: listOfSPs,
-          //     });
-          //   }
-          // });
         }
       });
   } catch (err) {
@@ -1057,25 +958,26 @@ exports.getAvailableEmployees = (req, res) => {
 =============================================================================
 */
 
-// this will return all the categories...
 exports.getAllCategories = (req, res) => {
   try {
     const company_id = req.params.id;
-    Category.find({ company_id: company_id }).exec((err, categories) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          data: categories,
-        });
-      }
-    });
+    Category.find({ company_id: company_id })
+      .populate("assignedDepartment")
+      .exec((err, categories) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            data: categories,
+          });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
@@ -1094,7 +996,7 @@ exports.getUnassignedCategories = (req, res) => {
             message: err.message,
           });
         } else if (categories == null) {
-          // this means that all categories are already assigned to the departments...
+          // if all the categories are already assigned to the departments...
           res.send({
             status: 200,
             success: true,

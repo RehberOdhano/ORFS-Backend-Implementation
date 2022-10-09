@@ -69,7 +69,7 @@ exports.register = (req, res) => {
                     });
                   } else {
                     res.json(successObject);
-                    const message = `${process.env.BASE_URL}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
+                    const message = `${process.env.FRONTEND}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
                     await sendEmail(req.body.email, "Verify Email", message);
                   }
                 }
