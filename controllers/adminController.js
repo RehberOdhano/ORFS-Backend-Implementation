@@ -692,37 +692,47 @@ exports.addSpecificDept = (req, res) => {
                       message: err.message,
                     });
                   } else {
-                    Category.updateMany(
-                      { _id: { $in: categories } },
-                      { assignedDepartment: department._id }
-                    ).exec((err, updatedCategories) => {
-                      if (err) {
-                        res.send({
-                          status: 500,
-                          success: false,
-                          message: err.message,
-                        });
-                      } else {
+                    var error = false;
+                    var message;
+                    if (categories.length > 0) {
+                      Category.updateMany(
+                        { _id: { $in: categories } },
+                        { assignedDepartment: department._id }
+                      ).exec((err, updatedCategories) => {
+                        if (err) {
+                          error = true;
+                          message = err.message;
+                        }
+                      });
+                    }
+
+                    if (!error) {
+                      if (employees.length > 0) {
                         SP.updateMany(
                           { _id: { $in: employees } },
                           { department: department._id }
                         ).exec((err, result) => {
                           if (err) {
-                            res.send({
-                              status: 500,
-                              success: false,
-                              message: err.message,
-                            });
-                          } else {
-                            res.send({
-                              status: 200,
-                              success: true,
-                              message: "DEPARTMENT IS SUCCESSFULLY ADDED!",
-                            });
+                            error = true;
+                            message = err.message;
                           }
                         });
                       }
-                    });
+                    }
+
+                    if (!error) {
+                      res.send({
+                        status: 200,
+                        success: true,
+                        message: "DEPARTMENT IS SUCCESSFULLY ADDED!",
+                      });
+                    } else {
+                      res.send({
+                        status: 500,
+                        success: false,
+                        message: message,
+                      });
+                    }
                   }
                 });
               }
