@@ -621,6 +621,7 @@ exports.getDeptsList = (req, res) => {
               resolvedComplaints: resolvedComplaints,
               unresolvedComplaints: unresolvedComplaints,
             };
+
             tempObj.department = dept;
             tempObj.complaintsAnalytics = [analyticsObj];
             deptAnalytics.push(tempObj);
@@ -776,7 +777,6 @@ exports.updateSpecificDept = (req, res) => {
   }
 };
 
-// check when correct data is available
 exports.deleteSpecificDept = (req, res) => {
   try {
     const id = req.params.id;
@@ -856,7 +856,7 @@ exports.addEmployeesToDept = (req, res) => {
           message: err.message,
         });
       } else {
-        SP.updateOne({ _id: spID }, { department: deptID }).exec(
+        SP.updateOne({ user_id: spID }, { department: deptID }).exec(
           (err, result) => {
             if (err) {
               res.send({
