@@ -777,6 +777,8 @@ exports.updateSpecificDept = (req, res) => {
   }
 };
 
+// change the findByIdAndDelete to deleteOne later....
+// use company_id instead from the request body...
 exports.deleteSpecificDept = (req, res) => {
   try {
     const id = req.params.id;
