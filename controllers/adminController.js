@@ -824,7 +824,7 @@ exports.deleteSpecificDept = (req, res) => {
               message: err.message,
             });
           } else {
-            Category.updateOne(
+            Category.updateMany(
               { assignedDepartment: dept._id },
               { assignedDepartment: null }
             ).exec((err, result) => {
