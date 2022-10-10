@@ -56,15 +56,25 @@ const complaintAssignment = (category_id, complaint_id) => {
         // then based on that assignedDepartment, we'll find the serviceproviders...
         if (!err && category && category.assignedDepartment !== null) {
           Department.findById({ _id: category.assignedDepartment })
-            .sort({ assignedComplaints: 1, averageRating: -1 })
             .populate("employees")
-            // sorting the serviceproviders in ascending order based on the assigned
-            // complaints and in descending order based on the ratings...
             .exec((err, serviceproviders) => {
               if (!err) {
                 console.log(serviceproviders);
-                const employees = serviceproviders["employees"];
+                var employees = serviceproviders["employees"];
+                // sorting the serviceproviders in ascending order based on the assigned
+                // complaints and in descending order based on the ratings...
+                employees.sort((emp1, emp2) => {
+                  return (
+                    emp1.assignedComplaints.length >
+                    emp2.assignedComplaints.length
+                  );
+                });
                 console.log(employees);
+                employees.sort((emp1, emp2) => {
+                  return emp1.averageRating < emp2.averageRating;
+                });
+                console.log(employees);
+
                 // assigning the complaint to the serviceprovider who has less number of
                 // assignedComplaints and has highest rating...
                 Complaint.updateOne(
