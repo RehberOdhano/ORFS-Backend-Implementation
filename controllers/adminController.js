@@ -692,10 +692,10 @@ exports.addSpecificDept = (req, res) => {
                       message: err.message,
                     });
                   } else {
-                    SP.updateMany(
-                      { _id: { $in: employees } },
-                      { department: department._id }
-                    ).exec((err, result) => {
+                    Category.updateMany(
+                      { _id: { $in: categories } },
+                      { assignedDepartment: department._id }
+                    ).exec((err, updatedCategories) => {
                       if (err) {
                         res.send({
                           status: 500,
@@ -703,10 +703,23 @@ exports.addSpecificDept = (req, res) => {
                           message: err.message,
                         });
                       } else {
-                        res.send({
-                          status: 200,
-                          success: true,
-                          message: "DEPARTMENT IS SUCCESSFULLY ADDED!",
+                        SP.updateMany(
+                          { _id: { $in: employees } },
+                          { department: department._id }
+                        ).exec((err, result) => {
+                          if (err) {
+                            res.send({
+                              status: 500,
+                              success: false,
+                              message: err.message,
+                            });
+                          } else {
+                            res.send({
+                              status: 200,
+                              success: true,
+                              message: "DEPARTMENT IS SUCCESSFULLY ADDED!",
+                            });
+                          }
                         });
                       }
                     });
@@ -1087,7 +1100,7 @@ exports.addCategory = (req, res) => {
 exports.addCategoryToDept = (req, res) => {
   try {
     const id = req.params.id;
-    const category_id = mongoose.Types.ObjectId(req.body.category_id);
+    const category_id = req.body.category_id;
     Category.updateOne({ _id: category_id }, { assignedDepartment: id }).exec(
       (err, category) => {
         if (err) {
