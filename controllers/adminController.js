@@ -825,7 +825,7 @@ exports.deleteSpecificDept = (req, res) => {
             });
           } else {
             Category.updateOne(
-              { company_id: dept.company_id },
+              { assignedDepartment: dept._id },
               { assignedDepartment: null }
             ).exec((err, result) => {
               if (err) {
@@ -1042,7 +1042,7 @@ exports.getAllCategories = (req, res) => {
   }
 };
 
-// this will return all the categories that are not assigned to a department...
+// this will return all the categories that are not assigned to any department...
 exports.getUnassignedCategories = (req, res) => {
   try {
     const company_id = req.params.id;
@@ -1055,7 +1055,7 @@ exports.getUnassignedCategories = (req, res) => {
             message: err.message,
           });
         } else if (categories == null) {
-          // if all the categories are already assigned to the departments...
+          // if all the categories are already assigned to any of the departments...
           res.send({
             status: 200,
             success: true,
