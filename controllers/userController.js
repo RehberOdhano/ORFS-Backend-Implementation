@@ -47,6 +47,7 @@ exports.getAllComplaints = (req, res) => {
 // HELPER FUNCTION FOR "fileNewComplaint"
 const complaintAssignment = (category_id, complaint_id) => {
   try {
+    var error = false;
     if (category_id !== 0) {
       Category.findById({ _id: category_id }).exec((err, category) => {
         // if category is found and it's property assignedDepartment isn't null,
@@ -73,11 +74,11 @@ const complaintAssignment = (category_id, complaint_id) => {
                       { _id: employees[0]._id },
                       { $push: { assignedComplaints: { _id: complaint_id } } }
                     ).exec();
-                  }
+                  } else error = true;
                 });
-              }
+              } else error = true;
             });
-        }
+        } else error = true;
       });
     } else {
       return;

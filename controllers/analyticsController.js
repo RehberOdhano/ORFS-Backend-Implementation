@@ -75,7 +75,7 @@ exports.getAdminDashboardAnalytics = (req, res) => {
         const totalUsers = count;
         User.count({
           company_id: company_id,
-          status: { $ne: "UNREGISTERED" },
+          status: "ACTIVE",
         }).exec((err, count) => {
           if (err) {
             res.send({
