@@ -298,6 +298,7 @@ exports.updateSpecificUser = (req, res) => {
 exports.deleteSpecificUser = (req, res) => {
   try {
     const userID = req.params.id;
+    console.log(userID);
     User.findByIdAndDelete({ _id: userID }, function (err, user) {
       if (err) {
         res.send({
