@@ -30,7 +30,7 @@ exports.getAllComplaints = (req, res) => {
           res.send({
             status: 200,
             success: true,
-            message: "NO COMPLAINT IS FILED YET!",
+            complaints: [],
           });
         } else {
           res.send({
