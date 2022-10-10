@@ -17,8 +17,8 @@ const analyticsController = require("../controllers/analyticsController");
 analytics_controller.get("/customers", analyticsController.getCustomerCount);
 analytics_controller.get("/users", analyticsController.getUserCount);
 analytics_controller.get(
-  "/user-analytics/:id",
-  analyticsController.getUserDashboardAnalytics
+  "/admin-analytics/:id",
+  analyticsController.getAdminDashboardAnalytics
 );
 analytics_controller.get(
   "/department-analytics/:id",
