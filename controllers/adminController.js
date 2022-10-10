@@ -780,7 +780,7 @@ exports.updateSpecificDept = (req, res) => {
 exports.deleteSpecificDept = (req, res) => {
   try {
     const id = req.params.id;
-    Department.deleteOne({ _id: id }).exec((err, dept) => {
+    Department.findByIdAndDelete({ _id: id }).exec((err, dept) => {
       if (err) {
         res.send({
           status: 500,
@@ -788,7 +788,6 @@ exports.deleteSpecificDept = (req, res) => {
           message: err.message,
         });
       } else {
-        JSON.stringify(dept);
         Customer.updateOne(
           { _id: dept.company_id },
           { $pull: { departments: id } }
@@ -822,7 +821,6 @@ exports.deleteSpecificDept = (req, res) => {
                       message: err.message,
                     });
                   } else {
-                    console.log("sp: " + result);
                     res.send({
                       status: 200,
                       success: true,
