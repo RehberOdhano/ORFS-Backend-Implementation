@@ -298,7 +298,7 @@ exports.updateSpecificUser = (req, res) => {
 exports.deleteSpecificUser = (req, res) => {
   try {
     const user_id = req.params.id;
-    User.findById({ _id: user_id }, function (err, user) {
+    User.findByIdAndDelete({ _id: user_id }, function (err, user) {
       if (err) {
         res.send({
           status: 500,
@@ -307,9 +307,9 @@ exports.deleteSpecificUser = (req, res) => {
         });
       } else {
         console.log(user);
-        user.remove();
+        const company_id = user.company_id;
         if (user.role === "COMPLAINEE") {
-          Complainee.findById({ _id: user._id })
+          Complainee.findByIdAndDelete({ user_id: user._id })
             .populate("complaints")
             .exec((err, complaints) => {
               if (err) {
@@ -320,53 +320,54 @@ exports.deleteSpecificUser = (req, res) => {
                 });
               } else {
                 console.log(complaints);
-                Complainee.deleteOne({ _id: user_id }).exec(
-                  (err, complainee) => {
-                    if (err) {
-                      res.send({
-                        status: 500,
-                        success: false,
-                        message: err.message,
+                Customer.updateOne(
+                  { _id: company_id },
+                  { $pull: { employees: user_id } }
+                ).exec((err, updatedCustomer) => {
+                  if (err) {
+                    res.send({
+                      status: 500,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    Complaint.deleteMany({ _id: { $in: complaints } })
+                      .populate("assignedTo")
+                      .exec((err, serviceproviders) => {
+                        if (err) {
+                          res.send({
+                            status: 500,
+                            success: false,
+                            message: err.message,
+                          });
+                        } else {
+                          console.log(serviceproviders);
+                          SP.updateMany(
+                            { user_id: { $in: { serviceproviders } } },
+                            {
+                              $pull: {
+                                assignComplaints: { $in: complaints },
+                              },
+                            }
+                          ).exec((err, result) => {
+                            if (err) {
+                              res.send({
+                                status: 500,
+                                success: false,
+                                message: err.message,
+                              });
+                            } else {
+                              res.send({
+                                status: 200,
+                                success: true,
+                                message: "USER IS SUCCESSFULLY DELETED!",
+                              });
+                            }
+                          });
+                        }
                       });
-                    } else {
-                      Complaint.deleteMany({ _id: { $in: complaints } })
-                        .populate("assignedTo")
-                        .exec((err, serviceproviders) => {
-                          if (err) {
-                            res.send({
-                              status: 500,
-                              success: false,
-                              message: err.message,
-                            });
-                          } else {
-                            console.log(serviceproviders);
-                            SP.updateMany(
-                              { user_id: { $in: { serviceproviders } } },
-                              {
-                                $pull: {
-                                  assignComplaints: { $in: complaints },
-                                },
-                              }
-                            ).exec((err, result) => {
-                              if (err) {
-                                res.send({
-                                  status: 500,
-                                  success: false,
-                                  message: err.message,
-                                });
-                              } else {
-                                res.send({
-                                  status: 200,
-                                  success: true,
-                                  message: "USER IS SUCCESSFULLY DELETED!",
-                                });
-                              }
-                            });
-                          }
-                        });
-                    }
                   }
-                );
+                });
               }
             });
         } else {
@@ -382,10 +383,23 @@ exports.deleteSpecificUser = (req, res) => {
                   message: err.message,
                 });
               } else {
-                res.send({
-                  status: 200,
-                  success: true,
-                  message: "SERVICEPROVIDER IS SUCCESSFULLY DELETED!",
+                Customer.updateOne(
+                  { _id: company_id },
+                  { $pull: { employees: user_id } }
+                ).exec((err, updatedCustomer) => {
+                  if (err) {
+                    res.send({
+                      status: 500,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    res.send({
+                      status: 200,
+                      success: true,
+                      message: "SERVICEPROVIDER IS SUCCESSFULLY DELETED!",
+                    });
+                  }
                 });
               }
             });
