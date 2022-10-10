@@ -46,6 +46,10 @@ const complaintSchema = mongoose.Schema(
       type: String,
       enum: ["RESOLVED", "INPROGRESS", "UNASSIGNED", "STOPPED", "ARCHIVED"],
     },
+    assignHistory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ServiceProvider",
+    },
     assignedTo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ServiceProvider",

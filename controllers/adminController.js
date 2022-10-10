@@ -232,8 +232,36 @@ exports.addSpecificUser = (req, res) => {
   }
 };
 
+// exports.updateUserStatus = (req, res) => {
+//   try {
+//     const userID = req.params.id;
+//     const status = req.body.status;
+//     User.updateOne(
+//       { _id: userID, role: { $in: ["COMPLAINEE", "SERVICEPROVIDER"] } },
+//       { status: status }
+//     ).exec((err, updatedUser) => {
+//       if (err) {
+//         res.send({
+//           status: 500,
+//           success: false,
+//           message: err.message,
+//         });
+//       } else {
+//         console.log(updatedUser);
+//         res.send({
+//           status: 200,
+//           success: true,
+//           message: "USER'S STATUS IS SUCCESSFULLY UPDATED!",
+//         });
+//       }
+//     });
+//   } catch (err) {
+//     console.log("ERROR: " + err.message);
+//   }
+// };
+
 // this will update an specific user...
-exports.updateSpecificUser = async (req, res) => {
+exports.updateSpecificUser = (req, res) => {
   try {
     const id = req.params.id;
     const name = req.body.name;
@@ -265,12 +293,11 @@ exports.updateSpecificUser = async (req, res) => {
 
 // this will delete a user's record from the collection and based on the role,
 // i.e. if the user is complainee, then a record from the complainee's collection
-// will also be deleted and same for the role = serviceprovider... and after that,
-// the user will also be removed from the company's employees list...
+// and the related data will also be deleted and same for the role = serviceprovider...
+// and after that, the user will also be removed from the company's employees list...
 exports.deleteSpecificUser = (req, res) => {
   try {
-    const company_id = req.params.id;
-    const user_id = req.body.id;
+    const user_id = req.params.id;
     User.findById({ _id: user_id }, function (err, user) {
       if (err) {
         res.send({
@@ -279,29 +306,91 @@ exports.deleteSpecificUser = (req, res) => {
           message: err.message,
         });
       } else {
+        console.log(user);
         user.remove();
-        user.role == "COMPLAINEE"
-          ? Complainee.deleteOne({ _id: user._id }).exec()
-          : SP.deleteOne({ user_id: user._id }).exec();
-
-        Customer.updateOne(
-          { _id: company_id },
-          { $pull: { employees: { _id: user_id } } }
-        ).exec((err, employee) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
+        if (user.role === "COMPLAINEE") {
+          Complainee.findById({ _id: user._id })
+            .populate("complaints")
+            .exec((err, complaints) => {
+              if (err) {
+                res.send({
+                  status: 500,
+                  success: false,
+                  message: err.message,
+                });
+              } else {
+                console.log(complaints);
+                Complainee.deleteOne({ _id: user_id }).exec(
+                  (err, complainee) => {
+                    if (err) {
+                      res.send({
+                        status: 500,
+                        success: false,
+                        message: err.message,
+                      });
+                    } else {
+                      Complaint.deleteMany({ _id: { $in: complaints } })
+                        .populate("assignedTo")
+                        .exec((err, serviceproviders) => {
+                          if (err) {
+                            res.send({
+                              status: 500,
+                              success: false,
+                              message: err.message,
+                            });
+                          } else {
+                            console.log(serviceproviders);
+                            SP.updateMany(
+                              { user_id: { $in: { serviceproviders } } },
+                              {
+                                $pull: {
+                                  assignComplaints: { $in: complaints },
+                                },
+                              }
+                            ).exec((err, result) => {
+                              if (err) {
+                                res.send({
+                                  status: 500,
+                                  success: false,
+                                  message: err.message,
+                                });
+                              } else {
+                                res.send({
+                                  status: 200,
+                                  success: true,
+                                  message: "USER IS SUCCESSFULLY DELETED!",
+                                });
+                              }
+                            });
+                          }
+                        });
+                    }
+                  }
+                );
+              }
             });
-          } else {
-            res.send({
-              status: 200,
-              success: true,
-              message: "USER IS SUCCESSFULLY DELETED!",
+        } else {
+          SP.deleteOne({ user_id: user_id }).exec((err, result) => {
+            Complaint.updateMany(
+              { assignedTo: user_id },
+              { assignedTo: null }
+            ).exec((err, updatedComplaints) => {
+              if (err) {
+                res.send({
+                  status: 500,
+                  success: false,
+                  message: err.message,
+                });
+              } else {
+                res.send({
+                  status: 200,
+                  success: true,
+                  message: "SERVICEPROVIDER IS SUCCESSFULLY DELETED!",
+                });
+              }
             });
-          }
-        });
+          });
+        }
       }
     });
   } catch (err) {

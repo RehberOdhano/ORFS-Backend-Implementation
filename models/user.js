@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema(
     status: {
       type: String,
       required: [true, "USER STATUS IS REQUIRED!"],
-      enum: ["ACTIVE", "INACTIVE", "UNREGISTERED"],
+      enum: ["ACTIVE", "UNREGISTERED"],
     },
     signin_type: {
       type: String,

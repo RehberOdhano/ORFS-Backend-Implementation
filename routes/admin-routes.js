@@ -19,6 +19,7 @@ admin_router.get("/users/all/:id", adminController.getUsersList);
 admin_router.post("/users/add/:id", adminController.addSpecificUser);
 admin_router.put("/users/update/:id", adminController.updateSpecificUser);
 admin_router.delete("/users/delete/:id", adminController.deleteSpecificUser);
+// admin_router.put("/users/update/status/:id", adminController.updateUserStatus);
 admin_router.delete(
   "/users/deleteMultiple",
   adminController.deleteMultipleUsers
