@@ -115,7 +115,7 @@ exports.fileNewComplaint = (req, res) => {
       } else {
         Complainee.updateOne(
           { _id: req.body.user_id },
-          { $push: { complaints: { _id: complaint._id } } }
+          { $push: { complaints: complaint._id } }
         ).exec((err, result) => {
           if (err) {
             res.send({
