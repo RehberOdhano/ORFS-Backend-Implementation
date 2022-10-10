@@ -56,10 +56,10 @@ const complaintAssignment = (category_id, complaint_id) => {
         // then based on that assignedDepartment, we'll find the serviceproviders...
         if (!err && category && category.assignedDepartment !== null) {
           Department.findById({ _id: category.assignedDepartment })
+            .sort({ assignedComplaints: 1, averageRating: -1 })
             .populate("employees")
             // sorting the serviceproviders in ascending order based on the assigned
             // complaints and in descending order based on the ratings...
-            .sort({ assignedComplaints: 1, averageRating: -1 })
             .exec((err, serviceproviders) => {
               if (!err) {
                 console.log(serviceproviders);
