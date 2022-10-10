@@ -44,20 +44,26 @@ exports.getAllComplaints = (req, res) => {
   }
 };
 
-// helper function for fileNewComplaint
+// HELPER FUNCTION FOR "fileNewComplaint"
 const complaintAssignment = (category_id, complaint_id) => {
   try {
     if (category_id !== 0) {
       Category.findById({ _id: category_id }).exec((err, category) => {
-        if (!err && category.assignedDepartment !== null) {
+        // if category is found and it's property assignedDepartment isn't null,
+        // then based on that assignedDepartment, we'll find the serviceproviders...
+        if (!err && category && category.assignedDepartment !== null) {
           Department.findById({ _id: category.assignedDepartment })
             .populate("employees")
+            // sorting the serviceproviders in ascending order based on the assigned
+            // complaints and in descending order based on the ratings...
             .sort({ assignedComplaints: 1, averageRating: -1 })
             .exec((err, serviceproviders) => {
               if (!err) {
                 console.log(serviceproviders);
                 const employees = serviceproviders["employees"];
                 console.log(employees);
+                // assigning the complaint to the serviceprovider who has less number of
+                // assignedComplaints and has highest rating...
                 Complaint.updateOne(
                   { _id: complaint_id },
                   { assignedTo: employees[0]._id }
