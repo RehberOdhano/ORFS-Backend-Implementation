@@ -297,8 +297,8 @@ exports.updateSpecificUser = (req, res) => {
 // and after that, the user will also be removed from the company's employees list...
 exports.deleteSpecificUser = (req, res) => {
   try {
-    const user_id = req.params.id;
-    User.findByIdAndDelete({ _id: user_id }, function (err, user) {
+    const userID = req.params.id;
+    User.findByIdAndDelete({ _id: userID }, function (err, user) {
       if (err) {
         res.send({
           status: 500,
@@ -322,7 +322,7 @@ exports.deleteSpecificUser = (req, res) => {
                 console.log(complaints);
                 Customer.updateOne(
                   { _id: company_id },
-                  { $pull: { employees: user_id } }
+                  { $pull: { employees: userID } }
                 ).exec((err, updatedCustomer) => {
                   if (err) {
                     res.send({
@@ -371,9 +371,9 @@ exports.deleteSpecificUser = (req, res) => {
               }
             });
         } else {
-          SP.deleteOne({ user_id: user_id }).exec((err, result) => {
+          SP.deleteOne({ user_id: userID }).exec((err, result) => {
             Complaint.updateMany(
-              { assignedTo: user_id },
+              { assignedTo: userID },
               { assignedTo: null }
             ).exec((err, updatedComplaints) => {
               if (err) {
@@ -385,7 +385,7 @@ exports.deleteSpecificUser = (req, res) => {
               } else {
                 Customer.updateOne(
                   { _id: company_id },
-                  { $pull: { employees: user_id } }
+                  { $pull: { employees: userID } }
                 ).exec((err, updatedCustomer) => {
                   if (err) {
                     res.send({
