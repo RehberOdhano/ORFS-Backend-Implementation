@@ -75,6 +75,7 @@ exports.getAdminDashboardAnalytics = (req, res) => {
         const totalUsers = count;
         User.count({
           company_id: company_id,
+          role: { $in: ["COMPLAINEE", "SERVICEPROVIDER"] },
           status: "ACTIVE",
         }).exec((err, count) => {
           if (err) {
