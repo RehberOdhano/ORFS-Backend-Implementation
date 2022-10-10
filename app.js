@@ -18,7 +18,6 @@ const server = http.createServer(app);
 const io = socket(server);
 
 // SOCKET SERVER INITIATE
-io.origins(["http://localhost:3000"]);
 io.on("connection", (socket) => {
     console.log('New client connected');
     interval = setInterval(() => testFunction(socket), 1000);
