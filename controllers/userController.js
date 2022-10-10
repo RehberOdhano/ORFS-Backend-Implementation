@@ -30,7 +30,7 @@ exports.getAllComplaints = (req, res) => {
           res.send({
             status: 200,
             success: true,
-            complaints: [],
+            message: [],
           });
         } else {
           res.send({
@@ -114,7 +114,7 @@ exports.fileNewComplaint = (req, res) => {
         });
       } else {
         Complainee.updateOne(
-          { _id: req.body.user_id },
+          { user_id: req.body.user_id },
           { $push: { complaints: complaint._id } }
         ).exec((err, result) => {
           if (err) {
