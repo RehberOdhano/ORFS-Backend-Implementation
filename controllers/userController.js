@@ -17,28 +17,30 @@ const Category = require("../models/category");
 exports.getAllComplaints = (req, res) => {
   try {
     const id = req.params.id;
-    Complaint.find({ user_id: id }).exec((err, complaints) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (complaints == null || !complaints.length) {
-        res.send({
-          status: 200,
-          success: true,
-          message: "NO COMPLAINT IS FILED YET!",
-        });
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          message: "COMPLAINTS ARE SUCCESSFULLY FETCHED!",
-          complaints: complaints,
-        });
-      }
-    });
+    Complaint.find({ user_id: id })
+      .populate("category")
+      .exec((err, complaints) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else if (complaints == null || !complaints.length) {
+          res.send({
+            status: 200,
+            success: true,
+            message: "NO COMPLAINT IS FILED YET!",
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            message: "COMPLAINTS ARE SUCCESSFULLY FETCHED!",
+            complaints: complaints,
+          });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
