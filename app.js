@@ -12,10 +12,10 @@ app.use(passport.initialize());
 
 // SOCKET IMPORTS
 const socket = require("socket.io");
-const http = require("http")
+const http = require("http");
 
-const server = http.createServer(app)
-const io = socket(server)
+const server = http.createServer(app);
+const io = socket(server);
 
 // SOCKET SERVER INITIATE
 io.origins(["http://localhost:3000"]);
@@ -33,8 +33,10 @@ const testFunction = socket => {
 }
 
 // SERVER LISTENING TO SOCKET PORT
-const socketPort = 4040
-server.listen(socketPort, () => console.log(`Listening on port ${socketPort}`))
+const socketPort = 4040;
+server.listen(socketPort, () =>
+  console.log(`SOCKETS ARE LISTENING ON PORT: ${socketPort}`)
+);
 
 // STATIC FOLDER
 app.use("/public", express.static(path.join(__dirname, "public")));

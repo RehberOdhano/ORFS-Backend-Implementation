@@ -61,7 +61,10 @@ exports.getAdminDashboardAnalytics = (req, res) => {
   try {
     const company_id = req.params.id;
     var analytics = {};
-    User.count({ company_id: company_id }).exec((err, count) => {
+    User.count({
+      company_id: company_id,
+      role: { $in: ["COMPLAINEE", "SERVICEPROVIDER"] },
+    }).exec((err, count) => {
       if (err) {
         res.send({
           status: 500,
