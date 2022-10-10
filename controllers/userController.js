@@ -85,10 +85,11 @@ exports.fileNewComplaint = (req, res) => {
   try {
     const complaintObj = {
       company_id: req.params.id,
-      complainee_id: req.body.complanee_id,
+      complainee_id: req.body.user_id,
       title: req.body.title,
       description: req.body.description,
       category: req.body.category_id,
+      priority: req.body.priority,
       // media: req.body.media,
       status: "UNASSIGNED",
       dateCreated: new Date(),
@@ -104,7 +105,7 @@ exports.fileNewComplaint = (req, res) => {
         });
       } else {
         Complainee.updateOne(
-          { _id: req.body.complainee_id },
+          { _id: req.body.user_id },
           { $push: { complaints: { _id: complaint._id } } }
         ).exec((err, result) => {
           if (err) {
