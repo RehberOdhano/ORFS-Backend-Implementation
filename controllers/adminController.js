@@ -57,7 +57,10 @@ const SP = require("../models/serviceProvider");
 exports.getUsersList = (req, res) => {
   try {
     const company_id = req.params.id;
-    User.find({ company_id: company_id })
+    User.find({
+      company_id: company_id,
+      role: { $in: ["COMPLAINEE", "SERVICEPROVIDER"] },
+    })
       .populate("company_id")
       .exec((err, users) => {
         if (err) {
