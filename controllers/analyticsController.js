@@ -154,7 +154,8 @@ exports.getDeptDashboardAnalytics = (req, res) => {
         } else {
           var count = 0,
             totalRating = 0,
-            numOfServiceProviders = 0;
+            numOfServiceProviders = 0,
+            numOfDepartments = 0;
 
           // getting total number of departments, serviceproviders, and average
           // rating of all the service providers of all the departments...
@@ -166,9 +167,10 @@ exports.getDeptDashboardAnalytics = (req, res) => {
               numOfServiceProviders++;
               count++;
             }
+            numOfDepartments++;
           }
 
-          analytics.numberOfDepartments = count;
+          analytics.numberOfDepartments = numOfDepartments;
           analytics.numberOfServiceProviders = numOfServiceProviders;
           analytics.averageRating = count !== 0 ? totalRating / count : 0;
           console.log(analytics);
