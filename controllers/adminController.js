@@ -1149,8 +1149,8 @@ exports.addCategoryToDept = (req, res) => {
 exports.deleteCategory = (req, res) => {
   try {
     const company_id = req.params.id;
-    const category_id = mongoose.Types.ObjectId(req.body.id);
-    Category.findByIdAndDelete({
+    const category_id = req.body.id;
+    Category.deleteOne({
       _id: category_id,
       company_id: company_id,
     }).exec((err, category) => {
@@ -1161,37 +1161,11 @@ exports.deleteCategory = (req, res) => {
           message: err.message,
         });
       } else {
-        // if this category is already assigned to any department, then
-        // using that department's id, we'll remove the category from the
-        // categories array in the department's collection...
-        if (category.assignedDepartment) {
-          const id = category.assignedDepartment._id;
-          Department.updateOne(
-            { _id: id },
-            { $pull: { category: { _id: category._id } } }
-          ).exec((err, dept) => {
-            if (err) {
-              res.send({
-                status: 500,
-                success: false,
-                message: err.message,
-              });
-            } else {
-              res.send({
-                status: 200,
-                success: true,
-                message:
-                  "CATEGORY IS SUCCESSFULLY DELETED AND UNASSIGNED FROM THE DEPARTMENT AS WELL!",
-              });
-            }
-          });
-        } else {
-          res.send({
-            status: 200,
-            success: true,
-            message: "CATEGORY IS SUCCESSFULLY DELETED!",
-          });
-        }
+        res.send({
+          status: 200,
+          success: true,
+          message: "CATEGORY IS SUCCESSFULLY DELETED!",
+        });
       }
     });
   } catch (err) {
