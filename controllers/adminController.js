@@ -1148,11 +1148,9 @@ exports.addCategoryToDept = (req, res) => {
 
 exports.deleteCategory = (req, res) => {
   try {
-    const company_id = req.params.id;
-    const category_id = req.body.id;
+    const category_id = req.params.id;
     Category.deleteOne({
       _id: category_id,
-      company_id: company_id,
     }).exec((err, category) => {
       if (err) {
         res.send({
