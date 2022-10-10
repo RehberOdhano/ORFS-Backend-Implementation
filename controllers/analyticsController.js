@@ -137,7 +137,7 @@ exports.getAdminDashboardAnalytics = (req, res) => {
 exports.getDeptDashboardAnalytics = (req, res) => {
   try {
     const company_id = req.params.id;
-    const analytics = {};
+    var analytics = {};
     Department.find({ company_id: company_id })
       .populate("employees")
       .exec((err, departments) => {
@@ -158,8 +158,8 @@ exports.getDeptDashboardAnalytics = (req, res) => {
             for (var employee of dept.employees) {
               totalRating += employee.averageRating;
               numOfServiceProviders++;
+              count++;
             }
-            count++;
           }
 
           analytics.numberOfDepartments = count;
