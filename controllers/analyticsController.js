@@ -156,7 +156,9 @@ exports.getDeptDashboardAnalytics = (req, res) => {
           // rating of all the service providers of all the departments...
           for (var dept of departments) {
             for (var employee of dept.employees) {
-              totalRating += employee.averageRating;
+              employee.averageRating != null
+                ? (totalRating += employee.averageRating)
+                : (totalRating += 0);
               numOfServiceProviders++;
               count++;
             }
@@ -164,8 +166,8 @@ exports.getDeptDashboardAnalytics = (req, res) => {
 
           analytics.numberOfDepartments = count;
           analytics.numberOfServiceProviders = numOfServiceProviders;
-          analytics.averageRating =
-            count !== (0 || null) ? totalRating / count : 0;
+          analytics.averageRating = count !== 0 ? totalRating / count : 0;
+          console.log(analytics);
           res.send({
             status: 200,
             success: true,
