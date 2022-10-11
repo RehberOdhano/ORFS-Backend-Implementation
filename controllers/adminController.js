@@ -735,14 +735,44 @@ exports.getDeptsList = (req, res) => {
               });
             });
 
-            const analyticsObj = {
-              totalComplaints: totalComplaints,
-              resolvedComplaints: resolvedComplaints,
-              unresolvedComplaints: unresolvedComplaints,
-            };
+            var graphData = [
+              {
+                id: "Unresolved Complaints",
+                data: [
+                  {
+                    x: "Unresolved Complaints",
+                    y: unresolvedComplaints,
+                  },
+                ],
+              },
+              {
+                id: "Resolved Complaints",
+                data: [
+                  {
+                    x: "Resolved Complaints",
+                    y: resolvedComplaints,
+                  },
+                ],
+              },
+              {
+                id: "Filed Complaints",
+                data: [
+                  {
+                    x: "Filed Complaints",
+                    y: totalComplaints,
+                  },
+                ],
+              },
+            ];
+
+            // const analyticsObj = {
+            //   totalComplaints: totalComplaints,
+            //   resolvedComplaints: resolvedComplaints,
+            //   unresolvedComplaints: unresolvedComplaints,
+            // };
 
             tempObj.department = dept;
-            tempObj.complaintsAnalytics = [analyticsObj];
+            tempObj.complaintsAnalytics = graphData;
             deptAnalytics.push(tempObj);
           });
 
