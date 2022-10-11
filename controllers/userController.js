@@ -19,6 +19,7 @@ exports.getAllComplaints = (req, res) => {
     const id = req.params.id;
     Complaint.find({ user_id: id })
       .populate("category")
+      .populate("assignedTo")
       .exec((err, complaints) => {
         if (err) {
           res.send({
@@ -95,7 +96,11 @@ const complaintAssignment = (category_id, complaint_id) => {
                 // assignedComplaints and has highest rating...
                 Complaint.updateOne(
                   { _id: complaint_id },
-                  { assignedTo: employees[0]._id }
+                  {
+                    assignedTo: employees[0]._id,
+                    assignHistory: employees[0]._id,
+                    status: "ASSIGNED",
+                  }
                 ).exec((err, complaint) => {
                   if (!err) {
                     SP.updateOne(
