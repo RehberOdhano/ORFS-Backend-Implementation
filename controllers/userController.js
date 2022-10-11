@@ -20,6 +20,7 @@ exports.getAllComplaints = (req, res) => {
     Complaint.find({ user_id: id })
       .populate("category")
       .populate("assignedTo")
+      .populate("user_id")
       .exec((err, complaints) => {
         if (err) {
           res.send({
