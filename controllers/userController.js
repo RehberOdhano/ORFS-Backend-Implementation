@@ -64,14 +64,27 @@ const complaintAssignment = (category_id, complaint_id) => {
                 // sorting the serviceproviders in ascending order based on the assigned
                 // complaints and in descending order based on the ratings...
                 console.log(employees);
-                employees.sort((emp1, emp2) => {
-                  console.log("employees");
-                  console.log(emp1.assignedComplaints, emp2.assignedComplaints);
-                  return (
-                    emp1.assignedComplaints.length >
-                    emp2.assignedComplaints.length
-                  );
-                });
+                // employees.sort((emp1, emp2) => {
+                //   console.log("employees");
+                //   console.log(emp1.assignedComplaints, emp2.assignedComplaints);
+                //   return (
+                //     emp1.assignedComplaints.length >
+                //     emp2.assignedComplaints.length
+                //   );
+                // });
+                var tempObj;
+                for (var i = 0; i < employees.length; i++) {
+                  for (var j = i + 1; j < employees.length; j++) {
+                    if (
+                      employees[i].assignedComplaints.length >
+                      employees[j].assignedComplaints.length
+                    ) {
+                      tempObj = employees[i];
+                      employees[i] = employees[j];
+                      employees[j] = tempObj;
+                    }
+                  }
+                }
                 console.log(employees);
                 employees.sort((emp1, emp2) => {
                   return emp1.averageRating < emp2.averageRating;
@@ -112,7 +125,7 @@ exports.fileNewComplaint = (req, res) => {
       description: req.body.description,
       category: req.body.category_id,
       priority: req.body.priority,
-      // media: req.body.media,
+      media: req.body.media,
       status: "UNASSIGNED",
       dateCreated: new Date(),
     };
