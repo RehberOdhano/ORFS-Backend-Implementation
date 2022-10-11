@@ -59,11 +59,14 @@ const complaintAssignment = (category_id, complaint_id) => {
             .populate("employees")
             .exec((err, serviceproviders) => {
               if (!err) {
-                console.log(serviceproviders);
+                // console.log(serviceproviders);
                 var employees = serviceproviders["employees"];
                 // sorting the serviceproviders in ascending order based on the assigned
                 // complaints and in descending order based on the ratings...
+                console.log(employees);
                 employees.sort((emp1, emp2) => {
+                  console.log("employees");
+                  console.log(emp1.assignedComplaints, emp2.assignedComplaints);
                   return (
                     emp1.assignedComplaints.length >
                     emp2.assignedComplaints.length
@@ -73,7 +76,7 @@ const complaintAssignment = (category_id, complaint_id) => {
                 employees.sort((emp1, emp2) => {
                   return emp1.averageRating < emp2.averageRating;
                 });
-                console.log(employees);
+                // console.log(employees);
 
                 // assigning the complaint to the serviceprovider who has less number of
                 // assignedComplaints and has highest rating...
