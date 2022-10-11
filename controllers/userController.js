@@ -192,7 +192,7 @@ exports.updateComplaint = (req, res) => {
 
 exports.deleteComplaint = (req, res) => {
   try {
-    Complaint.deleteOne(req.params.id).exec((err, result) => {
+    Complaint.findByIdAndDelete(req.params.id).exec((err, deletedComplaint) => {
       if (err) {
         res.send({
           status: 500,
@@ -200,10 +200,44 @@ exports.deleteComplaint = (req, res) => {
           message: err.message,
         });
       } else {
-        res.send({
-          status: 200,
-          success: true,
-          message: "COMPLAINT IS SUCCESSFULLY DELETED!",
+        Complainee.updateOne(
+          { company_id: deletedComplaint.company_id },
+          { $pull: { complaints: req.params.id } }
+        ).exec((err, updatedComplainee) => {
+          if (err) {
+            res.send({
+              status: 500,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            if (deletedComplaint.assignedTo) {
+              SP.updateOne(
+                { _id: deletedComplaint.assignedTo },
+                { $pull: { assignedComplaints: req.params.id } }
+              ).exec((err, updatedSP) => {
+                if (err) {
+                  res.send({
+                    status: 500,
+                    success: false,
+                    message: err.message,
+                  });
+                } else {
+                  res.send({
+                    status: 200,
+                    success: true,
+                    message: "COMPLAINT IS SUCCESSFULLY DELETED!",
+                  });
+                }
+              });
+            } else {
+              res.send({
+                status: 200,
+                success: true,
+                message: "COMPLAINT IS SUCCESSFULLY DELETED!",
+              });
+            }
+          }
         });
       }
     });
