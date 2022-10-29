@@ -11,6 +11,7 @@ const fs = require("fs");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 const supertest = require("supertest");
+const { OAuth2Client } = require("google-auth-library");
 
 module.exports = {
   express,
@@ -26,4 +27,5 @@ module.exports = {
   multer,
   nodemailer,
   supertest,
+  OAuth2Client,
 };

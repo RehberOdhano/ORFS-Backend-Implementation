@@ -18,7 +18,9 @@ const connect_db = async () => {
   const app = require("./app");
 
   app.listen(PORT, () => {
-    console.log("SERVER IS STARTED SUCCESSFULLY...! WE'RE GOOD TO GO!");
+    console.log(
+      `SERVER IS STARTED SUCCESSFULLY...! LISTENING TO PORT ${PORT}... WE'RE GOOD TO GO!`
+    );
   });
 };
 
