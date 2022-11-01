@@ -17,13 +17,13 @@ const adminController = require("../controllers/adminController");
 admin_router.get("/users/all/:id", adminController.getUsersList);
 // admin_router.get("/users/:id", adminController.getSpecificUser);
 admin_router.post("/users/add/:id", adminController.addSpecificUser);
-admin_router.put("/users/update/:id", adminController.updateSpecificUser);
+// admin_router.put("/users/update/:id", adminController.updateSpecificUser);
+admin_router.put("/users/update/status/:id", adminController.updateUserStatus);
 admin_router.delete("/users/delete/:id", adminController.deleteSpecificUser);
-// admin_router.put("/users/update/status/:id", adminController.updateUserStatus);
-admin_router.delete(
-  "/users/deleteMultiple",
-  adminController.deleteMultipleUsers
-);
+// admin_router.delete(
+//   "/users/deleteMultiple",
+//   adminController.deleteMultipleUsers
+// );
 
 // ADMIN ROLES ROUTES
 // admin_router.get('/roles', adminController.getRolesList);
