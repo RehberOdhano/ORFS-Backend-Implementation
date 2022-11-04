@@ -12,7 +12,7 @@ app.use(passport.initialize());
 
 // SOCKET IMPORTS
 const socket = require("socket.io");
-
+const http = require("https");
 
 const server = http.createServer(app);
 const io = socket(server, {cors: {origin: "*"}});
