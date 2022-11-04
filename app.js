@@ -15,7 +15,7 @@ const socket = require("socket.io");
 const http = require("https");
 
 const server = http.createServer(app);
-const io = socket(server, {cors: {origin: "*"}});
+const io = socket(server, { cors: { origin: "*" } });
 
 // SOCKET SERVER INITIATE
 io.on("connection", (socket) => {
@@ -32,10 +32,10 @@ const testFunction = (socket) => {
 };
 
 // SERVER LISTENING TO SOCKET PORT
-const socketPort = 4040;
-server.listen(socketPort, () =>
-  console.log(`SOCKETS ARE LISTENING ON PORT: ${socketPort}`)
-);
+// const socketPort = 4040;
+// server.listen(socketPort, () =>
+//   console.log(`SOCKETS ARE LISTENING ON PORT: ${socketPort}`)
+// );
 
 // STATIC FOLDER
 app.use("/public", express.static(path.join(__dirname, "public")));
