@@ -13,8 +13,9 @@ app.use(passport.initialize());
 // SOCKET IMPORTS
 const socket = require("socket.io");
 
-const server = require("http").createServer(app);
-const io = socket(server);
+
+const server = http.createServer(app);
+const io = socket(server, {cors: {origin: "*"}});
 
 // SOCKET SERVER INITIATE
 io.on("connection", (socket) => {

@@ -19,12 +19,13 @@ exports.getAllComplaints = (req, res) => {
     const id = req.params.id;
     Complaint.find({ user_id: id })
       .populate("category")
+      // .populate("assignedTo")
       .populate({
-        path: "assignedTo",
+        path: 'assignedTo',
         populate: {
-          path: "user_id",
-          model: "User",
-        },
+          path: 'user_id',
+          model: 'User'
+        }
       })
       .exec((err, complaints) => {
         if (err) {
