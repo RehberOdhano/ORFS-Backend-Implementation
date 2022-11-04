@@ -124,7 +124,7 @@ exports.login = (req, res) => {
   }
 };
 
-// exports.googleAuth = (req, res) => {
+// exports.googleSignIn = (req, res) => {
 //   try {
 //     console.log(req);
 //   } catch (error) {

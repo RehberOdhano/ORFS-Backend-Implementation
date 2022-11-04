@@ -12,24 +12,24 @@ app.use(passport.initialize());
 
 // SOCKET IMPORTS
 const socket = require("socket.io");
-const http = require("http");
+
 
 const server = http.createServer(app);
 const io = socket(server, {cors: {origin: "*"}});
 
 // SOCKET SERVER INITIATE
 io.on("connection", (socket) => {
-    console.log('New client connected');
-    interval = setInterval(() => testFunction(socket), 1000);
-    socket.on("discconect", () => {
-        console.log("Client disconnected");
-    })
-})
+  console.log("New client connected");
+  interval = setInterval(() => testFunction(socket), 1000);
+  socket.on("discconect", () => {
+    console.log("Client disconnected");
+  });
+});
 
-const testFunction = socket => {
-    const response = "TESTING NEW CONNECTION";
-    socket.emit("Test", response)
-}
+const testFunction = (socket) => {
+  const response = "TESTING NEW CONNECTION";
+  socket.emit("Test", response);
+};
 
 // SERVER LISTENING TO SOCKET PORT
 const socketPort = 4040;

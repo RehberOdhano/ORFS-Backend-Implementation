@@ -88,24 +88,26 @@ exports.getUsersList = (req, res) => {
   }
 };
 
-// exports.getSpecificUser = async (req, res) => {
-//   const user_id = req.params.id;
-//   await User.findOne({ id: user_id }, (err, user) => {
-//     if (err) {
-//       res.send({
-//         status: 500,
-//         success: false,
-//         message: err.message,
-//       });
-//     } else {
-//       res.send({
-//         status: 200,
-//         success: true,
-//         user: user,
-//       });
-//     }
-//   });
-// };
+// admin can view an specific user/employee based on id..
+// whether it's a complainee or serviceprovider...
+exports.getSpecificUser = (req, res) => {
+  const user_id = req.params.id;
+  User.findOne({ id: user_id }).exec((err, user) => {
+    if (err) {
+      res.send({
+        status: 500,
+        success: false,
+        message: err.message,
+      });
+    } else {
+      res.send({
+        status: 200,
+        success: true,
+        user: user,
+      });
+    }
+  });
+};
 
 // this will add a new user... and based on it's role, i.e. either the user
 // is complainee or serviceprovider, a new document will also be created in that
@@ -235,33 +237,34 @@ exports.addSpecificUser = (req, res) => {
   }
 };
 
-// exports.updateUserStatus = (req, res) => {
-//   try {
-//     const userID = req.params.id;
-//     const status = req.body.status;
-//     User.updateOne(
-//       { _id: userID, role: { $in: ["COMPLAINEE", "SERVICEPROVIDER"] } },
-//       { status: status }
-//     ).exec((err, updatedUser) => {
-//       if (err) {
-//         res.send({
-//           status: 500,
-//           success: false,
-//           message: err.message,
-//         });
-//       } else {
-//         console.log(updatedUser);
-//         res.send({
-//           status: 200,
-//           success: true,
-//           message: "USER'S STATUS IS SUCCESSFULLY UPDATED!",
-//         });
-//       }
-//     });
-//   } catch (err) {
-//     console.log("ERROR: " + err.message);
-//   }
-// };
+// admin will only updates the status of the user - whether it's
+// a complainee or serviceprovider...
+exports.updateUserStatus = (req, res) => {
+  try {
+    const userID = req.params.id;
+    const status = req.body.status;
+    User.updateOne(
+      { _id: userID, role: { $in: ["COMPLAINEE", "SERVICEPROVIDER"] } },
+      { status: status }
+    ).exec((err, updatedUser) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: "USER'S STATUS IS SUCCESSFULLY UPDATED!",
+        });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR: " + err.message);
+  }
+};
 
 // this will update an specific user...
 exports.updateSpecificUser = (req, res) => {
@@ -428,63 +431,63 @@ exports.deleteSpecificUser = (req, res) => {
   }
 };
 
-exports.deleteMultipleUsers = (req, res) => {
-  try {
-    const company_id = mongoose.Types.ObjectId(req.params.company_id);
-    const user_ids = req.body.ids.map((id) => mongoose.Types.ObjectId(id));
-    const role = req.body.role;
-    var error = false;
-    User.deleteMany({ _id: { $in: user_ids } }).exec((err, users) => {
-      if (err) {
-        error = true;
-      } else {
-        if (role == "COMPLAINEE") {
-          Complainee.deleteMany({ _id: { $in: user_ids } }).exec(
-            (err, complainees) => {
-              if (err) {
-                error = true;
-              }
-            }
-          );
-        } else if (role == "SERVICEPROVIDER") {
-          SP.deleteMany({ user_id: { $in: user_ids } }).exec((err, sps) => {
-            if (err) {
-              error = true;
-            }
-          });
-        }
-      }
-      if (!error) {
-        Customer.findByIdAndUpdate(
-          { _id: company_id },
-          { $pull: { employees: { _id: { $in: user_ids } } } }
-        ).exec((err, users) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
-            });
-          } else {
-            res.send({
-              status: 200,
-              success: true,
-              message: "USERS ARE SUCCESSFULLY DELETED!",
-            });
-          }
-        });
-      } else {
-        res.send({
-          status: 500,
-          success: false,
-          message: "NOT ABLE TO DELETE THE USERS!",
-        });
-      }
-    });
-  } catch (err) {
-    console.log("ERROR: " + err.message);
-  }
-};
+// exports.deleteMultipleUsers = (req, res) => {
+//   try {
+//     const company_id = mongoose.Types.ObjectId(req.params.company_id);
+//     const user_ids = req.body.ids.map((id) => mongoose.Types.ObjectId(id));
+//     const role = req.body.role;
+//     var error = false;
+//     User.deleteMany({ _id: { $in: user_ids } }).exec((err, users) => {
+//       if (err) {
+//         error = true;
+//       } else {
+//         if (role == "COMPLAINEE") {
+//           Complainee.deleteMany({ _id: { $in: user_ids } }).exec(
+//             (err, complainees) => {
+//               if (err) {
+//                 error = true;
+//               }
+//             }
+//           );
+//         } else if (role == "SERVICEPROVIDER") {
+//           SP.deleteMany({ user_id: { $in: user_ids } }).exec((err, sps) => {
+//             if (err) {
+//               error = true;
+//             }
+//           });
+//         }
+//       }
+//       if (!error) {
+//         Customer.findByIdAndUpdate(
+//           { _id: company_id },
+//           { $pull: { employees: { _id: { $in: user_ids } } } }
+//         ).exec((err, users) => {
+//           if (err) {
+//             res.send({
+//               status: 500,
+//               success: false,
+//               message: err.message,
+//             });
+//           } else {
+//             res.send({
+//               status: 200,
+//               success: true,
+//               message: "USERS ARE SUCCESSFULLY DELETED!",
+//             });
+//           }
+//         });
+//       } else {
+//         res.send({
+//           status: 500,
+//           success: false,
+//           message: "NOT ABLE TO DELETE THE USERS!",
+//         });
+//       }
+//     });
+//   } catch (err) {
+//     console.log("ERROR: " + err.message);
+//   }
+// };
 
 // exports.getRolesList = async(req, res) => {
 //     try {
