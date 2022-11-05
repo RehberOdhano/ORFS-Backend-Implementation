@@ -545,7 +545,23 @@ exports.deleteSpecificUser = (req, res) => {
 exports.getComplaintsList = (req, res) => {
   try {
     const company_id = req.params.id;
-    Complaint.find({ company_id: company_id }).exec((err, complaints) => {
+    Complaint.find({ company_id: company_id })
+    .populate("category")
+    .populate([
+      {
+        path: "assignedTo",
+        populate: {
+          path: "user_id",
+          model: "User"
+        }
+      },
+      {
+        path: "complainee_id",
+        model: "User",
+        select: ["name", "email"]
+      }
+    ])
+    .exec((err, complaints) => {
       if (err) {
         res.send({
           status: 500,
