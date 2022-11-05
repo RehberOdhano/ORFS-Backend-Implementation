@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const complaineeSchema = mongoose.Schema(
   {
     user_id: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
     company_id: {

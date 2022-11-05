@@ -546,36 +546,37 @@ exports.getComplaintsList = (req, res) => {
   try {
     const company_id = req.params.id;
     Complaint.find({ company_id: company_id })
-    .populate("category")
-    .populate([
-      {
-        path: "assignedTo",
-        populate: {
-          path: "user_id",
-          model: "User"
+      .lean()
+      .populate("category")
+      .populate([
+        {
+          path: "assignedTo",
+          populate: {
+            path: "user_id",
+            model: "User",
+          },
+        },
+        {
+          path: "complainee_id",
+          model: "User",
+          select: ["name", "email"],
+        },
+      ])
+      .exec((err, complaints) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            complaints: complaints,
+          });
         }
-      },
-      {
-        path: "complainee_id",
-        model: "User",
-        select: ["name", "email"]
-      }
-    ])
-    .exec((err, complaints) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          complaints: complaints,
-        });
-      }
-    });
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
