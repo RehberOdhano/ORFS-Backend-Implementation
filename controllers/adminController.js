@@ -559,7 +559,7 @@ exports.getComplaintsList = (req, res) => {
         {
           path: "complainee_id",
           model: "User",
-          select: ["name", "email"],
+          select: ["name", "email", "pfp"],
         },
       ])
       .exec((err, complaints) => {
