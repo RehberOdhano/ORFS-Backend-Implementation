@@ -21,5 +21,9 @@ user_router.post(
 );
 user_router.put("/complaints/update/:id", userController.updateComplaint);
 user_router.delete("/complaints/delete/:id", userController.deleteComplaint);
+user_router.put(
+  "/complaints/archive/:id",
+  userController.archiveSpecificComplaint
+);
 
 module.exports = user_router;

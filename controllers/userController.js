@@ -21,11 +21,11 @@ exports.getAllComplaints = (req, res) => {
       .populate("category")
       // .populate("assignedTo")
       .populate({
-        path: 'assignedTo',
+        path: "assignedTo",
         populate: {
-          path: 'user_id',
-          model: 'User'
-        }
+          path: "user_id",
+          model: "User",
+        },
       })
       .exec((err, complaints) => {
         if (err) {
@@ -210,6 +210,29 @@ exports.updateComplaint = (req, res) => {
         }
       }
     );
+  } catch (err) {
+    console.log("ERROR: " + err.message);
+  }
+};
+
+exports.archiveSpecificComplaint = (req, res) => {
+  try {
+    const id = req.params.id;
+    Complaint.updateOne(id, { status: "ARCHIVED" }).exec((err, complaint) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: "COMPLAINT IS SUCCESSFULLY ARCHIVED!",
+        });
+      }
+    });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
