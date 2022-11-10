@@ -1,12 +1,5 @@
 // IMPORTED REQUIRED PACKAGES
-const {
-  bcrypt,
-  mongoose,
-  csv,
-  path,
-  fs,
-  multer,
-} = require("../utils/packages");
+const { csv, path, fs, multer, PDFDocument } = require("../utils/packages");
 
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
@@ -1173,6 +1166,142 @@ exports.getAvailableEmployees = (req, res) => {
             success: true,
             data: sps,
           });
+        }
+      });
+  } catch (err) {
+    console.log("ERROR: " + err.message);
+  }
+};
+
+// HELPER FUNCTION FOR GENERATING PDF
+// this function will extract the needed data from the data that is
+// fetched from the database...
+const extractData = (data) => {
+  let deptAnalytics = [];
+  data.forEach((item) => {
+    let obj = {};
+    obj["company_title"] = item.company_id.title;
+    obj["company_website"] = item.company_id.website;
+    obj["dept_title"] = item.title;
+    let resolvedComplaints = 0,
+      totalComplaints = 0;
+    let avgRating = 0,
+      totalSPs = item.employees.length;
+    // calculating the average rating of the department and the number of
+    // resolved complaints...
+    item.employees.forEach((employee) => {
+      avgRating += employee.averageRating;
+      totalComplaints += employee.assignedComplaints.length;
+      employee.assignedComplaints.forEach((complaint) => {
+        if (complaint.status == "RESOLVED") resolvedComplaints++;
+      });
+    });
+    obj["total_complaints"] = totalComplaints;
+    obj["resolved_complaints"] = resolvedComplaints;
+    obj["complaint_completion_pct"] =
+      totalComplaints != 0 ? (resolvedComplaints / totalComplaints) * 100 : 0;
+    obj["rating"] = totalSPs != 0 ? (avgRating / totalSPs) * 100 : 0;
+    deptAnalytics.push(obj);
+  });
+
+  return deptAnalytics;
+};
+
+const generatePDF = async (pdfDoc, extractedData) => {
+  // getting the current date...
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+  today = mm + "/" + dd + "/" + yyyy;
+  pdfDoc.fontSize(8).text(today, { align: "right" });
+
+  // table
+  let tableRows = [],
+    row = [];
+  extractedData.forEach((data) => {
+    row.push(
+      data.company_title,
+      data.company_website,
+      data.dept_title,
+      data.total_complaints,
+      data.resolved_complaints,
+      data.complaint_completion_pct,
+      data.rating
+    );
+    tableRows.push(row);
+    row = [];
+  });
+
+  const table = {
+    title: "Department Statistics",
+    headers: [
+      "Company Name",
+      "Company Website",
+      "Department Title",
+      "Total Complaints",
+      "Resolved Complaints",
+      "Completion %",
+      "Rating",
+    ],
+    rows: tableRows,
+  };
+
+  await pdfDoc.table(table, {
+    width: 590,
+  });
+
+  pdfDoc.end();
+  pdfDoc.pipe(
+    fs.createWriteStream(
+      path.join(__dirname, "../", "/public/csv-files/department-report.pdf")
+    )
+  );
+
+  return "/public/csv-files/department-report.pdf";
+};
+
+exports.generateDeptReport = (req, res) => {
+  try {
+    const company_id = req.params.id;
+    Department.find({ company_id: company_id })
+      .populate([
+        "company_id",
+        "category",
+        {
+          path: "employees",
+          populate: {
+            path: "assignedComplaints",
+            model: "Complaint",
+          },
+        },
+      ])
+      .exec(async (err, data) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          const extractedData = extractData(data);
+          // creating a new pdf document
+          const pdfDoc = new PDFDocument({ margin: 20, size: "A4" });
+          generatePDF(pdfDoc, extractedData)
+            .then((link) => {
+              res.send({
+                status: 200,
+                success: true,
+                data: link,
+              });
+            })
+            .catch((err) => {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            });
         }
       });
   } catch (err) {

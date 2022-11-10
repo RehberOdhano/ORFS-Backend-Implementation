@@ -64,6 +64,7 @@ admin_router.get(
   "/depts/unassigned/:id",
   adminController.getAvailableEmployees
 );
+admin_router.get("/depts/report/:id", adminController.generateDeptReport);
 
 // ADMIN PAYMENT ROUTES
 // admin_router.get('/payment', adminController.getPaymentInfo);
@@ -82,16 +83,6 @@ admin_router.put("/categories/dept/add/:id", adminController.addCategoryToDept);
 admin_router.delete("/categories/delete/:id", adminController.deleteCategory);
 
 // ADMIN IMPORT, EXPORT & DELETE CSV FILE ROUTES
-
-// const extendTimeOut = (req, res, next) => {
-//   res.setTimeout(65000, function () {
-//     console.log("Request has timed out.");
-//     res.send(408);
-//   });
-
-//   next();
-// };
-
 admin_router.post("/upload/csv", adminController.parseCSVFile);
 admin_router.delete(
   "/delete/csv/:csv_file",
