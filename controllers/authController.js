@@ -177,7 +177,7 @@ exports.googleSignIn = async (req, res) => {
           res.send({
             status: 200,
             success: true,
-            user: updatedUser,
+            user: user,
             message: "USER IS ALREADY REGISTERED!",
             token: jwt.sign(ticket?.payload, process.env.JWTSECRET),
           });
