@@ -164,12 +164,21 @@ exports.googleSignIn = async (req, res) => {
                 message: err.message,
               });
             } else {
+              let successObject = {
+                token: jwt.sign(payload, process.env.JWTSECRET, {
+                  expiresIn: "1d",
+                }),
+                user,
+              };
+              res.json(successObject);
               res.send({
                 status: 200,
                 success: true,
-                user: updatedUser,
                 message: "USER IS SUCCESSFULLY REGISTERED!",
-                token: jwt.sign(ticket?.payload, process.env.JWTSECRET),
+                successObject: {
+                  user: updatedUser,
+                  token: jwt.sign(ticket?.payload, process.env.JWTSECRET),
+                },
               });
             }
           });
@@ -177,9 +186,11 @@ exports.googleSignIn = async (req, res) => {
           res.send({
             status: 200,
             success: true,
-            user: user,
-            message: "USER IS ALREADY REGISTERED!",
-            token: jwt.sign(ticket?.payload, process.env.JWTSECRET),
+            message: "USER IS SUCCESSFULLY REGISTERED!",
+            successObject: {
+              user: updatedUser,
+              token: jwt.sign(ticket?.payload, process.env.JWTSECRET),
+            },
           });
         }
       }
