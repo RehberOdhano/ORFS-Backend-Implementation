@@ -132,7 +132,7 @@ exports.googleSignIn = async (req, res) => {
     });
     const email = ticket?.payload?.email;
 
-    User.find({ email: email }).exec((err, user) => {
+    User.findOne({ email: email }).exec((err, user) => {
       if (err) {
         res.send({
           status: 500,
@@ -141,7 +141,7 @@ exports.googleSignIn = async (req, res) => {
         });
       } else if (!user) {
         res.send({
-          status: 404, // user not found
+          status: 401, // user not found
           success: true,
           message: `USER ISN'T AUTHORIZED TO SIGN UP!`,
         });
