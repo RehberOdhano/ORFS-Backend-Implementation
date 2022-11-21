@@ -1,6 +1,3 @@
-// IMPORTED REQUIRED PACKAGES
-const mongoose = require("../utils/packages");
-
 // MODELS
 const Complaint = require("../models/complaint");
 const Complainee = require("../models/complainee");
@@ -19,7 +16,6 @@ exports.getAllComplaints = (req, res) => {
     const id = req.params.id;
     Complaint.find({ user_id: id })
       .populate("category")
-      // .populate("assignedTo")
       .populate({
         path: "assignedTo",
         populate: {

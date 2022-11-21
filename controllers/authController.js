@@ -1,6 +1,6 @@
 // IMPORTED REQUIRED PACKAGES
-const { jwt, bcrypt, crypto } = require("../utils/packages");
-
+const { jwt, bcrypt, crypto, OAuth2Client } = require("../utils/packages");
+const client = new OAuth2Client(process.env.CLIENT_ID);
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
 
@@ -124,15 +124,43 @@ exports.login = (req, res) => {
   }
 };
 
-// exports.googleSignIn = (req, res) => {
-//   try {
-//     console.log(req);
-//   } catch (error) {
-//     console.log("ERROR: " + error.message);
-//   }
-// };
+exports.googleSignIn = async (req, res) => {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: req.body.token,
+      audience: process.env.CLIENT_ID,
+    });
+    console.log(ticket?.payload);
+    const email = ticket?.payload?.email;
+    console.log(email);
 
-// exports.extra = async(req, res) => {
+    User.find({ email: email }).exec((err, user) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (user) {
+        res.send({
+          status: 200,
+          success: true,
+          message: `USER WITH EMAIL ${user.email} ALREADY EXISTS!`,
+        });
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: `USER ISN'T AUTHORIZED TO SIGN UP!`,
+        });
+      }
+    });
+  } catch (error) {
+    console.log("ERROR: " + error.message);
+  }
+};
+
+// const createNewUser = async(req, res) => {
 //     let salt = bcrypt.genSaltSync(10);
 //     try{
 //         await User.create({
