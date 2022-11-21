@@ -141,18 +141,45 @@ exports.googleSignIn = async (req, res) => {
           success: false,
           message: err.message,
         });
-      } else if (user) {
+      } else if (!user) {
         res.send({
-          status: 200,
-          success: true,
-          message: `USER WITH EMAIL ${user.email} ALREADY EXISTS!`,
-        });
-      } else {
-        res.send({
-          status: 200,
+          status: 404, // user not found
           success: true,
           message: `USER ISN'T AUTHORIZED TO SIGN UP!`,
         });
+      } else {
+        if (user.status === "UNREGISTERED") {
+          User.findOneAndUpdate(
+            { email: email },
+            {
+              email: ticket?.payload?.email,
+              pdf: ticket?.payload?.picture,
+              verified: true,
+              status: "ACTIVE",
+              sign_type: "GOOGLE",
+            }
+          ).exec((err, updatedUser) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              res.send({
+                status: 200,
+                success: true,
+                userObj: {
+                  message: "USER IS SUCCESSFULLY REGISTERED!",
+                  token: jwt.sign(payload, process.env.JWTSECRET, {
+                    expiresIn: "1d",
+                  }),
+                  updatedUser,
+                },
+              });
+            }
+          });
+        }
       }
     });
   } catch (error) {
