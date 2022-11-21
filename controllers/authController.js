@@ -169,9 +169,7 @@ exports.googleSignIn = async (req, res) => {
                 success: true,
                 user: updatedUser,
                 message: "USER IS SUCCESSFULLY REGISTERED!",
-                token: jwt.sign(ticket?.payload, process.env.JWTSECRET, {
-                  expiresIn: "1d",
-                }),
+                token: jwt.sign(ticket?.payload, process.env.JWTSECRET),
               });
             }
           });
@@ -179,10 +177,9 @@ exports.googleSignIn = async (req, res) => {
           res.send({
             status: 200,
             success: true,
+            user: updatedUser,
             message: "USER IS ALREADY REGISTERED!",
-            token: jwt.sign(ticket?.payload, process.env.JWTSECRET, {
-              expiresIn: "1d",
-            }),
+            token: jwt.sign(ticket?.payload, process.env.JWTSECRET),
           });
         }
       }
