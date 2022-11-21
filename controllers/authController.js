@@ -130,9 +130,7 @@ exports.googleSignIn = async (req, res) => {
       idToken: req.body.token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
-    console.log(ticket?.payload);
     const email = ticket?.payload?.email;
-    console.log(email);
 
     User.find({ email: email }).exec((err, user) => {
       if (err) {
@@ -169,15 +167,22 @@ exports.googleSignIn = async (req, res) => {
               res.send({
                 status: 200,
                 success: true,
-                userObj: {
-                  message: "USER IS SUCCESSFULLY REGISTERED!",
-                  token: jwt.sign(payload, process.env.JWTSECRET, {
-                    expiresIn: "1d",
-                  }),
-                  updatedUser,
-                },
+                user: updatedUser,
+                message: "USER IS SUCCESSFULLY REGISTERED!",
+                token: jwt.sign(ticket?.payload, process.env.JWTSECRET, {
+                  expiresIn: "1d",
+                }),
               });
             }
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            message: "USER IS ALREADY REGISTERED!",
+            token: jwt.sign(ticket?.payload, process.env.JWTSECRET, {
+              expiresIn: "1d",
+            }),
           });
         }
       }
