@@ -164,12 +164,6 @@ exports.googleSignIn = async (req, res) => {
                 message: err.message,
               });
             } else {
-              let successObject = {
-                token: jwt.sign(payload, process.env.JWTSECRET, {
-                  expiresIn: "1d",
-                }),
-                user,
-              };
               res.json(successObject);
               res.send({
                 status: 200,
@@ -188,7 +182,7 @@ exports.googleSignIn = async (req, res) => {
             success: true,
             message: "USER IS SUCCESSFULLY REGISTERED!",
             successObject: {
-              user: updatedUser,
+              user: user,
               token: jwt.sign(ticket?.payload, process.env.JWTSECRET),
             },
           });
