@@ -1255,6 +1255,8 @@ exports.removeEmployeesFromDept = (req, res) => {
     const deptID = req.params.id;
     const spID = req.body.id;
 
+    console.log(deptID, spID)
+
     Department.findOneAndUpdate(
       { _id: deptID },
       {
