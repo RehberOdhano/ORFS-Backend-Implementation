@@ -484,7 +484,7 @@ const generateUsersListPDF = async (pdfDoc, users) => {
     )
   );
 
-  return "/public/csv-files/users-list.pdf";
+  return `/public/csv-files/users-list-${Date.now()}.pdf`;
 };
 
 exports.generateUsersReport = (req, res) => {
@@ -1449,7 +1449,7 @@ const generatePDF = async (pdfDoc, extractedData) => {
     )
   );
 
-  return "/public/csv-files/department-report.pdf";
+  return `/public/csv-files/department-report-${Date.now()}.pdf`;
 };
 
 exports.generateDeptReport = (req, res) => {
