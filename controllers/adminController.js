@@ -1107,12 +1107,13 @@ exports.removeEmployeesFromDept = (req, res) => {
 };
 
 exports.getAllDeptEmployees = (req, res) => {
+  console.log(req.body)
   try {
     const deptID = req.params.id;
-    SP.findOne({ department: deptID })
+    SP.find({ department: deptID })
       .populate("user_id")
       .populate("assignedComplaints")
-      .populate("ratings")
+      // .populate("ratings")
       .exec((err, data) => {
         if (err) {
           res.send({
