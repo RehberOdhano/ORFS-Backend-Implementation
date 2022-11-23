@@ -1212,7 +1212,7 @@ exports.addEmployeesToDept = (req, res) => {
   try {
     const deptID = req.params.id;
     const spID = req.body.id;
-    Department.updateOne(
+    Department.findByIdAndUpdate(
       { _id: deptID },
       { $push: { employees: { _id: spID } } }
     ).exec((err, result) => {
@@ -1255,36 +1255,37 @@ exports.removeEmployeesFromDept = (req, res) => {
     const deptID = req.params.id;
     const spID = req.body.id;
 
-    Department.updateOne({ _id: deptID }, { $pull: { employees: spID } }).exec(
-      (err, dept) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else {
-          SP.updateOne({ _id: spID }, { department: null }).exec(
-            (err, result) => {
-              if (err) {
-                res.send({
-                  status: 500,
-                  success: false,
-                  message: err.message,
-                });
-              } else {
-                res.send({
-                  status: 200,
-                  success: true,
-                  message:
-                    "SERVICEPROVIDER IS SUCCESSFULLY REMOVED FROM THE DEPARTMENT!",
-                });
-              }
+    Department.findOneAndUpdate(
+      { _id: deptID },
+      { $pull: { employees: spID } }
+    ).exec((err, dept) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        SP.findOneAndUpdate({ _id: spID }, { department: null }).exec(
+          (err, result) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              res.send({
+                status: 200,
+                success: true,
+                message:
+                  "SERVICEPROVIDER IS SUCCESSFULLY REMOVED FROM THE DEPARTMENT!",
+              });
             }
-          );
-        }
+          }
+        );
       }
-    );
+    });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
