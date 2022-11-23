@@ -57,7 +57,7 @@ admin_router.get(
   "/depts/all/employees/:id",
   adminController.getAllDeptEmployees
 );
-admin_router.delete(
+admin_router.put(
   "/depts/delete/employee/:id",
   adminController.removeEmployeesFromDept
 );

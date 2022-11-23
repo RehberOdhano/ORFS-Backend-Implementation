@@ -1,8 +1,8 @@
 // IMPORTED REQUIRED PACKAGES
 const { jwt, bcrypt, crypto, OAuth2Client } = require("../utils/packages");
 const client = new OAuth2Client(process.env.CLIENT_ID);
-// const { validate } = require("deep-email-validator");
-const emailChecker = require("email-spam-checker");
+const { validate } = require("deep-email-validator");
+
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
 
@@ -100,14 +100,6 @@ exports.login = (req, res) => {
           message: err.message,
         });
       } else if (user && bcrypt.compareSync(req.body.password, user.password)) {
-        // const { valid, reason, validators } = await validate(req.body.email);
-        // console.log(`valid: ${valid}\n reason: ${reason}\n validators: ${validators}`);
-        emailChecker(req.body.email)
-          .then((res) => console.log(`res: ${res}`))
-          .catch((err) => {
-            const { type } = err;
-            console.log(`type: ${type}`);
-          });
         payload = {
           role: user.role,
           _id: user.id,
@@ -118,6 +110,10 @@ exports.login = (req, res) => {
         };
         res.json(successObject);
       } else {
+        const { valid, reason, validators } = await validate(req.body.email);
+        console.log(
+          `valid: ${valid}\n reason: ${reason}\n validators: ${validators}`
+        );
         res.send({
           status: 500,
           success: false,
