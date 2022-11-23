@@ -1223,24 +1223,26 @@ exports.addEmployeesToDept = (req, res) => {
           message: err.message,
         });
       } else {
-        SP.updateOne({ user_id: spID }, { department: deptID }).exec(
-          (err, result) => {
-            if (err) {
-              res.send({
-                status: 500,
-                success: false,
-                message: err.message,
-              });
-            } else {
-              res.send({
-                status: 200,
-                success: true,
-                message:
-                  "SERVICEPROVIDER IS SUCCESSFULLY ADDED TO THE DEPARTMENT!",
-              });
-            }
+        SP.findByIdAndUpdate(
+          { _id: spID },
+          { department: deptID },
+          { upsert: true }
+        ).exec((err, result) => {
+          if (err) {
+            res.send({
+              status: 500,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            res.send({
+              status: 200,
+              success: true,
+              message:
+                "SERVICEPROVIDER IS SUCCESSFULLY ADDED TO THE DEPARTMENT!",
+            });
           }
-        );
+        });
       }
     });
   } catch (err) {
