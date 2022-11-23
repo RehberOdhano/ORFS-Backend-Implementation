@@ -1257,7 +1257,10 @@ exports.removeEmployeesFromDept = (req, res) => {
 
     Department.findOneAndUpdate(
       { _id: deptID },
-      { $pull: { employees: spID } }
+      {
+        $pull: { employees: spID },
+      },
+      { upsert: true }
     ).exec((err, dept) => {
       if (err) {
         res.send({
@@ -1266,24 +1269,26 @@ exports.removeEmployeesFromDept = (req, res) => {
           message: err.message,
         });
       } else {
-        SP.findOneAndUpdate({ _id: spID }, { department: null }).exec(
-          (err, result) => {
-            if (err) {
-              res.send({
-                status: 500,
-                success: false,
-                message: err.message,
-              });
-            } else {
-              res.send({
-                status: 200,
-                success: true,
-                message:
-                  "SERVICEPROVIDER IS SUCCESSFULLY REMOVED FROM THE DEPARTMENT!",
-              });
-            }
+        SP.findOneAndUpdate(
+          { _id: spID },
+          { department: null },
+          { upsert: true }
+        ).exec((err, result) => {
+          if (err) {
+            res.send({
+              status: 500,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            res.send({
+              status: 200,
+              success: true,
+              message:
+                "SERVICEPROVIDER IS SUCCESSFULLY REMOVED FROM THE DEPARTMENT!",
+            });
           }
-        );
+        });
       }
     });
   } catch (err) {
