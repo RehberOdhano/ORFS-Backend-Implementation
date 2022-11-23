@@ -262,13 +262,8 @@ exports.updateUserStatus = (req, res) => {
 // this will update an specific user...
 exports.updateSpecificUser = (req, res) => {
   try {
-    const id = req.params.id;
-    const name = req.body.name;
-    const email = req.body.email;
     const status = req.body.status;
-    User.findByIdAndUpdate(id, {
-      name: name,
-      email: email,
+    User.findOneAndUpdate(id, {
       status: status,
     }).exec((err, user) => {
       if (err) {
@@ -419,6 +414,199 @@ exports.deleteSpecificUser = (req, res) => {
         }
       }
     });
+  } catch (err) {
+    console.log("ERROR: " + err.message);
+  }
+};
+
+const generateUsersListPDF = async (pdfDoc, users) => {
+  // getting the current date...
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+  today = mm + "/" + dd + "/" + yyyy;
+
+  pdfDoc.fontSize(8).text(`Date: ${today}`, { align: "right" });
+
+  // table
+  let tableRows = [],
+    row = [],
+    totalComplaintsFiled = 0,
+    totalResolvedComplaints = 0;
+  users.forEach((user) => {
+    row.push(
+      user.name,
+      user.email,
+      user.role,
+      user.totalComplaintsFiled,
+      user.totalResolvedComplaints
+    );
+    totalComplaintsFiled += user.totalComplaintsFiled;
+    totalResolvedComplaints += user.totalResolvedComplaints;
+    tableRows.push(row);
+    row = [];
+  });
+
+  pdfDoc.fontSize(8).text(`Total Complaints Filed: ${totalComplaintsFiled}`, {
+    align: "right",
+  });
+  pdfDoc
+    .fontSize(8)
+    .text(`Total Resolved Complaints ${totalResolvedComplaints}`, {
+      align: "right",
+    });
+
+  const table = {
+    title: "User's Statistics",
+    headers: [
+      "Name",
+      "Email",
+      "Role",
+      "Filed Complaints",
+      "Resolved Complaints",
+    ],
+    rows: tableRows,
+  };
+
+  await pdfDoc.table(table, {
+    width: 590,
+  });
+
+  pdfDoc.end();
+  pdfDoc.pipe(
+    fs.createWriteStream(
+      path.join(
+        __dirname,
+        "../",
+        `/public/csv-files/users-list-${Date.now()}.pdf`
+      )
+    )
+  );
+
+  return "/public/csv-files/users-list.pdf";
+};
+
+exports.generateUsersReport = (req, res) => {
+  try {
+    const company_id = req.params.id;
+
+    Customer.findOne({ _id: company_id })
+      .select(["title", "website"])
+      .populate([
+        {
+          path: "employees",
+          model: "User",
+          match: { role: ["COMPLAINEE", "SERVICEPROVIDER"] },
+          select: ["name", "email", "role"],
+        },
+      ])
+      .exec(async (err, users) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          let complaineeIDs = [],
+            serviceprovideIDs = [];
+          users.employees.forEach((employee) => {
+            if (employee.role === "COMPLAINEE")
+              complaineeIDs.push(employee._id);
+            if (employee.role === "SERVICEPROVIDER")
+              serviceprovideIDs.push(employee._id);
+          });
+          Complainee.find({ user_id: { $in: complaineeIDs } })
+            .populate("user_id")
+            .populate([
+              {
+                path: "complaints",
+                model: "Complaint",
+                select: ["status"],
+              },
+            ])
+            .exec((err, complainees) => {
+              if (err) {
+                res.send(err);
+              } else {
+                SP.find({ user_id: { $in: serviceprovideIDs } })
+                  .populate("user_id")
+                  .populate([
+                    {
+                      path: "assignedComplaints",
+                      model: "Complaint",
+                      select: ["status"],
+                    },
+                  ])
+                  .exec((err, serviceproviders) => {
+                    if (err) {
+                      res.send(err);
+                    } else {
+                      let sps = [],
+                        complaineesArr = [];
+                      let spObj = {},
+                        compObj = {};
+                      let count = 0;
+
+                      serviceproviders.forEach((serviceprovider) => {
+                        spObj["name"] = serviceprovider.user_id.name;
+                        spObj["email"] = serviceprovider.user_id.email;
+                        spObj["role"] = serviceprovider.user_id.role;
+                        spObj["totalComplaintsFiled"] = 0;
+                        serviceprovider.assignedComplaints.forEach(
+                          (complaint) => {
+                            if (complaint.status == "RESOLVED") count++;
+                          }
+                        );
+                        spObj["totalResolvedComplaints"] = count;
+                        count = 0;
+                        sps.push(spObj);
+                        spObj = {};
+                      });
+
+                      complainees.forEach((complainee) => {
+                        compObj["name"] = complainee.user_id.name;
+                        compObj["email"] = complainee.user_id.email;
+                        compObj["role"] = complainee.user_id.role;
+                        compObj["totalResolvedComplaints"] = 0;
+                        compObj["totalComplaintsFiled"] =
+                          complainee.complaints.length;
+                        complaineesArr.push(compObj);
+                        compObj = {};
+                      });
+
+                      let data = [];
+                      complaineesArr.forEach((complainee) =>
+                        data.push(complainee)
+                      );
+                      sps.forEach((sp) => data.push(sp));
+                      const pdfDoc = new PDFDocument({
+                        margin: 20,
+                        size: "A4",
+                      });
+
+                      generateUsersListPDF(pdfDoc, data)
+                        .then((link) => {
+                          res.send({
+                            status: 200,
+                            success: true,
+                            data: link,
+                          });
+                        })
+                        .catch((err) => {
+                          res.send({
+                            status: 500,
+                            success: false,
+                            message: err.message,
+                          });
+                        });
+                    }
+                  });
+              }
+            });
+        }
+      });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
@@ -778,12 +966,6 @@ exports.getDeptsList = (req, res) => {
               },
             ];
 
-            // const analyticsObj = {
-            //   totalComplaints: totalComplaints,
-            //   resolvedComplaints: resolvedComplaints,
-            //   unresolvedComplaints: unresolvedComplaints,
-            // };
-
             tempObj.department = dept;
             tempObj.complaintsAnalytics = graphData;
             deptAnalytics.push(tempObj);
@@ -1109,10 +1291,10 @@ exports.removeEmployeesFromDept = (req, res) => {
 exports.getAllDeptEmployees = (req, res) => {
   try {
     const deptID = req.params.id;
-    SP.findOne({ department: deptID })
+    SP.find({ department: deptID })
       .populate("user_id")
       .populate("assignedComplaints")
-      .populate("ratings")
+      // .populate("ratings")
       .exec((err, data) => {
         if (err) {
           res.send({
@@ -1254,7 +1436,11 @@ const generatePDF = async (pdfDoc, extractedData) => {
   pdfDoc.end();
   pdfDoc.pipe(
     fs.createWriteStream(
-      path.join(__dirname, "../", "/public/csv-files/department-report.pdf")
+      path.join(
+        __dirname,
+        "../",
+        `/public/csv-files/department-report-${Date.now()}.pdf`
+      )
     )
   );
 
