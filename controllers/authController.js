@@ -2,7 +2,7 @@
 const { jwt, bcrypt, crypto, OAuth2Client } = require("../utils/packages");
 const client = new OAuth2Client(process.env.CLIENT_ID);
 // const { validate } = require("deep-email-validator");
-
+const emailChecker = require("email-spam-checker");
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
 
@@ -102,6 +102,7 @@ exports.login = (req, res) => {
       } else if (user && bcrypt.compareSync(req.body.password, user.password)) {
         // const { valid, reason, validators } = await validate(req.body.email);
         // console.log(`valid: ${valid}\n reason: ${reason}\n validators: ${validators}`);
+        // emailChecker(req.body.email);
         payload = {
           role: user.role,
           _id: user.id,
