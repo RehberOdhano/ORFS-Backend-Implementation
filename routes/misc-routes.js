@@ -24,6 +24,7 @@ misc_router.delete("/delete/image/:img", miscController.deleteUploadedImage);
 // UPDATE/CHANGE PROFILE SETTINGS
 misc_router.put("/update/profile/:id", miscController.updateProfileSettings);
 
-// PAYMENT USING STRIPE
+// PAYMENT USING STRIPE - TESTING
+misc_router.post("/add/payment", miscController.addPayment);
 
 module.exports = misc_router;
