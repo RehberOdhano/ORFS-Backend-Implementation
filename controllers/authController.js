@@ -92,35 +92,46 @@ exports.register = (req, res) => {
 
 exports.login = (req, res) => {
   try {
-    User.findOne({ email: req.body.email }).exec(async (err, user) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else if (user && bcrypt.compareSync(req.body.password, user.password)) {
-        payload = {
-          role: user.role,
-          _id: user.id,
-        };
-        let successObject = {
-          token: jwt.sign(payload, process.env.JWTSECRET, { expiresIn: "1d" }),
-          user,
-        };
-        res.json(successObject);
-      } else {
-        const { valid, reason, validators } = await validate(req.body.email);
-        console.log(
-          `valid: ${valid}\n reason: ${reason}\n validators: ${validators}`
-        );
-        res.send({
-          status: 500,
-          success: false,
-          message: "INCORRECT CREDENTIALS!",
-        });
-      }
-    });
+    User.findOne({ email: req.body.email })
+      .populate({
+        path: "company_id",
+        model: "Customer",
+        select: ["title", "pfp"],
+      })
+      .exec(async (err, user) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else if (
+          user &&
+          bcrypt.compareSync(req.body.password, user.password)
+        ) {
+          payload = {
+            role: user.role,
+            _id: user.id,
+          };
+          let successObject = {
+            token: jwt.sign(payload, process.env.JWTSECRET, {
+              expiresIn: "1d",
+            }),
+            user,
+          };
+          res.json(successObject);
+        } else {
+          const { valid, reason, validators } = await validate(req.body.email);
+          console.log(
+            `valid: ${valid}\n reason: ${reason}\n validators: ${validators}`
+          );
+          res.send({
+            status: 500,
+            success: false,
+            message: "INCORRECT CREDENTIALS!",
+          });
+        }
+      });
   } catch (err) {
     res.send({
       status: 500,

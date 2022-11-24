@@ -128,7 +128,7 @@ exports.updateProfileSettings = (req, res) => {
       { _id: user_id },
       { name, email, password, pfp },
       { multi: false, runValidators: true }
-    ).exec((err, result) => {
+    ).exec((err, user) => {
       if (err) {
         res.send({
           status: 500,
