@@ -21,4 +21,7 @@ misc_router.delete("/delete/image/:img", miscController.deleteUploadedImage);
 // DATABASE CLEANING ROUTES
 // misc_router.delete("/deleteAll", miscController.deleteAll);
 
+// UPDATE/CHANGE PROFILE SETTINGS
+misc_router.put("/update/profile/:id", miscController.updateProfileSettings);
+
 module.exports = misc_router;

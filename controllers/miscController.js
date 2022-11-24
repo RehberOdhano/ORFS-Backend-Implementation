@@ -4,7 +4,7 @@ const { fs, path, multer } = require("../utils/packages");
 // MODELS
 // const Customer = require("../models/customer");
 // const Category = require("../models/category");
-// const User = require("../models/user");
+const User = require("../models/user");
 
 // HELPER FUNCTIONS FOR IMAGE UPLOAD
 const fileStorageEngine = multer.diskStorage({
@@ -116,5 +116,34 @@ exports.deleteUploadedImage = (req, res) => {
     }
   } catch (err) {
     console.log("ERROR: " + err.message);
+  }
+};
+
+// CHANGE/UPDATE PROFILE SETTINGS
+exports.updateProfileSettings = (req, res) => {
+  try {
+    const { name, email, password, pfp } = req.body;
+    const user_id = req.params.id;
+    User.updateOne(
+      { _id: user_id },
+      { name, email, password, pfp },
+      { multi: false, runValidators: true }
+    ).exec((err, result) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: "PROFILE IS SUCCESSFULLY UPDATED!",
+        });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR:" + err.message);
   }
 };
