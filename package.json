@@ -47,7 +47,8 @@
         "passport-jwt": "^4.0.0",
         "pdfkit": "^0.13.0",
         "pdfkit-table": "^0.1.99",
-        "socket.io": "^4.5.2"
+        "socket.io": "^4.5.2",
+        "stripe": "^11.1.0"
     },
     "devDependencies": {
         "jest": "^29.0.3",

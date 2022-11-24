@@ -1,5 +1,5 @@
 // IMPORTED REQUIRED PACKAGES
-const { express, multer } = require("../utils/packages");
+const { express } = require("../utils/packages");
 
 // ROUTER
 const misc_router = express.Router();
