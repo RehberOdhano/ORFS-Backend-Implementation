@@ -147,3 +147,5 @@ exports.updateProfileSettings = (req, res) => {
     console.log("ERROR:" + err.message);
   }
 };
+
+// STRIPE PAYMENT
