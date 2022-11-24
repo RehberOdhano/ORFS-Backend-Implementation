@@ -122,11 +122,11 @@ exports.deleteUploadedImage = (req, res) => {
 // CHANGE/UPDATE PROFILE SETTINGS
 exports.updateProfileSettings = (req, res) => {
   try {
-    const { name, email, password, pfp } = req.body;
+    const { name, email, pfp } = req.body;
     const user_id = req.params.id;
     User.updateOne(
       { _id: user_id },
-      { name, email, password, pfp },
+      { name, email, pfp },
       { multi: false, runValidators: true }
     ).exec((err, user) => {
       if (err) {
