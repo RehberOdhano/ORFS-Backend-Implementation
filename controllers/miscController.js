@@ -1,5 +1,6 @@
 // IMPORTED REQUIRED PACKAGES
 const { fs, path, multer } = require("../utils/packages");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // MODELS
 // const Customer = require("../models/customer");
@@ -144,6 +145,26 @@ exports.updateProfileSettings = (req, res) => {
       }
     });
   } catch (err) {
-    console.log("ERROR:" + err.message);
+    console.error("ERROR:" + err.message);
+  }
+};
+
+// STRIPE PAYMENT
+exports.addPayment = (req, res) => {
+  try {
+    stripe.charges
+      .create({
+        amount: 100,
+        source: req.body.stripeTokenId,
+        currency: "usd",
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (err) {
+    console.error("ERROR:" + err.message);
   }
 };
