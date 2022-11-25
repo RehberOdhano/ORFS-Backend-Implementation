@@ -53,7 +53,7 @@ const upload = multer({
 //       else res.send("SUCCESSFULLY DELETED");
 //     });
 //   } catch (err) {
-//     console.log("ERROR: " + err.message);
+//     console.error("ERROR: " + err.message);
 //   }
 // };
 
@@ -89,7 +89,7 @@ exports.uploadProfilePicture = (req, res) => {
       }
     });
   } catch (err) {
-    console.log("ERROR: " + err.message);
+    console.error("ERROR: " + err.message);
   }
 };
 
@@ -116,7 +116,7 @@ exports.deleteUploadedImage = (req, res) => {
       });
     }
   } catch (err) {
-    console.log("ERROR: " + err.message);
+    console.error("ERROR: " + err.message);
   }
 };
 
