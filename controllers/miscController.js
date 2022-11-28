@@ -1,5 +1,6 @@
 // IMPORTED REQUIRED PACKAGES
-const { fs, path, multer } = require("../utils/packages");
+const { fs, path, multer, busboy } = require("../utils/packages");
+const { randomFillSync } = require("crypto");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // MODELS
@@ -38,6 +39,11 @@ const upload = multer({
     }
   },
 }).single("img");
+
+const random = (() => {
+  const buffer = Buffer.alloc(16);
+  return () => randomFillSync(buffer).toString("hex");
+})();
 
 /*
 =============================================================================
@@ -144,6 +150,38 @@ exports.updateProfileSettings = (req, res) => {
         });
       }
     });
+  } catch (err) {
+    console.error("ERROR:" + err.message);
+  }
+};
+
+// UPLOAD FILES (IMAGES, AUDIO OR VIDEO)
+exports.uploadMedia = (req, res) => {
+  try {
+    console.log("hello");
+    const bb = busboy({ headers: req.headers });
+    bb.on("file", (name, file, info) => {
+      const { filename, encoding, mimeType } = info;
+      console.log(
+        `filename: ${filename}\n encoding: ${encoding}\n mimeType: ${mimeType}\n info: ${info}`
+      );
+      console.log("file:");
+      console.log(file);
+      const saveTo = path.join(
+        __dirname,
+        "../" + "/public/uploads/" + `${random()}--${filename}`
+      );
+      file.pipe(fs.createWriteStream(saveTo));
+    });
+    bb.on("close", () => {
+      res.send({
+        status: 200,
+        success: true,
+        message: "FILE IS SUCCESSFULLY UPLOADED",
+      });
+    });
+    req.pipe(bb);
+    return;
   } catch (err) {
     console.error("ERROR:" + err.message);
   }

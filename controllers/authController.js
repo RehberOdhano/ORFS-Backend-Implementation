@@ -97,7 +97,7 @@ exports.login = (req, res) => {
         model: "Customer",
         select: ["title", "pfp"],
       })
-      .exec(async (err, user) => {
+      .exec((err, user) => {
         if (err) {
           res.send({
             status: 500,
@@ -128,11 +128,7 @@ exports.login = (req, res) => {
         }
       });
   } catch (err) {
-    res.send({
-      status: 500,
-      success: false,
-      message: err.message,
-    });
+    console.error("ERROR: " + err.message);
   }
 };
 

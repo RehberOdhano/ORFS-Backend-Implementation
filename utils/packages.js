@@ -13,6 +13,7 @@ const nodemailer = require("nodemailer");
 const supertest = require("supertest");
 const { OAuth2Client } = require("google-auth-library");
 const PDFDocument = require("pdfkit-table");
+const busboy = require("busboy");
 
 module.exports = {
   express,
@@ -30,4 +31,5 @@ module.exports = {
   supertest,
   OAuth2Client,
   PDFDocument,
+  busboy,
 };
