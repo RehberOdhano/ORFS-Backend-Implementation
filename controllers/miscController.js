@@ -193,23 +193,22 @@ exports.uploadMedia = (req, res) => {
         }
       } else errMsg = "PLEASE UPLOAD A FILE!";
 
-      const statusCode = errMsg === "" ? 200 : 404;
-      file.on("close", () => {
+      if (errMsg) {
         res.send({
-          status: statusCode,
+          status: 404,
           success: false,
-          message: errMsg === "" ? "FILE IS SUCCESSFULLY UPLOADED!" : errMsg,
+          message: errMsg,
         });
-      });
+      } else {
+        file.on("close", () => {
+          res.send({
+            status: 200,
+            success: true,
+            message: "FILE IS SUCCESSFULLY UPLOADED!",
+          });
+        });
+      }
     });
-
-    // bb.on("close", () => {
-    //   res.send({
-    //     status: 200,
-    //     success: true,
-    //     message: "FILE IS SUCCESSFULLY UPLOADED!",
-    //   });
-    // });
 
     bb.on("err", (err) => {
       res.send({
