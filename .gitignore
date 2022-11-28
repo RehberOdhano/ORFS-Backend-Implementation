@@ -108,5 +108,7 @@ __tests__
 coverage
 jest-stare
 
-# public foler
-# public
+# folders
+/public/uploads
+/public/static
+/public/s3
