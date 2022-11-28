@@ -17,8 +17,8 @@ const miscController = require("../controllers/miscController");
 misc_router.post("/upload/images", miscController.uploadProfilePicture);
 misc_router.delete("/delete/image/:img", miscController.deleteUploadedImage);
 
-// UPLOADING & DELETING AUDIO FILES
-// misc_router.post("/upload/audio", miscController.uploadAudioFile);
+// UPLOADING FILES (IMAGES, AUDIO AND VIDEO)
+misc_router.post("/upload/media", miscController.uploadMedia);
 
 // DATABASE CLEANING ROUTES
 // misc_router.delete("/deleteAll", miscController.deleteAll);
