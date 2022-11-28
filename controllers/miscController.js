@@ -205,6 +205,7 @@ exports.uploadMedia = (req, res) => {
             status: 200,
             success: true,
             message: "FILE IS SUCCESSFULLY UPLOADED!",
+            filePath: `/public/uploads/${filename}`,
           });
         });
       }
