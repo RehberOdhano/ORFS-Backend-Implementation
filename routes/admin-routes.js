@@ -81,6 +81,10 @@ admin_router.get(
 );
 admin_router.post("/categories/add/:id", adminController.addCategory);
 admin_router.put("/categories/dept/add/:id", adminController.addCategoryToDept);
+admin_router.delete(
+  "/categories/dept/delete/:id",
+  adminController.removeCategoryToDept
+);
 admin_router.delete("/categories/delete/:id", adminController.deleteCategory);
 
 // ADMIN IMPORT, EXPORT & DELETE CSV FILE ROUTES
