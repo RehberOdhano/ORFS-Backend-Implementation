@@ -45,6 +45,15 @@ const random = (() => {
   return () => randomFillSync(buffer).toString("hex");
 })();
 
+const maxFileSize = 1024 * 1024 * 5; // 5MBs;
+const mimeTypes = [
+  "image/png",
+  "image/jpeg",
+  "image/jpg",
+  "audio/mpeg",
+  "video/mp4",
+];
+
 /*
 =============================================================================
 |                         DATABASE CLEANING ROUTES                          |
@@ -158,28 +167,58 @@ exports.updateProfileSettings = (req, res) => {
 // UPLOAD FILES (IMAGES, AUDIO OR VIDEO)
 exports.uploadMedia = (req, res) => {
   try {
-    console.log("hello");
-    const bb = busboy({ headers: req.headers });
-    bb.on("file", (name, file, info) => {
-      const { filename, encoding, mimeType } = info;
-      console.log(
-        `filename: ${filename}\n encoding: ${encoding}\n mimeType: ${mimeType}\n info: ${info}`
-      );
-      console.log("file:");
-      console.log(file);
+    const bb = busboy({
+      headers: req.headers,
+      limits: { fileSize: maxFileSize },
+    });
+    bb.on("file", (fieldname, file, info) => {
+      const { filename, mimeType } = info;
       const saveTo = path.join(
         __dirname,
         "../" + "/public/uploads/" + `${random()}--${filename}`
       );
-      file.pipe(fs.createWriteStream(saveTo));
+      const fileSize = req.headers["content-length"];
+      var errMsg = "";
+      // check for empty field
+      if (filename.length > 0) {
+        if (mimeTypes.indexOf(mimeType) !== -1) {
+          if (fileSize <= maxFileSize) {
+            const stream = fs.createWriteStream(saveTo);
+            file.pipe(stream);
+          } else {
+            errMsg = "FILES LARGER THAN 5MBs CAN'T BE UPLOADED!";
+          }
+        } else {
+          errMsg = "ONLY PNG/JPG/JPEG/MP4/MPEG FILES ARE ALLOWED!";
+        }
+      } else errMsg = "PLEASE UPLOAD A FILE!";
+
+      if (errMsg) {
+        res.send({
+          status: 404,
+          success: false,
+          message: errMsg,
+        });
+      } else {
+        file.on("close", () => {
+          res.send({
+            status: 200,
+            success: true,
+            message: "FILE IS SUCCESSFULLY UPLOADED!",
+            filePath: `/public/uploads/${filename}`,
+          });
+        });
+      }
     });
-    bb.on("close", () => {
+
+    bb.on("err", (err) => {
       res.send({
-        status: 200,
-        success: true,
-        message: "FILE IS SUCCESSFULLY UPLOADED",
+        status: 404,
+        success: false,
+        message: err.message,
       });
     });
+
     req.pipe(bb);
     return;
   } catch (err) {

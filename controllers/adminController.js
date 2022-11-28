@@ -1255,7 +1255,7 @@ exports.removeEmployeesFromDept = (req, res) => {
     const deptID = req.params.id;
     const spID = req.body.id;
 
-    console.log(deptID, spID)
+    console.log(deptID, spID);
 
     Department.findOneAndUpdate(
       { _id: deptID },
@@ -1296,7 +1296,7 @@ exports.removeEmployeesFromDept = (req, res) => {
 };
 
 exports.getAllDeptEmployees = (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
     const deptID = req.params.id;
     SP.find({ department: deptID })
@@ -1602,37 +1602,38 @@ exports.addCategory = (req, res) => {
 exports.addCategoryToDept = (req, res) => {
   try {
     const id = req.params.id;
-    const category_id = req.body.category_id;
-    Category.updateOne({ _id: category_id }, { assignedDepartment: id }).exec(
-      (err, category) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else {
-          Department.updateOne(
-            { _id: id },
-            { $push: { category: { _id: category_id } } }
-          ).exec((err, dept) => {
-            if (err) {
-              res.send({
-                status: 500,
-                success: false,
-                message: err.message,
-              });
-            } else {
-              res.send({
-                status: 200,
-                success: true,
-                message: "CATEGORY IS SUCCESSFULLY ADDED TO THE DEPARTMENT!",
-              });
-            }
-          });
-        }
+    const categoryIDs = req.body.ids;
+    Category.updateMany(
+      { _id: { $in: categoryIDs } },
+      { assignedDepartment: id }
+    ).exec((err, category) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        Department.updateOne(
+          { _id: id },
+          { $push: { category: categoryIDs } }
+        ).exec((err, dept) => {
+          if (err) {
+            res.send({
+              status: 500,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            res.send({
+              status: 200,
+              success: true,
+              message: "CATEGORY IS SUCCESSFULLY ADDED TO THE DEPARTMENT!",
+            });
+          }
+        });
       }
-    );
+    });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }
