@@ -25,5 +25,9 @@ user_router.put(
   "/complaints/archive/:id",
   userController.archiveSpecificComplaint
 );
+user_router.get(
+  "/get/archive/complaints/:id",
+  userController.getArchivedComplaints
+);
 
 module.exports = user_router;

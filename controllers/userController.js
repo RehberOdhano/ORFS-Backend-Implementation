@@ -234,6 +234,28 @@ exports.archiveSpecificComplaint = (req, res) => {
   }
 };
 
+exports.getArchivedComplaints = (req, res) => {
+  try {
+    Complainee.find(req.params.id).exec((err, archivedComplaints) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          complaints: archivedComplaints,
+        });
+      }
+    });
+  } catch (err) {
+    console.error("ERROR: " + err.message);
+  }
+};
+
 exports.deleteComplaint = (req, res) => {
   try {
     Complaint.findByIdAndDelete(req.params.id).exec((err, deletedComplaint) => {
