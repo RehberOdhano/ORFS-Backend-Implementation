@@ -106,6 +106,7 @@ exports.login = (req, res) => {
           });
         } else if (
           user &&
+          user.password &&
           bcrypt.compareSync(req.body.password, user.password)
         ) {
           payload = {
