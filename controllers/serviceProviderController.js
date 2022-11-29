@@ -59,15 +59,16 @@ exports.getAssignedComplaints = (req, res) => {
         } else {
           const complaintIDs = result[0].assignedComplaints;
           Complaint.find({ _id: { $in: complaintIDs } })
-            // .populate([
-            //   {
-            //     path: "complainee_id",
-            //     populate: {
-            //       path: "user_id",
-            //       model: "Complainee",
-            //     },
-            //   },
-            // ])
+            .populate([
+              {
+                path: "complainee_id",
+                populate: {
+                  path: "user_id",
+                  model: "User",
+                  select: ["name", "email", "role", "pfp"],
+                },
+              },
+            ])
             .exec((err, complaints) => {
               if (err) {
                 res.send({
