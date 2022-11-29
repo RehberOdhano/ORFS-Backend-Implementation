@@ -1639,6 +1639,46 @@ exports.addCategoryToDept = (req, res) => {
   }
 };
 
+exports.removeCategoryToDept = (req, res) => {
+  try {
+    const deptID = req.params.id;
+    const categoryID = req.body.id;
+    Department.findOneAndUpdate(
+      { _id: deptID },
+      { $pull: { category: categoryID } }
+    ).exec((err, updatedOne) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        Category.updateOne(
+          { _id: categoryID },
+          { assignedDepartment: null }
+        ).exec((err, updatedOne) => {
+          if (err) {
+            res.send({
+              status: 500,
+              success: false,
+              message: err.message,
+            });
+          } else {
+            res.send({
+              status: 200,
+              success: true,
+              message: "CATEGORY IS SUCCESSFULLY REMOVED FROM THE DEPARTMENT!",
+            });
+          }
+        });
+      }
+    });
+  } catch (err) {
+    console.error("ERROR: " + err.message);
+  }
+};
+
 exports.deleteCategory = (req, res) => {
   try {
     const category_id = req.params.id;

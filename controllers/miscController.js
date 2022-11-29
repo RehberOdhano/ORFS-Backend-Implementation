@@ -245,3 +245,32 @@ exports.addPayment = (req, res) => {
     console.error("ERROR:" + err.message);
   }
 };
+
+// exports.uploadImageToS3 = (req, res) => {
+//   try {
+//     upload(req, res, (err) => {
+//       if (err instanceof multer.MulterError || err) {
+//         res.send({
+//           status: 500,
+//           success: false,
+//           message: err.message,
+//         });
+//       } else {
+//         fs.readFileSync(
+//           path.join(__dirname, "../", "/public/s3/" + req.file.filename)
+//         );
+//         const imgPath = req.file.path;
+
+//         res.send({
+//           status: 200,
+//           success: true,
+//           data: {
+//             imgPath: imgPath,
+//           },
+//         });
+//       }
+//     });
+//   } catch (err) {
+//     console.error("ERROR:" + err.message);
+//   }
+// };
