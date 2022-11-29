@@ -1641,6 +1641,7 @@ exports.addCategoryToDept = (req, res) => {
 
 exports.removeCategoryToDept = (req, res) => {
   try {
+    console.log(req.body)
     const deptID = req.params.id;
     const categoryID = req.body.id;
     Department.findOneAndUpdate(

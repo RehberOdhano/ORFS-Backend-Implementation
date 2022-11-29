@@ -81,7 +81,7 @@ admin_router.get(
 );
 admin_router.post("/categories/add/:id", adminController.addCategory);
 admin_router.put("/categories/dept/add/:id", adminController.addCategoryToDept);
-admin_router.delete(
+admin_router.put(
   "/categories/dept/delete/:id",
   adminController.removeCategoryToDept
 );
