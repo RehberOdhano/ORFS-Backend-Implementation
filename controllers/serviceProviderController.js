@@ -38,9 +38,17 @@ exports.getSpecificSP = (req, res) => {
 exports.getAssignedComplaints = (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id)
-    SP.find({ user_id: id })
+    SP.find({ _id: id })
       .select("assignedComplaints")
+      // .populate([
+      //   {
+      //     path: "assignedComplaints",
+      //     populate: {
+      //       path: "assignedTo",
+      //       model: "Complaint",
+      //     },
+      //   },
+      // ])
       .exec((err, result) => {
         if (err) {
           res.send({
@@ -51,11 +59,16 @@ exports.getAssignedComplaints = (req, res) => {
         } else {
           const complaintIDs = result[0].assignedComplaints;
           Complaint.find({ _id: { $in: complaintIDs } })
-          .populate("assignHistory")
-          .populate("category")
-          .populate("complainee_id")
-          .exec(
-            (err, complaints) => {
+            // .populate([
+            //   {
+            //     path: "complainee_id",
+            //     populate: {
+            //       path: "user_id",
+            //       model: "Complainee",
+            //     },
+            //   },
+            // ])
+            .exec((err, complaints) => {
               if (err) {
                 res.send({
                   status: 500,
@@ -70,8 +83,7 @@ exports.getAssignedComplaints = (req, res) => {
                   complaints: complaints,
                 });
               }
-            }
-          );
+            });
         }
       });
   } catch (err) {
@@ -149,8 +161,8 @@ exports.resolveComplaint = (req, res) => {
 exports.transferComplaint = (req, res) => {
   try {
     const complaintID = req.params.id;
-    const sp1_ID = mongoose.Types.ObjectId(req.body.sp1_ID);
-    const sp2_ID = mongoose.Types.ObjectId(req.body.sp2_ID);
+    const sp1_ID = req.body.sp1_ID;
+    const sp2_ID = req.body.sp2_ID;
 
     SP.findOne({ _id: sp2_ID }).exec((err, sp) => {
       if (err) {
