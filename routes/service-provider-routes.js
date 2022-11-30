@@ -23,7 +23,7 @@ service_provider_router.put(
   serviceProviderController.updateComplaint
 );
 service_provider_router.put(
-  "/complaints/resolve/:spID/:ID",
+  "/complaints/resolve/:id",
   serviceProviderController.resolveComplaint
 );
 service_provider_router.put(

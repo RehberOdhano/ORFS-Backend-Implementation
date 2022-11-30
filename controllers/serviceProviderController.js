@@ -119,11 +119,10 @@ exports.updateComplaint = (req, res) => {
 
 exports.resolveComplaint = (req, res) => {
   try {
-    const spID = req.params.spID;
-    const complaintID = req.params.ID;
-    const status = req.body.status;
+    const spID = req.params.id;
+    const complaintID = req.body.id;
     const query = { _id: spID, assignedComplaints: { _id: complaintID } };
-    SP.findOneAndUpdate(query, { status: status }).exec((err, sp) => {
+    SP.findOneAndUpdate(query, { status: "RESOLVED" }).exec((err, sp) => {
       if (err) {
         res.send({
           status: 500,
@@ -133,7 +132,7 @@ exports.resolveComplaint = (req, res) => {
       } else {
         Complaint.findOneAndUpdate(
           { _id: complaintID },
-          { status: status }
+          { status: "RESOLVED" }
         ).exec((err, complaint) => {
           if (err) {
             res.send({
