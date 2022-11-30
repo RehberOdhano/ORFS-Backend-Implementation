@@ -57,7 +57,8 @@ const complaintSchema = mongoose.Schema(
       ref: "ServiceProvider",
     },
     rating: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Rating",
     },
   },
   { versionKey: false }

@@ -67,7 +67,6 @@ const complaintAssignment = (category_id, complaint_id) => {
                 var employees = serviceproviders["employees"];
                 // sorting the serviceproviders in ascending order based on the assigned
                 // complaints and in descending order based on the ratings...
-                console.log(employees);
                 // employees.sort((emp1, emp2) => {
                 //   console.log("employees");
                 //   console.log(emp1.assignedComplaints, emp2.assignedComplaints);
@@ -89,7 +88,6 @@ const complaintAssignment = (category_id, complaint_id) => {
                     }
                   }
                 }
-                console.log(employees);
                 employees.sort((emp1, emp2) => {
                   return emp1.averageRating < emp2.averageRating;
                 });
@@ -173,141 +171,141 @@ exports.fileNewComplaint = (req, res) => {
   }
 };
 
-exports.updateComplaint = (req, res) => {
-  try {
-    const title = req.body.title;
-    const description = req.body.description;
-    const category = req.body.category;
-    const date_created = req.body.date;
-    const status = req.body.status;
+// exports.updateComplaint = (req, res) => {
+//   try {
+//     const title = req.body.title;
+//     const description = req.body.description;
+//     const category = req.body.category;
+//     const date_created = req.body.date;
+//     const status = req.body.status;
 
-    Complaint.updateOne(
-      { _id: req.params.id },
-      {
-        title: title,
-        description: description,
-        category: category,
-        dateCreated: date_created,
-        status: status,
-      },
-      (err, complaint) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else {
-          res.send({
-            status: 200,
-            success: true,
-            message: "COMPLAINT IS SUCCESSFULLY UPDATED",
-          });
-        }
-      }
-    );
-  } catch (err) {
-    console.log("ERROR: " + err.message);
-  }
-};
+//     Complaint.updateOne(
+//       { _id: req.params.id },
+//       {
+//         title: title,
+//         description: description,
+//         category: category,
+//         dateCreated: date_created,
+//         status: status,
+//       },
+//       (err, complaint) => {
+//         if (err) {
+//           res.send({
+//             status: 500,
+//             success: false,
+//             message: err.message,
+//           });
+//         } else {
+//           res.send({
+//             status: 200,
+//             success: true,
+//             message: "COMPLAINT IS SUCCESSFULLY UPDATED",
+//           });
+//         }
+//       }
+//     );
+//   } catch (err) {
+//     console.log("ERROR: " + err.message);
+//   }
+// };
 
-exports.archiveSpecificComplaint = (req, res) => {
-  try {
-    const id = req.params.id;
-    Complaint.updateOne(id, { status: "ARCHIVED" }).exec((err, complaint) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          message: "COMPLAINT IS SUCCESSFULLY ARCHIVED!",
-        });
-      }
-    });
-  } catch (err) {
-    console.log("ERROR: " + err.message);
-  }
-};
+// exports.archiveSpecificComplaint = (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     Complaint.updateOne(id, { status: "ARCHIVED" }).exec((err, complaint) => {
+//       if (err) {
+//         res.send({
+//           status: 500,
+//           success: false,
+//           message: err.message,
+//         });
+//       } else {
+//         res.send({
+//           status: 200,
+//           success: true,
+//           message: "COMPLAINT IS SUCCESSFULLY ARCHIVED!",
+//         });
+//       }
+//     });
+//   } catch (err) {
+//     console.log("ERROR: " + err.message);
+//   }
+// };
 
-exports.getArchivedComplaints = (req, res) => {
-  try {
-    Complainee.find(req.params.id).exec((err, archivedComplaints) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else {
-        res.send({
-          status: 200,
-          success: true,
-          complaints: archivedComplaints,
-        });
-      }
-    });
-  } catch (err) {
-    console.error("ERROR: " + err.message);
-  }
-};
+// exports.getArchivedComplaints = (req, res) => {
+//   try {
+//     Complainee.find(req.params.id).exec((err, archivedComplaints) => {
+//       if (err) {
+//         res.send({
+//           status: 500,
+//           success: false,
+//           message: err.message,
+//         });
+//       } else {
+//         res.send({
+//           status: 200,
+//           success: true,
+//           complaints: archivedComplaints,
+//         });
+//       }
+//     });
+//   } catch (err) {
+//     console.error("ERROR: " + err.message);
+//   }
+// };
 
-exports.deleteComplaint = (req, res) => {
-  try {
-    Complaint.findByIdAndDelete(req.params.id).exec((err, deletedComplaint) => {
-      if (err) {
-        res.send({
-          status: 500,
-          success: false,
-          message: err.message,
-        });
-      } else {
-        Complainee.updateOne(
-          { company_id: deletedComplaint.company_id },
-          { $pull: { complaints: req.params.id } }
-        ).exec((err, updatedComplainee) => {
-          if (err) {
-            res.send({
-              status: 500,
-              success: false,
-              message: err.message,
-            });
-          } else {
-            if (deletedComplaint.assignedTo) {
-              SP.updateOne(
-                { _id: deletedComplaint.assignedTo },
-                { $pull: { assignedComplaints: req.params.id } }
-              ).exec((err, updatedSP) => {
-                if (err) {
-                  res.send({
-                    status: 500,
-                    success: false,
-                    message: err.message,
-                  });
-                } else {
-                  res.send({
-                    status: 200,
-                    success: true,
-                    message: "COMPLAINT IS SUCCESSFULLY DELETED!",
-                  });
-                }
-              });
-            } else {
-              res.send({
-                status: 200,
-                success: true,
-                message: "COMPLAINT IS SUCCESSFULLY DELETED!",
-              });
-            }
-          }
-        });
-      }
-    });
-  } catch (err) {
-    console.log("ERROR: " + err.message);
-  }
-};
+// exports.deleteComplaint = (req, res) => {
+//   try {
+//     Complaint.findByIdAndDelete(req.params.id).exec((err, deletedComplaint) => {
+//       if (err) {
+//         res.send({
+//           status: 500,
+//           success: false,
+//           message: err.message,
+//         });
+//       } else {
+//         Complainee.updateOne(
+//           { company_id: deletedComplaint.company_id },
+//           { $pull: { complaints: req.params.id } }
+//         ).exec((err, updatedComplainee) => {
+//           if (err) {
+//             res.send({
+//               status: 500,
+//               success: false,
+//               message: err.message,
+//             });
+//           } else {
+//             if (deletedComplaint.assignedTo) {
+//               SP.updateOne(
+//                 { _id: deletedComplaint.assignedTo },
+//                 { $pull: { assignedComplaints: req.params.id } }
+//               ).exec((err, updatedSP) => {
+//                 if (err) {
+//                   res.send({
+//                     status: 500,
+//                     success: false,
+//                     message: err.message,
+//                   });
+//                 } else {
+//                   res.send({
+//                     status: 200,
+//                     success: true,
+//                     message: "COMPLAINT IS SUCCESSFULLY DELETED!",
+//                   });
+//                 }
+//               });
+//             } else {
+//               res.send({
+//                 status: 200,
+//                 success: true,
+//                 message: "COMPLAINT IS SUCCESSFULLY DELETED!",
+//               });
+//             }
+//           }
+//         });
+//       }
+//     });
+//   } catch (err) {
+//     console.log("ERROR: " + err.message);
+//   }
+// };

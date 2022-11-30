@@ -19,15 +19,15 @@ user_router.post(
   "/complaints/file/complaint/:id",
   userController.fileNewComplaint
 );
-user_router.put("/complaints/update/:id", userController.updateComplaint);
-user_router.delete("/complaints/delete/:id", userController.deleteComplaint);
-user_router.put(
-  "/complaints/archive/:id",
-  userController.archiveSpecificComplaint
-);
-user_router.get(
-  "/get/archive/complaints/:id",
-  userController.getArchivedComplaints
-);
+// user_router.delete("/complaints/delete/:id", userController.deleteComplaint);
+// user_router.put("/complaints/update/:id", userController.updateComplaint);
+// user_router.put(
+//   "/complaints/archive/:id",
+//   userController.archiveSpecificComplaint
+// );
+// user_router.get(
+//   "/get/archive/complaints/:id",
+//   userController.getArchivedComplaints
+// );
 
 module.exports = user_router;
