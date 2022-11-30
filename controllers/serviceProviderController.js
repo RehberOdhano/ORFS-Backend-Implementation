@@ -161,7 +161,10 @@ exports.transferComplaint = (req, res) => {
     const sp1_ID = req.body.sp1_ID;
     const sp2_ID = req.body.sp2_ID;
 
-    SP.findOne({ _id: sp2_ID }).exec((err, sp) => {
+    SP.updateOne(
+      { _id: sp1_ID },
+      { $pull: { assignedComplaints: { _id: complaintID } } }
+    ).exec((err, sp) => {
       if (err) {
         res.send({
           status: 500,
@@ -170,8 +173,8 @@ exports.transferComplaint = (req, res) => {
         });
       } else {
         SP.updateOne(
-          { _id: sp1_ID },
-          { $pull: { assignedComplaints: { _id: complaintID } } }
+          { _id: sp2_ID },
+          { $push: { assignedComplaints: { _id: complaintID } } }
         ).exec((err, sp) => {
           if (err) {
             res.send({
@@ -180,10 +183,10 @@ exports.transferComplaint = (req, res) => {
               message: err.message,
             });
           } else {
-            SP.updateOne(
-              { _id: sp2_ID },
-              { $push: { assignedComplaints: { _id: complaintID } } }
-            ).exec((err, sp) => {
+            Complaint.updateOne(
+              { _id: complaintID },
+              { assignHistory: sp1_ID, $pull: { assignedTo: { _id: sp1_ID } } }
+            ).exec((err, complaint) => {
               if (err) {
                 res.send({
                   status: 500,
@@ -193,7 +196,7 @@ exports.transferComplaint = (req, res) => {
               } else {
                 Complaint.updateOne(
                   { _id: complaintID },
-                  { $pull: { assignedTo: { _id: sp1_ID } } }
+                  { $push: { assignedTo: { _id: sp2_ID } } }
                 ).exec((err, complaint) => {
                   if (err) {
                     res.send({
@@ -202,34 +205,10 @@ exports.transferComplaint = (req, res) => {
                       message: err.message,
                     });
                   } else {
-                    Complaint.updateOne(
-                      { _id: complaintID },
-                      { $push: { assignedTo: { _id: sp2_ID } } }
-                    ).exec((err, complaint) => {
-                      if (err) {
-                        res.send({
-                          status: 500,
-                          success: false,
-                          message: err.message,
-                        });
-                      } else {
-                        const userID = sp.user_id;
-                        User.findOne({ _id: userID }, (err, user) => {
-                          if (err) {
-                            res.send({
-                              status: 500,
-                              success: false,
-                              message: err.message,
-                            });
-                          } else {
-                            res.send({
-                              status: 200,
-                              success: true,
-                              message: `COMPLAINT IS SUCCESSFULLY TRANSFERRED TO ${user.name}!`,
-                            });
-                          }
-                        });
-                      }
+                    res.send({
+                      status: 200,
+                      success: true,
+                      message: "COMPLAINT IS SUCCESSFULLY TRANSFERRED",
                     });
                   }
                 });
