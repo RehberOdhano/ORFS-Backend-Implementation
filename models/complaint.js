@@ -27,9 +27,11 @@ const complaintSchema = mongoose.Schema(
       type: String,
       enum: ["LOW", "MEDIUM", "HIGH"],
     },
-    workUpdate: {
-      type: String,
-    },
+    workUpdate: [
+      {
+        type: String,
+      },
+    ],
     media: {
       type: String,
     },

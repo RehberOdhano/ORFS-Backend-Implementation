@@ -92,12 +92,11 @@ exports.getAssignedComplaints = (req, res) => {
 
 exports.updateComplaint = (req, res) => {
   try {
-    const status = req.body.status;
     const workUpdate = req.body.workUpdate;
     const id = req.params.id;
     Complaint.updateOne(
       { _id: id },
-      { status: status, workUpdate: workUpdate }
+      { dateUpdated: Date.now(), $push: { workUpdate: workUpdate } }
     ).exec((err, complaint) => {
       if (err) {
         res.send({
