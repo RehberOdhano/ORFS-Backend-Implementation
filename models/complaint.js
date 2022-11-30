@@ -44,7 +44,7 @@ const complaintSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["RESOLVED", "INPROGRESS", "UNASSIGNED", "STOPPED", "ARCHIVED"],
+      enum: ["RESOLVED", "ASSIGNED", "UNASSIGNED", "STOPPED", "ARCHIVED"],
     },
     assignHistory: {
       type: mongoose.Schema.Types.ObjectId,

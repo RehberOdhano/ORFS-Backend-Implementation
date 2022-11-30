@@ -37,19 +37,9 @@ exports.getSpecificSP = (req, res) => {
 
 exports.getAssignedComplaints = (req, res) => {
   try {
-    
     const id = req.params.id;
     SP.find({ user_id: id })
       .select("assignedComplaints")
-      // .populate([
-      //   {
-      //     path: "assignedComplaints",
-      //     populate: {
-      //       path: "assignedTo",
-      //       model: "Complaint",
-      //     },
-      //   },
-      // ])
       .exec((err, result) => {
         if (err) {
           res.send({
@@ -58,37 +48,41 @@ exports.getAssignedComplaints = (req, res) => {
             message: err.message,
           });
         } else {
-          console.log("result", result)
-          const complaintIDs = result[0].assignedComplaints;
-          Complaint.find({ _id: { $in: complaintIDs } })
-            .populate([
-              {
-                path: "complainee_id",
-                populate: {
-                  path: "user_id",
+          if (result.length > 0) {
+            const complaintIDs = result[0].assignedComplaints;
+            Complaint.find({ _id: { $in: complaintIDs } })
+              .populate([
+                {
+                  path: "complainee_id",
                   model: "User",
-                  select: ["name", "email", "role", "pfp"],
+                  select: ["name", "email", "role", "pfp", "status"],
                 },
-              },
-            ])
-            .populate("category")
-            .populate("assignHistory")
-            .exec((err, complaints) => {
-              if (err) {
-                res.send({
-                  status: 500,
-                  success: false,
-                  message: err.message,
-                });
-              } else {
-                res.send({
-                  status: 200,
-                  success: true,
-                  message: "COMPLAINTS ARE SUCCESSFULLY FETCHED!",
-                  complaints: complaints,
-                });
-              }
+                "category",
+                "assignHistory",
+              ])
+              .exec((err, complaints) => {
+                if (err) {
+                  res.send({
+                    status: 500,
+                    success: false,
+                    message: err.message,
+                  });
+                } else {
+                  res.send({
+                    status: 200,
+                    success: true,
+                    message: "COMPLAINTS ARE SUCCESSFULLY FETCHED!",
+                    complaints: complaints,
+                  });
+                }
+              });
+          } else {
+            res.send({
+              status: 200,
+              success: true,
+              message: "ZERO COMPLAINTS ARE ASSIGNED TO THE SERVICEPROVIDER!",
             });
+          }
         }
       });
   } catch (err) {
