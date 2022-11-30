@@ -37,8 +37,9 @@ exports.getSpecificSP = (req, res) => {
 
 exports.getAssignedComplaints = (req, res) => {
   try {
+    
     const id = req.params.id;
-    SP.find({ _id: id })
+    SP.find({ user_id: id })
       .select("assignedComplaints")
       // .populate([
       //   {
@@ -57,6 +58,7 @@ exports.getAssignedComplaints = (req, res) => {
             message: err.message,
           });
         } else {
+          console.log("result", result)
           const complaintIDs = result[0].assignedComplaints;
           Complaint.find({ _id: { $in: complaintIDs } })
             .populate([
@@ -69,6 +71,8 @@ exports.getAssignedComplaints = (req, res) => {
                 },
               },
             ])
+            .populate("category")
+            .populate("assignHistory")
             .exec((err, complaints) => {
               if (err) {
                 res.send({
