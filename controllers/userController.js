@@ -4,6 +4,7 @@ const Complainee = require("../models/complainee");
 const Department = require("../models/department");
 const SP = require("../models/serviceProvider");
 const Category = require("../models/category");
+const Rating = require("../models/rating");
 
 /*
 =============================================================================
@@ -168,6 +169,45 @@ exports.fileNewComplaint = (req, res) => {
     });
   } catch (err) {
     console.log("ERROR: " + err.message);
+  }
+};
+
+exports.submitRating = (req, res) => {
+  try {
+    const complaintID = req.params.id;
+    const company_id = req.body.company_id;
+    const spID = req.body.spID;
+    const complainee_user_id = req.body.user_id;
+    const rating_level = req.body.rating_level;
+    const review = req.body.review;
+
+    Rating.create(
+      {
+        company_id: company_id,
+        complainee_id: complainee_user_id,
+        serviceprovider_id: spID,
+        complaint_id: complaintID,
+        rating_level: rating_level,
+        review: review,
+      },
+      (err, rating) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            message: "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
+          });
+        }
+      }
+    );
+  } catch (err) {
+    console.error("ERROR: " + err.message);
   }
 };
 

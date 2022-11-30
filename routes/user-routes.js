@@ -19,6 +19,7 @@ user_router.post(
   "/complaints/file/complaint/:id",
   userController.fileNewComplaint
 );
+user_router.post("/complaints/rating/submit/:id", userController.submitRating);
 // user_router.delete("/complaints/delete/:id", userController.deleteComplaint);
 // user_router.put("/complaints/update/:id", userController.updateComplaint);
 // user_router.put(
