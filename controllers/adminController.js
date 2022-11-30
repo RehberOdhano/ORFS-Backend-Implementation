@@ -4,6 +4,9 @@ const { csv, path, fs, multer, PDFDocument } = require("../utils/packages");
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
 
+// publish email
+const { publishMessage } = require("../utils/email-worker");
+
 const fileSize = 1024 * 1024 * 5;
 
 const fileStorageEngine = multer.diskStorage({
@@ -126,7 +129,7 @@ exports.addSpecificUser = (req, res) => {
           user: user,
         });
       } else {
-        const query = { email: req.body.email },
+        const query = { email: email },
           update = {
             name: "N/A",
             email: email,
@@ -227,6 +230,62 @@ exports.addSpecificUser = (req, res) => {
   } catch (err) {
     console.log("ERROR: " + err.message);
     return;
+  }
+};
+
+exports.addMultipleUsers = (req, res) => {
+  try {
+    upload(req, res, (err) => {
+      if (err instanceof multer.MulterError || err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: `ERROR: ${err.message}`,
+        });
+      } else {
+        var userRecords = [],
+          serviceProviders = [],
+          complainees = [];
+        fs.createReadStream(
+          path.join(__dirname, "../", "/public/csv-files/" + req.file.filename)
+        )
+          .pipe(csv.parse({ headers: true }))
+          .on("error", (err) => console.error("ERROR: " + err.message))
+          .on("data", (row) => userRecords.push(row))
+          .on("end", (rowCount) => {
+            userRecords.forEach((record) => {
+              if (Object.keys(record).length === 3) {
+                record.role === "SERVICEPROVIDER"
+                  ? serviceProviders.push(record)
+                  : complainees.push(record);
+              } else {
+                res.send({
+                  status: 404,
+                  success: false,
+                  message:
+                    "THE CSV FILE MUST CONTAIN THREE COLUMNS: company_id, email & role",
+                });
+              }
+            });
+            const emailOptions = {
+              mail: serviceProviders[0].email,
+              subject: "User Registration",
+              template: `
+                <body>
+                  <p>Hi, ${serviceProviders[0].email}</p>
+                  <p>Click this link to register: ${process.env.FRONTEND}/register</p>
+                </body>
+                `,
+            };
+            publishMessage(emailOptions);
+            return res
+              .status(200)
+              .send({ message: "EMAIL IS SUCCESSFULLY SENT!" });
+          });
+      }
+    });
+  } catch (err) {
+    console.error("ERROR: " + err.message);
   }
 };
 
@@ -1732,9 +1791,18 @@ exports.parseCSVFile = (req, res) => {
             var serviceProviders = [],
               complainees = [];
             records.forEach((record) => {
-              record.role === "SERVICEPROVIDER"
-                ? serviceProviders.push(record)
-                : complainees.push(record);
+              if (Object.keys(record).length === 3) {
+                record.role === "SERVICEPROVIDER"
+                  ? serviceProviders.push(record)
+                  : complainees.push(record);
+              } else {
+                res.send({
+                  status: 404,
+                  success: false,
+                  message:
+                    "THE CSV FILE MUST CONTAINS THREE COLUMNS: company_id, role & email",
+                });
+              }
             });
             res.send({
               status: 200,

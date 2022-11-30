@@ -1,4 +1,5 @@
 const express = require("express");
+const dotenv = require("dotenv");
 const cors = require("cors");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
@@ -14,6 +15,8 @@ const supertest = require("supertest");
 const { OAuth2Client } = require("google-auth-library");
 const PDFDocument = require("pdfkit-table");
 const busboy = require("busboy");
+// const amqp = require("amqplib/callback_api");
+const amqp = require("amqplib");
 
 module.exports = {
   express,
@@ -32,4 +35,6 @@ module.exports = {
   OAuth2Client,
   PDFDocument,
   busboy,
+  amqp,
+  dotenv,
 };
