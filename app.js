@@ -12,7 +12,7 @@ app.use(passport.initialize());
 
 // SOCKET IMPORTS
 const socket = require("socket.io");
-const http = require("https");
+const http = require("http");
 
 const server = http.createServer(app);
 const io = socket(server, { cors: { origin: "*" } });
@@ -36,7 +36,6 @@ const getUser = (userId) => {
 // SOCKET SERVER INITIATE - when user connects
 io.on("connection", (socket) => {
   console.log("New client connected");
-  interval = setInterval(() => testFunction(socket), 1000);
 
   // take userId and socketId from the user
   socket.on("addUser", (userId) => {
@@ -54,23 +53,18 @@ io.on("connection", (socket) => {
   });
 
   // when user disconnects
-  socket.on("discconect", () => {
+  socket.on("disconnect", () => {
     console.log("Client disconnected");
     removeUser(socket.id);
     io.emit("getUsers", users);
   });
 });
 
-const testFunction = (socket) => {
-  const response = "TESTING NEW CONNECTION";
-  socket.emit("Test", response);
-};
-
 // SERVER LISTENING TO SOCKET PORT
-// const socketPort = 4040;
-// server.listen(socketPort, () =>
-//   console.log(`SOCKETS ARE LISTENING ON PORT: ${socketPort}`)
-// );
+const socketPort = 4040;
+server.listen(socketPort, () =>
+  console.log(`SOCKETS ARE LISTENING ON PORT: ${socketPort}`)
+);
 
 // STATIC FOLDER
 app.use("/public", express.static(path.join(__dirname, "public")));
