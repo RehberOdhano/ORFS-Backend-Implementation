@@ -198,10 +198,23 @@ exports.submitRating = (req, res) => {
             message: err.message,
           });
         } else {
-          res.send({
-            status: 200,
-            success: true,
-            message: "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
+          Complaint.updateOne(
+            { _id: complaintID },
+            { rating: rating._id }
+          ).exec((err, complaint) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              res.send({
+                status: 200,
+                success: true,
+                message: "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
+              });
+            }
           });
         }
       }
