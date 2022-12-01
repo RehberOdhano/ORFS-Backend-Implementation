@@ -31,4 +31,10 @@ service_provider_router.put(
   serviceProviderController.transferComplaint
 );
 
+// LEADERBOARD & GAMIFICATION RELATED ROUTES
+service_provider_router.get(
+  "/avg-rating/:id",
+  serviceProviderController.getAvgRating
+);
+
 module.exports = service_provider_router;

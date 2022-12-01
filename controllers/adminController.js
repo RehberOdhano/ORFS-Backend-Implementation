@@ -4,8 +4,6 @@ const { csv, path, fs, multer, PDFDocument } = require("../utils/packages");
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
 
-// publish email
-// const { publishMessage } = require("../utils/email-worker");
 const { addUsersToQueue } = require("../utils/redis-queue");
 
 const fileSize = 1024 * 1024 * 5;
@@ -272,17 +270,6 @@ exports.addMultipleUsers = (req, res) => {
               message: "EMAILS WILL BE SUCCESSFULLY SENT AFTER A WHILE!",
             });
             addUsersToQueue(userRecords);
-            // const emailOptions = {
-            //   mail: serviceProviders[0].email,
-            //   subject: "User Registration",
-            //   template: `
-            //     <body>
-            //       <p>Hi, ${serviceProviders[0].email}</p>
-            //       <p>Click this link to register: ${process.env.FRONTEND}/register</p>
-            //     </body>
-            //     `,
-            // };
-            // publishMessage(emailOptions);
           });
       }
     });
@@ -1845,5 +1832,76 @@ exports.deleteUploadedCSVFile = (req, res) => {
     }
   } catch (error) {
     console.log("ERROR: " + error.message);
+  }
+};
+
+/*
+=============================================================================
+|                      LEADERBOARD & GAMIFICATION ROUTES                    |
+=============================================================================
+*/
+
+exports.getAvgRatingOfSpsOfDept = (req, res) => {
+  try {
+    const deptId = req.params.id;
+    Department.findOne({ _id: deptId })
+      .populate({ path: "employees", model: "ServiceProvider" })
+      .select("employees")
+      .exec((err, data) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          const serviceproviders = data.employees;
+          let avgRatingOfDept = 0;
+          if (serviceproviders.length > 0) {
+            serviceproviders.forEach(
+              (serviceprovider) =>
+                (avgRatingOfDept += serviceprovider.averageRating)
+            );
+            avgRatingOfDept /= serviceproviders.length;
+          }
+          res.send({
+            status: 200,
+            success: true,
+            averageRatingOfDept: avgRatingOfDept,
+          });
+        }
+      });
+  } catch (err) {
+    console.error("ERROR: " + err.message);
+  }
+};
+
+exports.getAvgRatingOfSpsOfCustomer = (req, res) => {
+  try {
+    const companyId = req.params.id;
+    SP.find({ company_id: companyId }).exec((err, serviceproviders) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        let avgRatingOfCompany = 0;
+        if (serviceproviders.length > 0) {
+          serviceproviders.forEach(
+            (sp) => (avgRatingOfCompany += sp.averageRating)
+          );
+          avgRatingOfCompany /= serviceproviders.length;
+        }
+        res.send({
+          status: 200,
+          success: true,
+          avgRatingOfCompany: avgRatingOfCompany,
+        });
+      }
+    });
+  } catch (err) {
+    console.error("ERROR: " + err.message);
   }
 };
