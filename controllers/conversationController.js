@@ -22,14 +22,27 @@ exports.createNewConversation = (req, res) => {
         const newConversation = new Conversation({
           memebers: [req.body.senderId, req.body.receiverId],
         });
-
-        const savedConversation = await newConversation.save();
-        res.send({
-          status: 200,
-          success: true,
-          message: "CONVERSATION IS SUCCESSFULLY CREATED!",
-          conversation: savedConversation,
-        });
+        Conversation.create(
+          {
+            members: [req.body.senderId, req.body.receiverId],
+          },
+          (err, savedConversation) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              res.send({
+                status: 200,
+                success: true,
+                message: "CONVERSATION IS SUCCESSFULLY CREATED!",
+                conversation: savedConversation,
+              });
+            }
+          }
+        );
       }
     });
   } catch (err) {
