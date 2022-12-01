@@ -18,6 +18,8 @@ const busboy = require("busboy");
 // const amqp = require("amqplib/callback_api");
 const amqp = require("amqplib");
 const RedisQueue = require("bull");
+const socket = require("socket.io");
+const http = require("https");
 
 module.exports = {
   express,
@@ -39,4 +41,6 @@ module.exports = {
   amqp,
   dotenv,
   RedisQueue,
+  http,
+  socket,
 };

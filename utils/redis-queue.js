@@ -12,9 +12,8 @@ const emailQueue = new RedisQueue("email-queue", {
 
 const addUsersToQueue = (users) => {
   try {
-    console.log(users);
     users.forEach((user, index) =>
-      emailQueue.add({ user }, { delay: 2000 }).then(() => {
+      emailQueue.add({ user }).then(() => {
         if (index + 1 === users.length) {
           emailQueue.process(path.join(__dirname, "process-queue.js"));
           emailQueue.on("completed", (job) => {
