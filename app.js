@@ -51,6 +51,7 @@ io.on("connection", (socket) => {
   // send & get message
   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
     const user = getUser(receiverId);
+    console.log(user)
     io.to(user.socketId).emit("getMessage", {
       senderId,
       text,
