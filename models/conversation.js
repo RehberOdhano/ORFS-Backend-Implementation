@@ -2,10 +2,12 @@ const mongoose = require("mongoose");
 
 const conversationSchema = mongoose.Schema(
   {
-    members: {
-      type: Array,
-      ref: "User",
-    },
+    members: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { versionKey: false }
 );
