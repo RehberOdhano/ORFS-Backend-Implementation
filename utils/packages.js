@@ -17,6 +17,7 @@ const PDFDocument = require("pdfkit-table");
 const busboy = require("busboy");
 // const amqp = require("amqplib/callback_api");
 const amqp = require("amqplib");
+const RedisQueue = require("bull");
 
 module.exports = {
   express,
@@ -37,4 +38,5 @@ module.exports = {
   busboy,
   amqp,
   dotenv,
+  RedisQueue,
 };

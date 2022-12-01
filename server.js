@@ -16,6 +16,7 @@ const connect_db = async () => {
 
   // starting the app right after the successful connection to the databse
   const app = require("./app");
+  // require("./utils/redis-queue");
 
   app.listen(PORT, () => {
     console.log(
