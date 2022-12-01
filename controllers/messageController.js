@@ -40,23 +40,21 @@ exports.sendMessage = async (req, res) => {
 exports.getMessage = (req, res) => {
   try {
     const conversationId = req.params.id;
-    Message.findOne({ conversation_id: conversationId }).exec(
-      (err, message) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else {
-          res.send({
-            status: 200,
-            success: true,
-            message: message,
-          });
-        }
+    Message.find({ conversation_id: conversationId }).exec((err, message) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else {
+        res.send({
+          status: 200,
+          success: true,
+          message: message,
+        });
       }
-    );
+    });
   } catch (err) {
     console.error("ERROR: " + err.message);
     res.send({
