@@ -4,8 +4,6 @@ const {
   cors,
   passport,
   path,
-  http,
-  socket,
 } = require("./utils/packages");
 
 const app = express();
