@@ -4,8 +4,6 @@ const { csv, path, fs, multer, PDFDocument } = require("../utils/packages");
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
 
-// publish email
-// const { publishMessage } = require("../utils/email-worker");
 const { addUsersToQueue } = require("../utils/redis-queue");
 
 const fileSize = 1024 * 1024 * 5;
@@ -272,17 +270,6 @@ exports.addMultipleUsers = (req, res) => {
               message: "EMAILS WILL BE SUCCESSFULLY SENT AFTER A WHILE!",
             });
             addUsersToQueue(userRecords);
-            // const emailOptions = {
-            //   mail: serviceProviders[0].email,
-            //   subject: "User Registration",
-            //   template: `
-            //     <body>
-            //       <p>Hi, ${serviceProviders[0].email}</p>
-            //       <p>Click this link to register: ${process.env.FRONTEND}/register</p>
-            //     </body>
-            //     `,
-            // };
-            // publishMessage(emailOptions);
           });
       }
     });

@@ -1,5 +1,12 @@
 // imported the required packages
-const { express, cors, passport, path } = require("./utils/packages");
+const {
+  express,
+  cors,
+  passport,
+  path,
+  http,
+  socket,
+} = require("./utils/packages");
 
 const app = express();
 
@@ -9,10 +16,6 @@ app.use(cors());
 
 // PASSPORT MIDDLEWARE
 app.use(passport.initialize());
-
-// SOCKET IMPORTS
-const socket = require("socket.io");
-const http = require("https");
 
 const server = http.createServer(app);
 const io = socket(server, { cors: { origin: "*" } });

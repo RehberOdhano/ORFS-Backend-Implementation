@@ -19,7 +19,7 @@ const busboy = require("busboy");
 const amqp = require("amqplib");
 const RedisQueue = require("bull");
 const socket = require("socket.io");
-const http = require("https");
+const http = require("http");
 
 module.exports = {
   express,
