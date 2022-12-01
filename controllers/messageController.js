@@ -3,7 +3,12 @@ const Message = require("../models/message");
 
 exports.sendMessage = async (req, res) => {
   try {
-    const newMessage = new Message(req.body);
+    const { senderId, text, conversationId } = req.body;
+    const newMessage = new Message({
+      conversation_id: conversationId,
+      sender: senderId,
+      message: text,
+    });
     const savedMessage = await newMessage.save();
     res.send({
       status: 200,
