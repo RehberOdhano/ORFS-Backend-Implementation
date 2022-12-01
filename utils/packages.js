@@ -20,6 +20,7 @@ const amqp = require("amqplib");
 const RedisQueue = require("bull");
 const socket = require("socket.io");
 const http = require("http");
+const redis = require("redis");
 
 module.exports = {
   express,
@@ -43,4 +44,5 @@ module.exports = {
   RedisQueue,
   http,
   socket,
+  redis,
 };

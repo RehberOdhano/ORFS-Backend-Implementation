@@ -95,4 +95,17 @@ admin_router.delete(
   adminController.deleteUploadedCSVFile
 );
 
+// LEADERBOARD & GAMIFICATION RELATED ROUTES
+// to get the average of ratings of all the serviceproviders within a specific department
+admin_router.get(
+  "/all/serviceproviders/ratings/dept/:id",
+  adminController.getAvgRatingOfSpsOfDept
+);
+
+// to get the average of ratings of all the serviceproviders within a company
+admin_router.get(
+  "/all/serviceproviders/ratings/customer/:id",
+  adminController.getAvgRatingOfSpsOfCustomer
+);
+
 module.exports = admin_router;

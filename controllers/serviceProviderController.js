@@ -222,3 +222,28 @@ exports.transferComplaint = (req, res) => {
     console.log("ERROR: ", err.message);
   }
 };
+
+exports.getAvgRating = (req, res) => {
+  try {
+    const spId = req.params.id;
+    SP.findOne({ _id: spId })
+      .select(["user_id", "averageRating"])
+      .exec((err, rating) => {
+        if (err) {
+          res.send({
+            status: 500,
+            success: false,
+            message: err.message,
+          });
+        } else {
+          res.send({
+            status: 200,
+            success: true,
+            avgRating: rating,
+          });
+        }
+      });
+  } catch (err) {
+    console.error("ERROR: ", err.message);
+  }
+};
