@@ -14,6 +14,7 @@ const Category = require("../models/category");
 const SP = require("../models/serviceProvider");
 const CustomerType = require("../models/customerType");
 const Token = require("../models/token");
+const Subscription = require("../models/subscription");
 
 /*
 =============================================================================
@@ -86,32 +87,36 @@ exports.addCustomer = (req, res) => {
                 message: err.message,
               });
             } else {
-              const company_id = customer._id;
-              User.findOne({ email: req.body.email }).exec((err, user) => {
-                if (err) {
-                  res.send({
-                    status: 500,
-                    success: false,
-                    message: err.message,
-                  });
-                } else if (user) {
-                  res.send({
-                    status: 200,
-                    success: true,
-                    message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS!`,
-                    user_id: user._id,
-                    company_id: customer._id,
-                  });
-                } else {
-                  const query = { email: req.body.email },
-                    update = {
-                      email: req.body.email,
-                      role: "ADMIN",
-                      company_id: company_id,
-                    },
-                    options = { new: true, upsert: true };
-                  User.findOneAndUpdate(query, update, options).exec(
-                    (err, user) => {
+              const companyId = customer._id;
+              const today = new Date(); // current date
+              console.log(today);
+              console.log(today.getDate());
+              const duration = req.body.subscription_plan.duration; // number of months
+              const numOfDays = duration * 30; // number of days
+              const expiryDate = today.setDate(today.getDate() + numOfDays);
+              console.log(today);
+              console.log(expiryDate);
+
+              Subscription.create(
+                {
+                  company_id: companyId,
+                  price: 0,
+                  duration: duration,
+                  datePurchased: today,
+                  dateTillExpiry: expiryDate,
+                },
+                (err, subscription) => {
+                  if (err) {
+                    res.send({
+                      status: 500,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    Customer.updateOne(
+                      { _id: companyId },
+                      { subscription_plan: subscription._id }
+                    ).exec((err, updatedCustomer) => {
                       if (err) {
                         res.send({
                           status: 500,
@@ -119,38 +124,81 @@ exports.addCustomer = (req, res) => {
                           message: err.message,
                         });
                       } else {
-                        Customer.updateOne(
-                          { website: req.body.website },
-                          { $push: { employees: { _id: user._id } } }
-                        ).exec(async (err, customer) => {
-                          if (err) {
-                            res.send({
-                              status: 500,
-                              success: false,
-                              message: err.message,
-                            });
-                          } else {
-                            const message = `Click this link to register: ${process.env.FRONTEND}/register`;
-                            res.send({
-                              status: 200,
-                              success: true,
-                              message:
-                                "An email is sent to the admin... please register here...",
-                              company_id: company_id,
-                              user_id: user._id,
-                            });
-                            await sendEmail(
-                              req.body.email,
-                              "User Registration",
-                              message
-                            );
+                        User.findOne({ email: req.body.email }).exec(
+                          (err, user) => {
+                            if (err) {
+                              res.send({
+                                status: 500,
+                                success: false,
+                                message: err.message,
+                              });
+                            } else if (user) {
+                              res.send({
+                                status: 200,
+                                success: true,
+                                message: `USER WITH THIS EMAIL ${user.email} ALREADY EXISTS!`,
+                                user_id: user._id,
+                                company_id: companyId,
+                              });
+                            } else {
+                              const query = { email: req.body.email },
+                                update = {
+                                  email: req.body.email,
+                                  role: "ADMIN",
+                                  company_id: companyId,
+                                },
+                                options = { new: true, upsert: true };
+                              User.findOneAndUpdate(
+                                query,
+                                update,
+                                options
+                              ).exec((err, user) => {
+                                if (err) {
+                                  res.send({
+                                    status: 500,
+                                    success: false,
+                                    message: err.message,
+                                  });
+                                } else {
+                                  Customer.updateOne(
+                                    { website: req.body.website },
+                                    {
+                                      $push: { employees: { _id: user._id } },
+                                    }
+                                  ).exec(async (err, customer) => {
+                                    if (err) {
+                                      res.send({
+                                        status: 500,
+                                        success: false,
+                                        message: err.message,
+                                      });
+                                    } else {
+                                      const message = `Click this link to register: ${process.env.FRONTEND}/register`;
+                                      res.send({
+                                        status: 200,
+                                        success: true,
+                                        message:
+                                          "An email is sent to the admin... please register here...",
+                                        company_id: companyId,
+                                        user_id: user._id,
+                                      });
+                                      await sendEmail(
+                                        req.body.email,
+                                        "User Registration",
+                                        message
+                                      );
+                                    }
+                                  });
+                                }
+                              });
+                            }
                           }
-                        });
+                        );
                       }
-                    }
-                  );
+                    });
+                  }
                 }
-              });
+              );
             }
           }
         );
