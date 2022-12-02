@@ -242,9 +242,7 @@ exports.addMultipleUsers = (req, res) => {
           message: `ERROR: ${err.message}`,
         });
       } else {
-        var userRecords = [],
-          serviceProviders = [],
-          complainees = [];
+        var userRecords = [];
         fs.createReadStream(
           path.join(__dirname, "../", "/public/csv-files/" + req.file.filename)
         )
@@ -253,11 +251,7 @@ exports.addMultipleUsers = (req, res) => {
           .on("data", (row) => userRecords.push(row))
           .on("end", (rowCount) => {
             userRecords.forEach((record) => {
-              if (Object.keys(record).length === 3) {
-                record.role === "SERVICEPROVIDER"
-                  ? serviceProviders.push(record)
-                  : complainees.push(record);
-              } else {
+              if (Object.keys(record).length !== 3) {
                 res.send({
                   status: 404,
                   success: false,
