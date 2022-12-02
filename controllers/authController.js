@@ -19,73 +19,71 @@ exports.register = (req, res) => {
   try {
     let salt = bcrypt.genSaltSync(10);
     const email = req.body.email;
-    User.findOne({ email: email, verified: false })
-      .populate({
-        path: "company_id",
-        model: "Customer",
-        select: ["title", "pfp"],
-      })
-      .exec((err, user) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else if (!user) {
-          res.send({
-            status: 403,
-            success: true,
-            message: "USER DOES NOT EXIST!",
-          });
-        } else {
-          const userObj = {
-            name: req.body.firstName + " " + req.body.lastName,
-            password: bcrypt.hashSync(req.body.password, salt),
-            sign_type: "PLATFORM",
-            status: "ACTIVE",
-          };
-          options = { new: true, upsert: true };
-          User.findOneAndUpdate({ email: email }, userObj, options).exec(
-            (err, user) => {
-              if (err) {
-                res.send({
-                  status: 500,
-                  success: false,
-                  message: err.message,
-                });
-              } else {
-                let successObject = {
-                  token: jwt.sign({ _id: user._id }, process.env.JWTSECRET, {
-                    expiresIn: "60m",
-                  }),
-                  user,
-                  message: "An email is sent to the admin... Please verify...",
-                };
-                Token.create(
-                  {
-                    userId: user._id,
-                    token: crypto.randomBytes(32).toString("hex"),
-                  },
-                  async (err, token) => {
-                    if (err) {
-                      res.send({
-                        status: 500,
-                        success: false,
-                        message: err.message,
-                      });
-                    } else {
-                      res.json(successObject);
-                      const message = `${process.env.FRONTEND}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
-                      await sendEmail(req.body.email, "Verify Email", message);
-                    }
+    User.findOne({ email: email, verified: false }).exec((err, user) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (!user) {
+        res.send({
+          status: 403,
+          success: true,
+          message: "USER DOES NOT EXIST!",
+        });
+      } else {
+        const userObj = {
+          name: req.body.firstName + " " + req.body.lastName,
+          password: bcrypt.hashSync(req.body.password, salt),
+          sign_type: "PLATFORM",
+          status: "ACTIVE",
+        };
+        options = { new: true, upsert: true };
+        User.findOneAndUpdate({ email: email }, userObj, options)
+          .populate({
+            path: "company_id",
+            model: "Customer",
+            select: ["title", "pfp"],
+          })
+          .exec((err, user) => {
+            if (err) {
+              res.send({
+                status: 500,
+                success: false,
+                message: err.message,
+              });
+            } else {
+              let successObject = {
+                token: jwt.sign({ _id: user._id }, process.env.JWTSECRET, {
+                  expiresIn: "60m",
+                }),
+                user,
+                message: "An email is sent to the admin... Please verify...",
+              };
+              Token.create(
+                {
+                  userId: user._id,
+                  token: crypto.randomBytes(32).toString("hex"),
+                },
+                async (err, token) => {
+                  if (err) {
+                    res.send({
+                      status: 500,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    res.json(successObject);
+                    const message = `${process.env.FRONTEND}/superadmin/admin/verify/${user._id}/${req.body.email}/${token.token}`;
+                    await sendEmail(req.body.email, "Verify Email", message);
                   }
-                );
-              }
+                }
+              );
             }
-          );
-        }
-      });
+          });
+      }
+    });
   } catch (err) {
     res.send({
       status: 500,
