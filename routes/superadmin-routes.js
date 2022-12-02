@@ -46,4 +46,10 @@ superAdminRouter.get(
   superAdminController.verifyEmail
 );
 
+// SUBSCRIPTION ROUTES
+superAdminRouter.get(
+  "/get/subscription/:id",
+  superAdminController.getCurrentSubscription
+);
+
 module.exports = superAdminRouter;
