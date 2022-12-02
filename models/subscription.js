@@ -1,10 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const subscriptionSchema = mongoose.Schema({
+const subscriptionSchema = mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true
+      type: String,
     },
-}, { versionKey: false });
+    price: {
+      type: Number,
+    },
+  },
+  { versionKey: false }
+);
 
 module.exports = mongoose.model("Subscription", subscriptionSchema);

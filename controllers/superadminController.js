@@ -411,27 +411,30 @@ exports.addAdmin = (req, res) => {
     let salt = bcrypt.genSaltSync(10);
     const email = req.body.email;
     const company_id = req.params.id;
-    User.create(
-      {
-        name: "UNDEFINED",
-        email: email,
-        password: bcrypt.hashSync("admin", salt),
-        role: "ADMIN",
-        sign_type: "PLATFORM",
-        company_id: company_id,
-      },
-      (err, user) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else {
-          Customer.updateOne(
-            { _id: company_id },
-            { $push: { employees: { email: email, _id: user._id } } }
-          ).exec((err, customer) => {
+    User.findOne({ email: email }).exec((err, user) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (user) {
+        res.send({
+          status: 200,
+          success: true,
+          message: "USER WITH THIS EMAIL ALREADY EXISTS!",
+        });
+      } else {
+        User.create(
+          {
+            name: "UNDEFINED",
+            email: email,
+            password: bcrypt.hashSync("admin", salt),
+            role: "ADMIN",
+            sign_type: "PLATFORM",
+            company_id: company_id,
+          },
+          (err, user) => {
             if (err) {
               res.send({
                 status: 500,
@@ -439,16 +442,34 @@ exports.addAdmin = (req, res) => {
                 message: err.message,
               });
             } else {
-              res.send({
-                status: 200,
-                success: true,
-                message: "ADMIN IS SUCCESSFULLY ADDED!",
+              Customer.updateOne(
+                { _id: company_id },
+                { $push: { employees: { email: email, _id: user._id } } }
+              ).exec(async (err, customer) => {
+                if (err) {
+                  res.send({
+                    status: 500,
+                    success: false,
+                    message: err.message,
+                  });
+                } else {
+                  const message = `Click this link to register: ${process.env.FRONTEND}/register`;
+                  res.send({
+                    status: 200,
+                    success: true,
+                    message:
+                      "An email is sent to the admin... please register here...",
+                    company_id: company_id,
+                    user_id: user._id,
+                  });
+                  await sendEmail(req.body.email, "User Registration", message);
+                }
               });
             }
-          });
-        }
+          }
+        );
       }
-    );
+    });
   } catch (err) {
     console.log("ERROR: " + err.message);
   }

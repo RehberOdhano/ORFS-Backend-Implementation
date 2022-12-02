@@ -26,9 +26,6 @@ misc_router.post("/upload/media", miscController.uploadMedia);
 // UPDATE/CHANGE PROFILE SETTINGS
 misc_router.put("/update/profile/:id", miscController.updateProfileSettings);
 
-// PAYMENT USING STRIPE - TESTING
-misc_router.post("/add/payment", miscController.addPayment);
-
 // UPLOADING IMAGES TO S3 BUCKET
 // misc_router.post("/upload/image/s3", miscController.uploadImageToS3);
 

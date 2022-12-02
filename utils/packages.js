@@ -21,6 +21,7 @@ const RedisQueue = require("bull");
 const socket = require("socket.io");
 const http = require("http");
 const redis = require("redis");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 module.exports = {
   express,
@@ -45,4 +46,5 @@ module.exports = {
   http,
   socket,
   redis,
+  stripe,
 };
