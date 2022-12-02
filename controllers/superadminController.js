@@ -427,12 +427,13 @@ exports.addAdmin = (req, res) => {
       } else {
         User.create(
           {
-            name: "UNDEFINED",
+            name: "N/A",
             email: email,
             password: bcrypt.hashSync("admin", salt),
             role: "ADMIN",
             sign_type: "PLATFORM",
             company_id: company_id,
+            status: "UNREGISTERED",
           },
           (err, user) => {
             if (err) {
