@@ -1899,6 +1899,7 @@ exports.getAvgRatingOfSpsOfCustomer = (req, res) => {
     console.error("ERROR: " + err.message);
   }
 };
+
 /*
 =============================================================================
 |                         SUBSCRIPTIONS' ROUTES                             |
