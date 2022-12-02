@@ -89,13 +89,11 @@ exports.addCustomer = (req, res) => {
             } else {
               const companyId = customer._id;
               const today = new Date(); // current date
-              console.log(today);
-              console.log(today.getDate());
               const duration = req.body.subscription_plan.duration; // number of months
               const numOfDays = duration * 30; // number of days
-              const expiryDate = today.setDate(today.getDate() + numOfDays);
-              console.log(today);
-              console.log(expiryDate);
+              const expiryDate = new Date().setDate(
+                today.getDate() + numOfDays
+              );
 
               Subscription.create(
                 {
