@@ -606,39 +606,3 @@ exports.getCustomerTypes = (req, res) => {
     console.log("ERROR:" + err.message);
   }
 };
-
-/*
-=============================================================================
-|                         SUBSCRIPTIONS' ROUTES                             |
-=============================================================================
-*/
-
-exports.getCurrentSubscription = (req, res) => {
-  try {
-    const companyId = req.params.id;
-    Customer.findOne({ _id: companyId })
-      .populate("subscription_plan")
-      .exec((err, currSubscription) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else {
-          res.send({
-            status: 200,
-            success: true,
-            subscription: currSubscription,
-          });
-        }
-      });
-  } catch (err) {
-    console.err("ERROR:" + err.message);
-    res.send({
-      status: 500,
-      success: false,
-      message: err.message,
-    });
-  }
-};

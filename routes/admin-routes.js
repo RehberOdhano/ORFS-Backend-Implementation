@@ -105,4 +105,10 @@ adminRouter.get(
   adminController.getAvgRatingOfSpsOfCustomer
 );
 
+// SUBSCRIPTION ROUTES
+adminRouter.get(
+  "/get/subscription/:id",
+  adminController.getCurrentSubscription
+);
+
 module.exports = adminRouter;
