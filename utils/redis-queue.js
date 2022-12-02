@@ -1,5 +1,5 @@
 // IMPORTED REQUIRED PACKAGES
-const { RedisQueue, path, dotenv } = require("./packages");
+const { RedisQueue, dotenv } = require("./packages");
 dotenv.config();
 
 // UTILITY/HELPER FUNCTIONS
