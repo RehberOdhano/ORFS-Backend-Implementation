@@ -2,7 +2,7 @@
 const { express } = require("../utils/packages");
 
 // ROUTER
-const analytics_controller = express.Router();
+const analyticsRouter = express.Router();
 
 // CONTROLLERS
 const analyticsController = require("../controllers/analyticsController");
@@ -14,15 +14,15 @@ const analyticsController = require("../controllers/analyticsController");
 */
 
 // ANALYTICS ROUTES
-analytics_controller.get("/customers", analyticsController.getCustomerCount);
-analytics_controller.get("/users", analyticsController.getUserCount);
-analytics_controller.get(
+analyticsRouter.get("/customers", analyticsController.getCustomerCount);
+analyticsRouter.get("/users", analyticsController.getUserCount);
+analyticsRouter.get(
   "/admin-analytics/:id",
   analyticsController.getAdminDashboardAnalytics
 );
-analytics_controller.get(
+analyticsRouter.get(
   "/department-analytics/:id",
   analyticsController.getDeptDashboardAnalytics
 );
 
-module.exports = analytics_controller;
+module.exports = analyticsRouter;

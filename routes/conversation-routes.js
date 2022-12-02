@@ -2,7 +2,7 @@
 const { express } = require("../utils/packages");
 
 // ROUTER
-const conversation_router = express.Router();
+const conversationRouter = express.Router();
 
 // CONTROLLERS
 const conversationController = require("../controllers/conversationController");
@@ -14,15 +14,15 @@ const conversationController = require("../controllers/conversationController");
 */
 
 // create new conversation
-conversation_router.post(
+conversationRouter.post(
   "/create/conversation",
   conversationController.createNewConversation
 );
 
 // get conversation of a user
-conversation_router.get(
+conversationRouter.get(
   "/get/conversation/:id",
   conversationController.getConversation
 );
 
-module.exports = conversation_router;
+module.exports = conversationRouter;

@@ -2,10 +2,10 @@
 const { express } = require("../utils/packages");
 
 // ROUTER
-const superadmin_router = express.Router();
+const superAdminRouter = express.Router();
 
 // CONTROLLERS
-const superadminController = require("../controllers/superadminController");
+const superAdminController = require("../controllers/superadminController");
 
 /*
 =============================================================================
@@ -14,39 +14,36 @@ const superadminController = require("../controllers/superadminController");
 */
 
 // SUPERADMIN CUSTOMER ROUTES
-superadmin_router.get("/customers", superadminController.getAllCustomers);
-superadmin_router.post("/customers/add", superadminController.addCustomer);
-superadmin_router.put(
+superAdminRouter.get("/customers", superAdminController.getAllCustomers);
+superAdminRouter.post("/customers/add", superAdminController.addCustomer);
+superAdminRouter.put(
   "/customers/update/:id",
-  superadminController.editCustomer
+  superAdminController.editCustomer
 );
-superadmin_router.put(
+superAdminRouter.put(
   "/customers/update/status/:id",
-  superadminController.updateCustomerStatus
+  superAdminController.updateCustomerStatus
 );
-superadmin_router.delete(
+superAdminRouter.delete(
   "/customers/delete/:id",
-  superadminController.deleteCustomer
+  superAdminController.deleteCustomer
 );
 
 // SUPERADMIN ADMIN ROUTES
-superadmin_router.post("/admins/add/:id", superadminController.addAdmin);
-superadmin_router.delete(
-  "/admins/delete/:id",
-  superadminController.deleteAdmin
-);
+superAdminRouter.post("/admins/add/:id", superAdminController.addAdmin);
+superAdminRouter.delete("/admins/delete/:id", superAdminController.deleteAdmin);
 
 // SUPERADMIN CUSTOMER TYPE ROUTES
-superadmin_router.post(
+superAdminRouter.post(
   "/customerType/add",
-  superadminController.addCustomerType
+  superAdminController.addCustomerType
 );
-superadmin_router.get("/customerType", superadminController.getCustomerTypes);
+superAdminRouter.get("/customerType", superAdminController.getCustomerTypes);
 
 // EMAIL VERIFICATION ROUTE
-superadmin_router.get(
+superAdminRouter.get(
   "/admin/verify/:id/:email/:token",
-  superadminController.verifyEmail
+  superAdminController.verifyEmail
 );
 
-module.exports = superadmin_router;
+module.exports = superAdminRouter;

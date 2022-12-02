@@ -2,7 +2,7 @@
 const { express } = require("../utils/packages");
 
 // ROUTER
-const message_router = express.Router();
+const messageRouter = express.Router();
 
 // CONTROLLERS
 const messageController = require("../controllers/messageController");
@@ -14,9 +14,9 @@ const messageController = require("../controllers/messageController");
 */
 
 // add/post/send message
-message_router.post("/send/message", messageController.sendMessage);
+messageRouter.post("/send/message", messageController.sendMessage);
 
 // get message
-message_router.get("/get/message/:id", messageController.getMessage);
+messageRouter.get("/get/message/:id", messageController.getMessage);
 
-module.exports = message_router;
+module.exports = messageRouter;

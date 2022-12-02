@@ -2,7 +2,7 @@
 const { express } = require("../utils/packages");
 
 // ROUTER
-const service_provider_router = express.Router();
+const serviceProviderRouter = express.Router();
 
 // CONTROLLERS
 const serviceProviderController = require("../controllers/serviceProviderController");
@@ -13,28 +13,28 @@ const serviceProviderController = require("../controllers/serviceProviderControl
 =============================================================================
 */
 
-service_provider_router.get("/:id", serviceProviderController.getSpecificSP);
-service_provider_router.get(
+serviceProviderRouter.get("/:id", serviceProviderController.getSpecificSP);
+serviceProviderRouter.get(
   "/complaints/assigned/:id",
   serviceProviderController.getAssignedComplaints
 );
-service_provider_router.put(
+serviceProviderRouter.put(
   "/complaints/update/:id",
   serviceProviderController.updateComplaint
 );
-service_provider_router.put(
+serviceProviderRouter.put(
   "/complaints/resolve/:id",
   serviceProviderController.resolveComplaint
 );
-service_provider_router.put(
+serviceProviderRouter.put(
   "/complaints/transfer/:id",
   serviceProviderController.transferComplaint
 );
 
 // LEADERBOARD & GAMIFICATION RELATED ROUTES
-service_provider_router.get(
+serviceProviderRouter.get(
   "/avg-rating/:id",
   serviceProviderController.getAvgRating
 );
 
-module.exports = service_provider_router;
+module.exports = serviceProviderRouter;

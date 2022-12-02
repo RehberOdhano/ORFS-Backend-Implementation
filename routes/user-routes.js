@@ -2,7 +2,7 @@
 const { express } = require("../utils/packages");
 
 // ROUTER
-const user_router = express.Router();
+const userRouter = express.Router();
 
 // CONTROLLERS
 const userController = require("../controllers/userController");
@@ -14,21 +14,21 @@ const userController = require("../controllers/userController");
 */
 
 // USERS COMPLAINT ROUTES
-user_router.get("/complaints/:id", userController.getAllComplaints);
-user_router.post(
+userRouter.get("/complaints/:id", userController.getAllComplaints);
+userRouter.post(
   "/complaints/file/complaint/:id",
   userController.fileNewComplaint
 );
-user_router.post("/complaints/rating/submit/:id", userController.submitRating);
-// user_router.delete("/complaints/delete/:id", userController.deleteComplaint);
-// user_router.put("/complaints/update/:id", userController.updateComplaint);
-// user_router.put(
+userRouter.post("/complaints/rating/submit/:id", userController.submitRating);
+// userRouter.delete("/complaints/delete/:id", userController.deleteComplaint);
+// userRouter.put("/complaints/update/:id", userController.updateComplaint);
+// userRouter.put(
 //   "/complaints/archive/:id",
 //   userController.archiveSpecificComplaint
 // );
-// user_router.get(
+// userRouter.get(
 //   "/get/archive/complaints/:id",
 //   userController.getArchivedComplaints
 // );
 
-module.exports = user_router;
+module.exports = userRouter;
