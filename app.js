@@ -49,12 +49,13 @@ io.on("connection", (socket) => {
   });
 
   // send & get message
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+  socket.on("sendMessage", ({ conversation_id, senderId, receiverId, text }) => {
     const user = getUser(receiverId);
-    console.log(user)
+    console.log(users)
     io.to(user.socketId).emit("getMessage", {
       senderId,
       text,
+      conversation_id
     });
   });
 
