@@ -15,6 +15,7 @@ const SP = require("../models/serviceProvider");
 const CustomerType = require("../models/customerType");
 const Token = require("../models/token");
 const Subscription = require("../models/subscription");
+const Rating = require("../models/rating");
 
 /*
 =============================================================================
@@ -424,11 +425,23 @@ exports.deleteCustomer = (req, res) => {
                                         message: err.message,
                                       });
                                     } else {
-                                      res.send({
-                                        status: 200,
-                                        success: true,
-                                        message:
-                                          "CUSTOMER IS SUCCESSFULLY DELETED!",
+                                      Rating.deleteMany({
+                                        company_id: customer._id,
+                                      }).exec((err, ratings) => {
+                                        if (err) {
+                                          res.send({
+                                            status: 500,
+                                            success: false,
+                                            message: err.message,
+                                          });
+                                        } else {
+                                          res.send({
+                                            status: 200,
+                                            success: true,
+                                            message:
+                                              "CUSTOMER IS SUCCESSFULLY DELETED!",
+                                          });
+                                        }
                                       });
                                     }
                                   });

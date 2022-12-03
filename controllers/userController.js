@@ -218,7 +218,7 @@ exports.submitRating = (req, res) => {
               Complaint.updateOne(
                 { _id: complaintId },
                 { rating: rating._id }
-              ).exec((err, complaint) => {
+              ).exec(async (err, complaint) => {
                 if (err) {
                   res.send({
                     status: 500,
@@ -226,10 +226,18 @@ exports.submitRating = (req, res) => {
                     message: err.message,
                   });
                 } else {
-                  SP.updateOne(
-                    { _id: spId },
-                    { $push: { ratings: { _id: rating._id } } }
-                  ).exec((err, sp) => {
+                  // const avgRating = await SP.aggregate([
+                  //   { $match: { _id: spId } },
+                  //   {
+                  //     $reduce: {
+                  //       input: "ratings",
+                  //       initialValue: 0,
+                  //       in: { $add: ["$$value.sum", "$$this"] },
+                  //     },
+                  //   },
+                  // ]);
+                  let avgRating = ratingLevel;
+                  SP.findOne({ _id: spId }).exec((err, sp) => {
                     if (err) {
                       res.send({
                         status: 500,
@@ -237,11 +245,31 @@ exports.submitRating = (req, res) => {
                         message: err.message,
                       });
                     } else {
-                      res.send({
-                        status: 200,
-                        success: true,
-                        message:
-                          "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
+                      if (sp.ratings.length > 0) {
+                        sp.ratings.forEach((rating) => (avgRating += rating));
+                        avgRating /= avgRating / sp.ratings.length;
+                      }
+                      SP.updateOne(
+                        { _id: spId },
+                        {
+                          averageRating: avgRating,
+                          $push: { ratings: { _id: rating._id } },
+                        }
+                      ).exec((err, sp) => {
+                        if (err) {
+                          res.send({
+                            status: 500,
+                            success: false,
+                            message: err.message,
+                          });
+                        } else {
+                          res.send({
+                            status: 200,
+                            success: true,
+                            message:
+                              "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
+                          });
+                        }
                       });
                     }
                   });
