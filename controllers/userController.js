@@ -127,7 +127,7 @@ exports.fileNewComplaint = (req, res) => {
   try {
     const complaintObj = {
       company_id: req.params.id,
-      complainee_id: req.body._id,
+      complainee_id: req.body.user_id,
       title: req.body.title,
       description: req.body.description,
       category: req.body.category_id,

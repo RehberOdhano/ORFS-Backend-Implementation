@@ -126,7 +126,7 @@ exports.login = (req, res) => {
           res.json(successObject);
         } else {
           res.send({
-            status: 500,
+            status: 403,
             success: false,
             message: "INCORRECT CREDENTIALS!",
           });
