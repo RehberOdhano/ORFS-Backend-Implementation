@@ -197,6 +197,12 @@ exports.submitRating = (req, res) => {
           success: true,
           message: "RATING IS ALREADY GIVEN!",
         });
+      } else if (complaint.status != "RESOLVED") {
+        res.send({
+          status: 202,
+          success: true,
+          message: "RATING NOT ALLOWED!",
+        });
       } else {
         Rating.create(
           {
