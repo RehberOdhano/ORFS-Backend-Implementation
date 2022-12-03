@@ -16,14 +16,17 @@ exports.getAllComplaints = (req, res) => {
   try {
     const id = req.params.id;
     Complaint.find({ user_id: id })
-      .populate("category")
-      .populate({
-        path: "assignedTo",
-        populate: {
-          path: "user_id",
-          model: "User",
+      .populate([
+        {
+          path: "assignedTo",
+          populate: {
+            path: "user_id",
+            model: "User",
+          },
         },
-      })
+        "category",
+        "rating",
+      ])
       .exec((err, complaints) => {
         if (err) {
           res.send({
@@ -174,34 +177,37 @@ exports.fileNewComplaint = (req, res) => {
 
 exports.submitRating = (req, res) => {
   try {
-    const complaintID = req.params.id;
-    const company_id = req.body.company_id;
-    const spID = req.body.spID;
-    const complainee_user_id = req.body.user_id;
-    const rating_level = req.body.rating_level;
+    const complaintId = req.params.id;
+    const companyId = req.body.company_id;
+    const spId = req.body.spID;
+    const complaineeUserId = req.body.user_id;
+    const ratingLevel = req.body.rating_level;
     const review = req.body.review;
 
-    Rating.create(
-      {
-        company_id: company_id,
-        complainee_id: complainee_user_id,
-        serviceprovider_id: spID,
-        complaint_id: complaintID,
-        rating_level: rating_level,
-        review: review,
-      },
-      (err, rating) => {
-        if (err) {
-          res.send({
-            status: 500,
-            success: false,
-            message: err.message,
-          });
-        } else {
-          Complaint.updateOne(
-            { _id: complaintID },
-            { rating: rating._id }
-          ).exec((err, complaint) => {
+    Complaint.findOne({ _id: complaintId }).exec((err, complaint) => {
+      if (err) {
+        res.send({
+          status: 500,
+          success: false,
+          message: err.message,
+        });
+      } else if (complaint) {
+        res.send({
+          status: 200,
+          success: true,
+          message: "RATING IS ALREADY GIVEN!",
+        });
+      } else {
+        Rating.create(
+          {
+            company_id: companyId,
+            complainee_id: complaineeUserId,
+            serviceprovider_id: spId,
+            complaint_id: complaintId,
+            rating_level: ratingLevel,
+            review: review,
+          },
+          (err, rating) => {
             if (err) {
               res.send({
                 status: 500,
@@ -209,16 +215,43 @@ exports.submitRating = (req, res) => {
                 message: err.message,
               });
             } else {
-              res.send({
-                status: 200,
-                success: true,
-                message: "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
+              Complaint.updateOne(
+                { _id: complaintId },
+                { rating: { _id: rating._id } }
+              ).exec((err, complaint) => {
+                if (err) {
+                  res.send({
+                    status: 500,
+                    success: false,
+                    message: err.message,
+                  });
+                } else {
+                  SP.updateOne(
+                    { _id: spId },
+                    { $push: { ratings: rating._id } }
+                  ).exec((err, sp) => {
+                    if (err) {
+                      res.send({
+                        status: 500,
+                        success: false,
+                        message: err.message,
+                      });
+                    } else {
+                      res.send({
+                        status: 200,
+                        success: true,
+                        message:
+                          "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
+                      });
+                    }
+                  });
+                }
               });
             }
-          });
-        }
+          }
+        );
       }
-    );
+    });
   } catch (err) {
     console.error("ERROR: " + err.message);
   }

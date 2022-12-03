@@ -59,6 +59,7 @@ exports.getAssignedComplaints = (req, res) => {
                 },
                 "category",
                 "assignHistory",
+                "rating",
               ])
               .exec((err, complaints) => {
                 if (err) {
