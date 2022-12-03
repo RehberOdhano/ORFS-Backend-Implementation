@@ -191,7 +191,7 @@ exports.submitRating = (req, res) => {
           success: false,
           message: err.message,
         });
-      } else if (complaint) {
+      } else if (complaint.rating) {
         res.send({
           status: 201,
           success: true,
