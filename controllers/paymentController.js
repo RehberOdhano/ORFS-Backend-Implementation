@@ -1,6 +1,6 @@
 // IMPORTED REQUIRED PACKAGE(S)
-const { stripe } = require("../utils/packages");
-
+const { Stripe } = require("../utils/packages");
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 // MODELS
 const Payment = require("../models/payment");
 
@@ -57,5 +57,23 @@ exports.addPayment = (req, res) => {
       success: false,
       message: err.message,
     });
+  }
+};
+
+exports.addPaymentIntent = async (req, res) => {
+  try {
+    const { currency } = req.body;
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: 100,
+      currency: currency,
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+    res.send({
+      client_secret: paymentIntent.client_secret,
+    });
+  } catch (err) {
+    console.error("ERROR:" + err.message);
   }
 };
