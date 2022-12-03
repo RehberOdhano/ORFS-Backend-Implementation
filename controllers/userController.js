@@ -193,7 +193,7 @@ exports.submitRating = (req, res) => {
         });
       } else if (complaint) {
         res.send({
-          status: 200,
+          status: 201,
           success: true,
           message: "RATING IS ALREADY GIVEN!",
         });
@@ -217,7 +217,7 @@ exports.submitRating = (req, res) => {
             } else {
               Complaint.updateOne(
                 { _id: complaintId },
-                { rating: { _id: rating._id } }
+                { rating: rating._id }
               ).exec((err, complaint) => {
                 if (err) {
                   res.send({
@@ -228,7 +228,7 @@ exports.submitRating = (req, res) => {
                 } else {
                   SP.updateOne(
                     { _id: spId },
-                    { $push: { ratings: rating._id } }
+                    { $push: { ratings: { _id: rating._id } } }
                   ).exec((err, sp) => {
                     if (err) {
                       res.send({
