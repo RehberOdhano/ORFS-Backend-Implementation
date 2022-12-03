@@ -42,7 +42,12 @@ const customerSchema = mongoose.Schema(
         ref: "Addon",
       },
     ],
-    departments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Department" }],
+    departments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Department",
+      },
+    ],
     billing_info: {
       type: Object,
       payment_method: { type: String },
