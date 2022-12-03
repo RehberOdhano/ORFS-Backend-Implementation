@@ -62,17 +62,13 @@ exports.addPayment = (req, res) => {
 
 exports.addPaymentIntent = async (req, res) => {
   try {
-    const { currency } = req.body;
+    const { id } = req.body;
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 100,
-      currency: currency,
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      currency: "usd",
+      payment_method: id,
     });
-    res.send({
-      client_secret: paymentIntent.client_secret,
-    });
+    res.json(paymentIntent);
   } catch (err) {
     console.error("ERROR:" + err.message);
   }
