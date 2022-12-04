@@ -22,6 +22,7 @@ const http = require("http");
 const redis = require("redis");
 const Stripe = require("stripe");
 const axios = require("axios");
+const twilio = require("twilio");
 
 module.exports = {
   express,
@@ -48,4 +49,5 @@ module.exports = {
   redis,
   Stripe,
   axios,
+  twilio,
 };

@@ -112,12 +112,18 @@ adminRouter.get(
 );
 
 // VIDEOSDK - AUDIO/VIDEO CHAT
-adminRouter.get("/get-token", adminController.getAccessToken);
-adminRouter.post("/create-meeting", adminController.createMeeting);
-adminRouter.post(
-  "/validate-meeting/:meetingId",
-  adminController.validateMeeting
-);
+// adminRouter.get("/get-token", adminController.getAccessToken);
+// adminRouter.post("/create-meeting", adminController.createMeeting);
+// adminRouter.post(
+//   "/validate-meeting/:meetingId",
+//   adminController.validateMeeting
+// );
+
+// ZOOM - AUDIO/VIDEO CHAT ROUTES
+// adminRouter.post("/create-meeting", adminController.createZoomMeeting);
+
+// TWILIO - AUDIO/VIDEO CHAT ROUTES
+adminRouter.post("/create-meeting", adminController.createTwilioMeeting);
 
 // KNOWLEDGEBASE ROUTES
 adminRouter.post("/add/guide", adminController.getGuides);
