@@ -243,42 +243,46 @@ exports.submitRating = (req, res) => {
                   //   },
                   // ]);
                   let avgRating = ratingLevel;
-                  SP.findOne({ _id: spId }).exec((err, sp) => {
-                    if (err) {
-                      res.send({
-                        status: 500,
-                        success: false,
-                        message: err.message,
-                      });
-                    } else {
-                      if (sp.ratings.length > 0) {
-                        sp.ratings.forEach((rating) => (avgRating += rating));
-                        avgRating /= avgRating / sp.ratings.length;
+                  SP.findOne({ _id: spId })
+                    .populate("ratings")
+                    .exec((err, sp) => {
+                      if (err) {
+                        res.send({
+                          status: 500,
+                          success: false,
+                          message: err.message,
+                        });
+                      } else {
+                        if (sp.ratings.length > 0) {
+                          sp.ratings.forEach(
+                            (rating) => (avgRating += rating.rating_level)
+                          );
+                          avgRating /= sp.ratings.length + 1;
+                        }
+                        SP.updateOne(
+                          { _id: spId },
+                          {
+                            averageRating: avgRating,
+                            $push: { ratings: { _id: rating._id } },
+                          }
+                        ).exec((err, sp) => {
+                          if (err) {
+                            res.send({
+                              status: 500,
+                              success: false,
+                              message: err.message,
+                            });
+                          } else {
+                            res.send({
+                              status: 200,
+                              success: true,
+                              message:
+                                "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
+                            });
+                          }
+                        });
                       }
-                      SP.updateOne(
-                        { _id: spId },
-                        {
-                          averageRating: avgRating,
-                          $push: { ratings: { _id: rating._id } },
-                        }
-                      ).exec((err, sp) => {
-                        if (err) {
-                          res.send({
-                            status: 500,
-                            success: false,
-                            message: err.message,
-                          });
-                        } else {
-                          res.send({
-                            status: 200,
-                            success: true,
-                            message:
-                              "RATING & FEEDBACK ARE SUCCESSFULLY SUBMITTED!",
-                          });
-                        }
-                      });
-                    }
-                  });
+                    });
                 }
               });
             }
