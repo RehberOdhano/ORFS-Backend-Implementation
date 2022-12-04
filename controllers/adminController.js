@@ -8,6 +8,7 @@ const {
   axios,
   jwt,
 } = require("../utils/packages");
+const { default: fetch } = require("node-fetch");
 
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
@@ -1971,17 +1972,16 @@ exports.getAccessToken = (req, res) => {
   }
 };
 
-exports.createMeeting = (req, res) => {
+exports.createMeeting = async (req, res) => {
   try {
-    const { token, region } = req.body;
+    const { token } = req.body;
     const url = `${process.env.VIDEOSDK_API_ENDPOINT}/api/meetings`;
     const options = {
       method: "POST",
       headers: { Authorization: token, "Content-Type": "application/json" },
-      body: JSON.stringify({ region }),
+      body: JSON.stringify({ region: "sg001" }),
     };
-
-    axios(url, options)
+    fetch(url, options)
       .then((response) => response.json())
       .then((result) => res.json(result)) // result will contain meetingId
       .catch((error) => console.error("error", error));
