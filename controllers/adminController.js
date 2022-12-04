@@ -1,5 +1,12 @@
 // IMPORTED REQUIRED PACKAGES
-const { csv, path, fs, multer, PDFDocument } = require("../utils/packages");
+const {
+  csv,
+  path,
+  fs,
+  multer,
+  PDFDocument,
+  axios,
+} = require("../utils/packages");
 
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
@@ -1934,5 +1941,73 @@ exports.getCurrentSubscription = (req, res) => {
       success: false,
       message: err.message,
     });
+  }
+};
+
+/*
+=============================================================================
+|                      ZOOM: AUDIO/VIDEO CHAT ROUTES                        |
+=============================================================================
+*/
+
+exports.getAccessToken = (req, res) => {
+  try {
+    const API_KEY = process.env.VIDEOSDK_API_KEY;
+    const SECRET_KEY = process.env.VIDEOSDK_SECRET_KEY;
+
+    const options = { expiresIn: "10m", algorithm: "HS256" };
+
+    const payload = {
+      apikey: API_KEY,
+      permissions: ["allow_join", "allow_mod"], // also accepts "ask_join"
+    };
+
+    const token = jwt.sign(payload, SECRET_KEY, options);
+    res.json({ token });
+  } catch (error) {
+    console.error("ERROR: " + error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+exports.createMeeting = (req, res) => {
+  try {
+    const { token, region } = req.body;
+    const url = `${process.env.VIDEOSDK_API_ENDPOINT}/api/meetings`;
+    const options = {
+      method: "POST",
+      headers: { Authorization: token, "Content-Type": "application/json" },
+      body: JSON.stringify({ region }),
+    };
+
+    axios(url, options)
+      .then((response) => response.json())
+      .then((result) => res.json(result)) // result will contain meetingId
+      .catch((error) => console.error("error", error));
+  } catch (error) {
+    console.error("ERROR: " + error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+exports.validateMeeting = (req, res) => {
+  try {
+    const token = req.body.token;
+    const meetingId = req.params.meetingId;
+
+    const url = `${process.env.VIDEOSDK_API_ENDPOINT}/api/meetings/${meetingId}`;
+
+    const options = {
+      method: "POST",
+      headers: { Authorization: token },
+    };
+
+    axios(url, options)
+      .then((response) => response.json())
+      .then((result) => res.json(result)) // result will contain meetingId
+      .catch((error) => console.error("error", error));
+  } catch (error) {
+    console.error("ERROR: " + error.message);
+    res.status(500).send({ message: error.message });
   }
 };

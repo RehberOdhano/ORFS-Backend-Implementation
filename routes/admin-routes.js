@@ -111,4 +111,12 @@ adminRouter.get(
   adminController.getCurrentSubscription
 );
 
+// ZOOM - video and audio chat
+adminRouter.get("/get-token", adminController.getAccessToken);
+adminRouter.post("/create-meeting", adminController.createMeeting);
+adminRouter.post(
+  "/validate-meeting/:meetingId",
+  adminController.validateMeeting
+);
+
 module.exports = adminRouter;

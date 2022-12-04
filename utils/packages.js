@@ -15,13 +15,13 @@ const supertest = require("supertest");
 const { OAuth2Client } = require("google-auth-library");
 const PDFDocument = require("pdfkit-table");
 const busboy = require("busboy");
-// const amqp = require("amqplib/callback_api");
 const amqp = require("amqplib");
 const RedisQueue = require("bull");
 const socket = require("socket.io");
 const http = require("http");
 const redis = require("redis");
 const Stripe = require("stripe");
+const axios = require("axios");
 
 module.exports = {
   express,
@@ -47,4 +47,5 @@ module.exports = {
   socket,
   redis,
   Stripe,
+  axios,
 };
