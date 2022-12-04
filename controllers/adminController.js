@@ -194,6 +194,7 @@ exports.addSpecificUser = (req, res) => {
                         user_id: userID,
                         company_id: req.params.id,
                         averageRating: 0,
+                        level: 0,
                       },
                       async (err, user) => {
                         if (err) {
