@@ -1975,6 +1975,7 @@ exports.getAccessToken = (req, res) => {
 exports.createMeeting = async (req, res) => {
   try {
     const { token } = req.body;
+    console.log(token)
     const url = `${process.env.VIDEOSDK_API_ENDPOINT}/api/meetings`;
     const options = {
       method: "POST",
@@ -1983,10 +1984,10 @@ exports.createMeeting = async (req, res) => {
     };
     fetch(url, options)
       .then((response) => response.json())
-      .then((result) => res.json(result)) // result will contain meetingId
+      .then((result) => res.json(result), ) // result will contain meetingId
       .catch((error) => console.error("error", error));
   } catch (error) {
-    console.error("ERROR: " + error.message);
+    console.error("ERROR: " + error);
     res.status(500).send({ message: error.message });
   }
 };
