@@ -55,7 +55,8 @@ exports.createNewConversation = (req, res) => {
 exports.getConversation = (req, res) => {
   try {
     const id = req.params.id;
-    Conversation.find({ memebers: { $in: [id] } })
+    console.log(id)
+    Conversation.find({ members: { $in: [id] } })
       .populate("members")
       .exec((err, conversation) => {
         if (err) {
