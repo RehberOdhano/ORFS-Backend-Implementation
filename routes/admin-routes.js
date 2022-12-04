@@ -119,4 +119,7 @@ adminRouter.post(
   adminController.validateMeeting
 );
 
+// KNOWLEDGEBASE ROUTES
+adminRouter.post("/add/guide", adminController.getGuides);
+
 module.exports = adminRouter;

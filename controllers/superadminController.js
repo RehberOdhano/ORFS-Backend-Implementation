@@ -16,6 +16,7 @@ const CustomerType = require("../models/customerType");
 const Token = require("../models/token");
 const Subscription = require("../models/subscription");
 const Rating = require("../models/rating");
+const Guide = require("../models/guide");
 
 /*
 =============================================================================
@@ -617,5 +618,49 @@ exports.getCustomerTypes = (req, res) => {
     });
   } catch (err) {
     console.log("ERROR:" + err.message);
+  }
+};
+
+/*
+=============================================================================
+|                           KNOWLEDGEBASE ROUTES                            |
+=============================================================================
+*/
+
+exports.addGuide = (req, res) => {
+  try {
+    const { title, content, videoLink } = req.body;
+    Guide.create(
+      {
+        title: title,
+        content: content,
+        videoLink: videoLink,
+      },
+      (err, newGuide) => {
+        if (err) {
+          res.status(500).send({ message: err.message });
+        } else {
+          res.status(200).send({ message: "GUIDE IS ADDED SUCCESSFULLY!" });
+        }
+      }
+    );
+  } catch (err) {
+    console.log("ERROR:" + err.message);
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.getGuides = (req, res) => {
+  try {
+    Guide.find({}).exec((err, guides) => {
+      if (err) {
+        res.status(500).send({ message: err.message });
+      } else {
+        res.status(200).send({ data: guides, message: err.message });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR:" + err.message);
+    res.status(500).send({ message: err.message });
   }
 };
