@@ -11,11 +11,18 @@ app.use(cors());
 app.use(passport.initialize());
 
 // SOCKET IMPORTS
-const socket = require("socket.io");
+// const socket = require("socket.io");
 const http = require("http");
 
 const server = http.createServer(app);
-const io = socket(server, { cors: { origin: "*" } });
+// const io = socket(server, { cors: { origin: "*" } });
+
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 
 let users = [];
 
@@ -58,6 +65,17 @@ io.on("connection", (socket) => {
       }
     }
   );
+
+  // for video chat
+  socket.emit("me", socket.id);
+
+  socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+    io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+  });
+
+  socket.on("answerCall", (data) => {
+    io.to(data.to).emit("callAccepted", data.signal);
+  });
 
   // when user disconnects
   socket.on("disconnect", () => {

@@ -5,7 +5,6 @@ const {
   fs,
   multer,
   PDFDocument,
-  axios,
   jwt,
 } = require("../utils/packages");
 const { default: fetch } = require("node-fetch");
@@ -51,6 +50,7 @@ const Customer = require("../models/customer");
 const Department = require("../models/department");
 const Complainee = require("../models/complainee");
 const SP = require("../models/serviceProvider");
+const Guide = require("../models/guide");
 
 /*
 =============================================================================
@@ -2011,5 +2011,26 @@ exports.validateMeeting = (req, res) => {
   } catch (error) {
     console.error("ERROR: " + error.message);
     res.status(500).send({ message: error.message });
+  }
+};
+
+/*
+=============================================================================
+|                           KNOWLEDGEBASE ROUTES                            |
+=============================================================================
+*/
+
+exports.getGuides = (req, res) => {
+  try {
+    Guide.find({}).exec((err, guides) => {
+      if (err) {
+        res.status(500).send({ message: err.message });
+      } else {
+        res.status(200).send({ data: guides, message: err.message });
+      }
+    });
+  } catch (err) {
+    console.log("ERROR:" + err.message);
+    res.status(500).send({ message: err.message });
   }
 };

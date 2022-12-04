@@ -46,4 +46,8 @@ superAdminRouter.get(
   superAdminController.verifyEmail
 );
 
+// KNOWLEDGEBASE ROUTES
+superAdminRouter.post("/add/guide", superAdminController.addGuide);
+superAdminRouter.post("/get/guides", superAdminController.getGuides);
+
 module.exports = superAdminRouter;
