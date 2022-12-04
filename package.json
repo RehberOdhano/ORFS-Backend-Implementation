@@ -54,7 +54,9 @@
         "pdfkit-table": "^0.1.99",
         "redis": "^4.5.1",
         "socket.io": "^4.5.2",
-        "stripe": "^11.1.0"
+        "stripe": "^11.1.0",
+        "twilio": "^3.83.4",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
         "jest": "^29.0.3",
