@@ -1948,7 +1948,7 @@ exports.getCurrentSubscription = (req, res) => {
 
 /*
 =============================================================================
-|                      ZOOM: AUDIO/VIDEO CHAT ROUTES                        |
+|                  VIDEOSDK: AUDIO/VIDEO CHAT ROUTES                        |
 =============================================================================
 */
 
@@ -2003,7 +2003,7 @@ exports.validateMeeting = (req, res) => {
       headers: { Authorization: token },
     };
 
-    axios(url, options)
+    fetch(url, options)
       .then((response) => response.json())
       .then((result) => res.json(result)) // result will contain meetingId
       .catch((error) => console.error("error", error));
