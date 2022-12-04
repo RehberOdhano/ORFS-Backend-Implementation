@@ -6,6 +6,7 @@ const {
   multer,
   PDFDocument,
   axios,
+  jwt,
 } = require("../utils/packages");
 
 // UTILITY/HELPER FUNCTIONS
