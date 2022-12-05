@@ -254,8 +254,8 @@ exports.submitRating = (req, res) => {
                       const points = ratingLevel * 10;
                       if (progress && progress + points >= 100) {
                         levelCount++;
-                        progress -= points;
-                      }
+                        progress += points - 100;
+                      } else progress += points;
 
                       let avgRating = ratingLevel;
                       if (sp.ratings.length > 0) {

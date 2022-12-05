@@ -185,3 +185,6 @@ exports.getDeptDashboardAnalytics = (req, res) => {
     console.log("ERROR: " + err.message);
   }
 };
+
+// serviceprovider dashboard analytics
+exports;
