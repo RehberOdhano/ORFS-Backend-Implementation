@@ -23,6 +23,7 @@ const redis = require("redis");
 const Stripe = require("stripe");
 const axios = require("axios");
 const twilio = require("twilio");
+const KJUR = require("jsrsasign");
 
 module.exports = {
   express,
@@ -50,4 +51,5 @@ module.exports = {
   Stripe,
   axios,
   twilio,
+  KJUR,
 };

@@ -5,18 +5,18 @@ const {
   fs,
   multer,
   PDFDocument,
-  // jwt,
-  // KJUR,
-  // axios,
   dotenv,
-  twilio,
+  KJUR,
+  // jwt,
+  // axios,
+  // twilio,
 } = require("../utils/packages");
 dotenv.config();
 
 // TWILIO CONFIGURATION
-const { v4: uuidv4 } = require("uuid");
-const AccessToken = twilio.jwt.AccessToken;
-const VideoGrant = AccessToken.VideoGrant;
+// const { v4: uuidv4 } = require("uuid");
+// const AccessToken = twilio.jwt.AccessToken;
+// const VideoGrant = AccessToken.VideoGrant;
 
 // UTILITY/HELPER FUNCTIONS
 const sendEmail = require("../utils/email");
@@ -1964,44 +1964,44 @@ exports.getCurrentSubscription = (req, res) => {
 // 1. generates a sdkJWT
 // 2. gets user token or ZAK(Zoom Access Token)
 // 3. send the response back to the client
-// exports.createZoomMeeting = (req, res) => {
-//   try {
-//     const { role } = req.body;
-//     const meetingNumber = Math.floor(10000 + Math.random() * 9999);
-//     const iat = Math.round((new Date().getTime() - 30000) / 1000);
-//     const exp = iat + 60 * 60 * 2;
-//     const oHeader = { alg: "HS256", typ: "JWT" };
+exports.createZoomMeeting = (req, res) => {
+  try {
+    const { role } = req.body;
+    const meetingNumber = Math.floor(10000 + Math.random() * 9999);
+    const iat = Math.round((new Date().getTime() - 30000) / 1000);
+    const exp = iat + 60 * 60 * 2;
+    const oHeader = { alg: "HS256", typ: "JWT" };
 
-//     const oPayload = {
-//       sdkKey: process.env.SDK_KEY,
-//       mn: meetingNumber,
-//       role: role,
-//       iat: iat,
-//       exp: exp,
-//       appKey: process.env.SDK_SECRET_KEY,
-//       tokenExp: iat + 60 * 60 * 2,
-//     };
+    const oPayload = {
+      sdkKey: process.env.SDK_KEY,
+      mn: meetingNumber,
+      role: role,
+      iat: iat,
+      exp: exp,
+      appKey: process.env.SDK_SECRET_KEY,
+      tokenExp: iat + 60 * 60 * 2,
+    };
 
-//     const sHeader = JSON.stringify(oHeader);
-//     const sPayload = JSON.stringify(oPayload);
-//     const sdkJWT = KJUR.jws.JWS.sign(
-//       "HS256",
-//       sHeader,
-//       sPayload,
-//       process.env.SDK_SECRET_KEY
-//     );
-//     console.log(sdkJWT);
+    const sHeader = JSON.stringify(oHeader);
+    const sPayload = JSON.stringify(oPayload);
+    const sdkJWT = KJUR.jws.JWS.sign(
+      "HS256",
+      sHeader,
+      sPayload,
+      process.env.SDK_SECRET_KEY
+    );
+    console.log(sdkJWT);
 
-//     res.send({
-//       status: 200,
-//       success: true,
-//       sdkJWT: sdkJWT,
-//     });
-//   } catch (error) {
-//     console.error("ERROR: " + error.message);
-//     res.status(500).send({ message: error.message });
-//   }
-// };
+    res.send({
+      status: 200,
+      success: true,
+      sdkJWT: sdkJWT,
+    });
+  } catch (error) {
+    console.error("ERROR: " + error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
 
 /*
 =============================================================================
@@ -2010,64 +2010,64 @@ exports.getCurrentSubscription = (req, res) => {
 */
 
 // HELPER FUNCTIONS FOR "createTwilioMeeting"
-const findOrCreateRoom = async (roomName) => {
-  try {
-    // see if the room exists already. If it doesn't, this will throw
-    // error 20404.
-    await twilioClient.video.rooms(roomName).fetch();
-  } catch (error) {
-    // the room was not found, so create it
-    if (error.code == 20404) {
-      await twilioClient.video.rooms.create({
-        uniqueName: roomName,
-        type: "go",
-      });
-    } else {
-      // let other errors bubble up
-      throw error;
-    }
-  }
-};
+// const findOrCreateRoom = async (roomName) => {
+//   try {
+//     // see if the room exists already. If it doesn't, this will throw
+//     // error 20404.
+//     await twilioClient.video.rooms(roomName).fetch();
+//   } catch (error) {
+//     // the room was not found, so create it
+//     if (error.code == 20404) {
+//       await twilioClient.video.rooms.create({
+//         uniqueName: roomName,
+//         type: "go",
+//       });
+//     } else {
+//       // let other errors bubble up
+//       throw error;
+//     }
+//   }
+// };
 
-const getAccessToken = (roomName) => {
-  // create an access token
-  const token = new AccessToken(
-    process.env.TWILIO_ACCOUNT_SID,
-    process.env.TWILIO_API_KEY_SID,
-    process.env.TWILIO_API_KEY_SECRET,
-    // generate a random unique identity for this participant
-    { identity: uuidv4() }
-  );
-  // create a video grant for this specific room
-  const videoGrant = new VideoGrant({
-    room: roomName,
-  });
+// const getAccessToken = (roomName) => {
+//   // create an access token
+//   const token = new AccessToken(
+//     process.env.TWILIO_ACCOUNT_SID,
+//     process.env.TWILIO_API_KEY_SID,
+//     process.env.TWILIO_API_KEY_SECRET,
+//     // generate a random unique identity for this participant
+//     { identity: uuidv4() }
+//   );
+//   // create a video grant for this specific room
+//   const videoGrant = new VideoGrant({
+//     room: roomName,
+//   });
 
-  // add the video grant
-  token.addGrant(videoGrant);
-  // serialize the token and return it
-  return token.toJwt();
-};
+//   // add the video grant
+//   token.addGrant(videoGrant);
+//   // serialize the token and return it
+//   return token.toJwt();
+// };
 
-exports.createTwilioMeeting = (req, res) => {
-  try {
-    // return 400 if the request has an empty body or no roomName
-    console.log(req.body);
-    if (!req.body || !req.body.roomName) {
-      return res.status(400).send("Must include roomName argument.");
-    }
-    const roomName = req.body.roomName;
-    // find or create a room with the given roomName
-    findOrCreateRoom(roomName);
-    // generate an Access Token for a participant in this room
-    const token = getAccessToken(roomName);
-    console.log(token);
-    res.status(200).send({ token: token });
-  } catch (err) {
-    console.log("ERROR:" + err.message);
-    res.status(500).send({ message: err.message });
-  }
-};
+// exports.createTwilioMeeting = (req, res) => {
+//   try {
+//     // return 400 if the request has an empty body or no roomName
+//     console.log(req.body);
+//     if (!req.body || !req.body.roomName) {
+//       return res.status(400).send("Must include roomName argument.");
+//     }
+//     const roomName = req.body.roomName;
+//     // find or create a room with the given roomName
+//     findOrCreateRoom(roomName);
+//     // generate an Access Token for a participant in this room
+//     const token = getAccessToken(roomName);
+//     console.log(token);
+//     res.status(200).send({ token: token });
+//   } catch (err) {
+//     console.log("ERROR:" + err.message);
+//     res.status(500).send({ message: err.message });
+//   }
+// };
 
 /*
 =============================================================================
