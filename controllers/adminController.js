@@ -2111,17 +2111,24 @@ exports.getRecommendedSPs = async (req, res) => {
 exports.assignComplaintManually = async (req, res) => {
   try {
     const { complaintId, spId } = req.body;
-    SP.updateOne({ _id: spId }, { $push: { complaints: complaintId } }).exec(
-      (err, sp) => {
-        if (err) {
-          res.status(500).send({ message: err.message });
-        } else {
-          res
-            .status(200)
-            .send({ message: "COMPLAINT IS SUCCESSFULLY ASSIGNED!" });
-        }
+    SP.updateOne(
+      { _id: spId },
+      { $push: { assignedComplaints: { _id: complaintId } } }
+    ).exec((err, sp) => {
+      if (err) {
+        res.status(500).send({ message: err.message });
+      } else {
+        Complaint.updateOne({ _id: complaintId }).exec((err, complaint) => {
+          if (err) {
+            res.status(500).send({ message: err.message });
+          } else {
+            res
+              .status(200)
+              .send({ message: "COMPLAINT IS SUCCESSFULLY ASSIGNED!" });
+          }
+        });
       }
-    );
+    });
   } catch (err) {
     console.error("ERROR: " + err.message);
     res.status(500).send({ message: err.message });
