@@ -129,7 +129,6 @@ adminRouter.post("/create-meeting", adminController.createZoomMeeting);
 adminRouter.post("/add/guide", adminController.getGuides);
 
 // RECOMMENDER SYSTEM ROUTES
-adminRouter.post("/get-recommendations", adminController.getRecomendations);
-adminRouter.post("/predict/:id", adminController.getPrediction);
+adminRouter.post("/get-recommendations/:id", adminController.getRecommendedSPs);
 
 module.exports = adminRouter;
