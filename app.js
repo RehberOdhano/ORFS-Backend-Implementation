@@ -8,11 +8,11 @@ app.use(express.json());
 app.use(cors());
 
 // create the twilioClient
-const twilioClient = require("twilio")(
-  process.env.TWILIO_API_KEY_SID,
-  process.env.TWILIO_API_KEY_SECRET,
-  { accountSid: process.env.TWILIO_ACCOUNT_SID }
-);
+// const twilioClient = require("twilio")(
+//   process.env.TWILIO_API_KEY_SID,
+//   process.env.TWILIO_API_KEY_SECRET,
+//   { accountSid: process.env.TWILIO_ACCOUNT_SID }
+// );
 
 // PASSPORT MIDDLEWARE
 app.use(passport.initialize());
