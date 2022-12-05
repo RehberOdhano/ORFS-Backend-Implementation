@@ -2060,7 +2060,6 @@ exports.getRecommendedSPs = async (req, res) => {
             },
           ])
           .exec((err, data) => {
-            console.log(data);
             if (err) {
               res.status(500).send({ message: err.message });
             } else if (!data) {
@@ -2102,6 +2101,26 @@ exports.getRecommendedSPs = async (req, res) => {
           });
       }
     });
+  } catch (err) {
+    console.error("ERROR: " + err.message);
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.assignComplaintManually = async (req, res) => {
+  try {
+    const { complaintId, spId } = req.body;
+    SP.updateOne({ _id: spId }, { $push: { complaints: complaintId } }).exec(
+      (err, sp) => {
+        if (err) {
+          res.status(500).send({ message: err.message });
+        } else {
+          res
+            .status(200)
+            .send({ message: "COMPLAINT IS SUCCESSFULLY ASSIGNED!" });
+        }
+      }
+    );
   } catch (err) {
     console.error("ERROR: " + err.message);
     res.status(500).send({ message: err.message });
