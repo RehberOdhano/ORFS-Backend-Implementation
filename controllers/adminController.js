@@ -2098,7 +2098,7 @@ exports.getRecomendations = async (req, res) => {
     const response = await fetch(
       `http://localhost:5000/predict/${req.params.id}`,
       {
-        method: "GET",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
       }
     );
