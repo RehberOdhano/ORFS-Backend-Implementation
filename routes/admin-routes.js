@@ -130,6 +130,9 @@ adminRouter.post("/add/guide", adminController.getGuides);
 
 // RECOMMENDER SYSTEM ROUTES
 adminRouter.post("/get-recommendations/:id", adminController.getRecommendedSPs);
-adminRouter.post("/complaint/assing", adminController.assignComplaintManually);
+adminRouter.post(
+  "/manual/assign/complaint",
+  adminController.assignComplaintManually
+);
 
 module.exports = adminRouter;

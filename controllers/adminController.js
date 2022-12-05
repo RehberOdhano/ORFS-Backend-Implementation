@@ -2107,6 +2107,7 @@ exports.getRecommendedSPs = async (req, res) => {
   }
 };
 
+// this function will assign the complaint manually to the serviceprovider...
 exports.assignComplaintManually = async (req, res) => {
   try {
     const { complaintId, spId } = req.body;
