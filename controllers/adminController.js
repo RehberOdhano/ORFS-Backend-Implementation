@@ -2049,8 +2049,18 @@ exports.getRecommendedSPs = async (req, res) => {
       } else {
         const categoryId = category._id;
         Department.findOne({ category: categoryId })
-          .populate("employees")
+          .populate([
+            {
+              path: "employees",
+              model: "ServiceProvider",
+              populate: {
+                path: "user_id",
+                mode: "User",
+              },
+            },
+          ])
           .exec((err, data) => {
+            console.log(data);
             if (err) {
               res.status(500).send({ message: err.message });
             } else if (!data) {
