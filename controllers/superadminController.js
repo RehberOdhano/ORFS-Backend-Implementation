@@ -28,6 +28,7 @@ exports.getAllCustomers = (req, res) => {
   try {
     Customer.find({})
       .populate("employees")
+      .populate("subscription_plan")
       .exec((err, customers) => {
         if (err) {
           res.send({
