@@ -79,6 +79,8 @@ const complaintAssignment = (category_id, complaint_id) => {
                 //     emp2.assignedComplaints.length
                 //   );
                 // });
+                // 1. sorting the employees based on number of assigned complaints
+                // sortinh using bubble sort... will use more efficient algorithm later... :)
                 var tempObj;
                 for (var i = 0; i < employees.length; i++) {
                   for (var j = i + 1; j < employees.length; j++) {
@@ -92,6 +94,7 @@ const complaintAssignment = (category_id, complaint_id) => {
                     }
                   }
                 }
+                // 2. sorting the employees based on the average rating
                 employees.sort((emp1, emp2) => {
                   return emp1.averageRating < emp2.averageRating;
                 });

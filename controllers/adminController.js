@@ -2048,6 +2048,7 @@ exports.getRecomendations = async (req, res) => {
         } else {
           const employees = data.employees;
           // 1. sorting the employees based on number of assigned complaints
+          // sortinh using bubble sort... will use more efficient algorithm later... :)
           var tempObj;
           for (var i = 0; i < employees.length; i++) {
             for (var j = i + 1; j < employees.length; j++) {
