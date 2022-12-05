@@ -226,8 +226,8 @@ exports.transferComplaint = (req, res) => {
 
 exports.getAvgRating = (req, res) => {
   try {
-    const spId = req.params.id;
-    SP.findOne({ _id: spId })
+    const user_id = req.params.id;
+    SP.findOne({ user_id })
       .select(["user_id", "averageRating"])
       .exec((err, rating) => {
         if (err) {
