@@ -2074,3 +2074,20 @@ exports.getRecomendations = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+
+exports.getPrediction = async (req, res) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/predict/${req.params.id}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    const data = await response.text();
+    res.status(200).send(data);
+  } catch (err) {
+    console.error("ERROR: " + err.message);
+    res.status(500).send({ message: err.message });
+  }
+};

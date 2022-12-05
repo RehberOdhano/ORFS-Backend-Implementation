@@ -130,5 +130,6 @@ adminRouter.post("/add/guide", adminController.getGuides);
 
 // RECOMMENDER SYSTEM ROUTES
 adminRouter.post("/get-recommendations", adminController.getRecomendations);
+adminRouter.post("/predict/:id", adminController.getPrediction);
 
 module.exports = adminRouter;
