@@ -21,9 +21,7 @@ const socket = require("socket.io");
 const http = require("http");
 const redis = require("redis");
 const Stripe = require("stripe");
-const axios = require("axios");
-const twilio = require("twilio");
-const KJUR = require("jsrsasign");
+const fetch = require("node-fetch");
 
 module.exports = {
   express,
@@ -49,7 +47,5 @@ module.exports = {
   socket,
   redis,
   Stripe,
-  axios,
-  twilio,
-  KJUR,
+  fetch,
 };

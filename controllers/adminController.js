@@ -6,10 +6,7 @@ const {
   multer,
   PDFDocument,
   dotenv,
-  KJUR,
-  // jwt,
-  // axios,
-  // twilio,
+  fetch,
 } = require("../utils/packages");
 dotenv.config();
 
@@ -2084,6 +2081,30 @@ exports.getGuides = (req, res) => {
         res.status(200).send({ data: guides, message: err.message });
       }
     });
+  } catch (err) {
+    console.log("ERROR:" + err.message);
+    res.status(500).send({ message: err.message });
+  }
+};
+
+/*
+=============================================================================
+|                   RECOMMENDATION SYSTEM ROUTES                            |
+=============================================================================
+*/
+
+exports.getRecomendations = async (req, res) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/predict/${req.params.id}`,
+      {
+        method: "GET",
+        // body: JSON.stringify(req.body),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    console.log(await response.json());
+    res.status(200).send(response);
   } catch (err) {
     console.log("ERROR:" + err.message);
     res.status(500).send({ message: err.message });
