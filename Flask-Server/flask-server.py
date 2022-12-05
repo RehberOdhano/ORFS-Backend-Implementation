@@ -1,6 +1,7 @@
 # Importing the required modules
-from flask import Flask, make_response
+from flask import Flask, make_response # for flask server
 
+# for recommender system
 import numpy as np 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
