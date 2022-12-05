@@ -78,12 +78,9 @@ def trainLSVCModelAndGetPrediction(complaint):
 def greetings():
 	return 'WELCOME TO OUR WORLD - QRFS'
 
-@app.route('/predict/<text>', methods=['GET'])
-def predict(text):
-    print("text: ", text)
-    prediction = trainLSVCModelAndGetPrediction(text);
-    print("prediction: ", prediction[0])
-    print("res: ", make_response(prediction[0], 200))
+@app.route('/predict/<complaint>', methods=['GET'])
+def predict(complaint):
+    prediction = trainLSVCModelAndGetPrediction(complaint);
     return make_response(prediction[0], 200)
 
 # main driver function

@@ -2099,12 +2099,11 @@ exports.getRecomendations = async (req, res) => {
       `http://localhost:5000/predict/${req.params.id}`,
       {
         method: "GET",
-        // body: JSON.stringify(req.body),
         headers: { "Content-Type": "application/json" },
       }
     );
-    console.log(await response.json());
-    res.status(200).send(response);
+    const data = await response.text();
+    res.status(200).send(data);
   } catch (err) {
     console.log("ERROR:" + err.message);
     res.status(500).send({ message: err.message });
