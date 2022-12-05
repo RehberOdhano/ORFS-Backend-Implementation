@@ -1,7 +1,6 @@
 # Importing the required modules
 from flask import Flask, make_response # for flask server
 
-# for recommender system
 import numpy as np 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -70,10 +69,6 @@ def trainLSVCModelAndGetPrediction(complaint):
 # The route() function of the Flask class is a decorator,
 # which tells the application which URL should call
 # the associated function.
-@app.route('/')
-# ‘/’ URL is bound with greetings() function.
-def greetings():
-	return 'WELCOME TO OUR WORLD - QRFS'
 
 @app.route('/predict/<complaint>', methods=['POST'])
 def predict(complaint):
