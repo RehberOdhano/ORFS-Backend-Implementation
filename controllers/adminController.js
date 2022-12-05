@@ -2083,7 +2083,11 @@ exports.getRecommendedSPs = async (req, res) => {
               employees.sort((emp1, emp2) => {
                 return emp1.averageRating < emp2.averageRating;
               });
-              res.status(200).send(employees);
+              const resObj = {
+                employees: [employees[0], employees[1], employees[2]],
+                category: category,
+              };
+              res.status(200).send(resObj);
             }
           });
       }
