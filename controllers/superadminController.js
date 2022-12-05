@@ -436,11 +436,23 @@ exports.deleteCustomer = (req, res) => {
                                             message: err.message,
                                           });
                                         } else {
-                                          res.send({
-                                            status: 200,
-                                            success: true,
-                                            message:
-                                              "CUSTOMER IS SUCCESSFULLY DELETED!",
+                                          Subscription.deleteMany({
+                                            company_id: customer._id,
+                                          }).exec((err, subscriptions) => {
+                                            if (err) {
+                                              res.send({
+                                                status: 500,
+                                                success: false,
+                                                message: err.message,
+                                              });
+                                            } else {
+                                              res.send({
+                                                status: 200,
+                                                success: true,
+                                                message:
+                                                  "CUSTOMER IS SUCCESSFULLY DELETED!",
+                                              });
+                                            }
                                           });
                                         }
                                       });
