@@ -245,30 +245,40 @@ exports.submitRating = (req, res) => {
                   //     },
                   //   },
                   // ]);
-                  let avgRating = ratingLevel;
-                  SP.findOne({ _id: spId })
-                    .populate("ratings")
-                    .exec((err, sp) => {
-                      if (err) {
-                        res.send({
-                          status: 500,
-                          success: false,
-                          message: err.message,
-                        });
-                      } else {
-                        if (sp.ratings.length > 0) {
-                          sp.ratings.forEach(
-                            (rating) => (avgRating += rating.rating_level)
-                          );
-                          avgRating /= sp.ratings.length + 1;
+                  SP.findOne({ _id: spId }).exec((err, sp) => {
+                    if (err) {
+                      res.status(500).send({ message: err.message });
+                    } else {
+                      let progress = sp?.level?.progress;
+                      let levelCount = sp?.level?.level_count;
+                      const points = ratingLevel * 10;
+                      if (progress && progress + points >= 100) {
+                        levelCount++;
+                        progress -= points;
+                      }
+
+                      let avgRating = ratingLevel;
+                      if (sp.ratings.length > 0) {
+                        sp.ratings.forEach(
+                          (rating) => (avgRating += rating.rating_level)
+                        );
+                        avgRating /= sp.ratings.length + 1;
+                      }
+
+                      SP.updateOne(
+                        { _id: spId },
+                        {
+                          $push: { ratings: { _id: rating._id } },
+                          $set: {
+                            "level.progress": progress,
+                            "level.level_count": levelCount,
+                          },
+                          points: ratingLevel * 10,
+                          averageRating: avgRating,
                         }
-                        SP.updateOne(
-                          { _id: spId },
-                          {
-                            averageRating: avgRating,
-                            $push: { ratings: { _id: rating._id } },
-                          }
-                        ).exec((err, sp) => {
+                      )
+                        .populate("ratings")
+                        .exec((err, sp) => {
                           if (err) {
                             res.send({
                               status: 500,
@@ -284,8 +294,8 @@ exports.submitRating = (req, res) => {
                             });
                           }
                         });
-                      }
-                    });
+                    }
+                  });
                 }
               });
             }

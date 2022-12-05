@@ -29,8 +29,11 @@ const service_providers_schema = mongoose.Schema(
     averageRating: {
       type: Number,
     },
-    level: { type: Number },
-    points: { type: Number },
+    level: {
+      progress: { type: Number, default: 0 },
+      level_count: { type: Number, default: 0 },
+    },
+    points: { type: Number, default: 0 },
   },
   { versionKey: false }
 );
