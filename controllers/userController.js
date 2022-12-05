@@ -119,7 +119,7 @@ const complaintAssignment = (category_id, complaint_id) => {
         } else error = true;
       });
     } else {
-      return;
+      // Here ML will come into play...
     }
   } catch (err) {
     console.log("ERROR: " + err.message);

@@ -2035,15 +2035,39 @@ exports.getGuides = (req, res) => {
 
 exports.getRecomendations = async (req, res) => {
   try {
-    const response = await fetch(
-      `http://localhost:5000/predict/${req.params.id}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    const data = await response.text();
-    res.status(200).send(data);
+    const categoryId = req.body.id;
+    Department.findOne({ category: categoryId })
+      .populate("employees")
+      .exec((err, data) => {
+        if (err) {
+          res.status(500).send({ message: err.message });
+        } else if (!data) {
+          res.status(201).send({ message: "NO RECOMMENDATIONS ARE FOUND!" });
+        } else if (data.employees.length >= 1 && data.employees.length <= 3) {
+          res.status(200).send(data.employees);
+        } else {
+          const employees = data.employees;
+          // 1. sorting the employees based on number of assigned complaints
+          var tempObj;
+          for (var i = 0; i < employees.length; i++) {
+            for (var j = i + 1; j < employees.length; j++) {
+              if (
+                employees[i].assignedComplaints.length >
+                employees[j].assignedComplaints.length
+              ) {
+                tempObj = employees[i];
+                employees[i] = employees[j];
+                employees[j] = tempObj;
+              }
+            }
+          }
+          // 2. sorting the employees based on the average rating
+          employees.sort((emp1, emp2) => {
+            return emp1.averageRating < emp2.averageRating;
+          });
+          res.send(employees);
+        }
+      });
   } catch (err) {
     console.log("ERROR:" + err.message);
     res.status(500).send({ message: err.message });
