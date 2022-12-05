@@ -1,7 +1,5 @@
 # Importing the required modules
-from flask import Flask, redirect, url_for, request, jsonify, make_response
-# import joblib
-import json
+from flask import Flask, make_response
 
 import numpy as np 
 import pandas as pd
@@ -14,11 +12,9 @@ from sklearn.svm import LinearSVC
 # current module (__name__) as argument.
 app = Flask(__name__)
 
-# model = joblib.load(r'F:\CUI\QRFS-FYP\Backend Implementation\utils\Recommender System\recommender_model')
-
 def loadDataSet():
     # loading dataset
-    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\utils\Recommender System\dataset.csv'))
+    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\dataset.csv'))
     df = df.loc[:,["CATEGORY", "COMPLAINT"]]
     return df
 
