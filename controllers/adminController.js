@@ -2118,15 +2118,17 @@ exports.assignComplaintManually = async (req, res) => {
       if (err) {
         res.status(500).send({ message: err.message });
       } else {
-        Complaint.updateOne({ _id: complaintId }).exec((err, complaint) => {
-          if (err) {
-            res.status(500).send({ message: err.message });
-          } else {
-            res
-              .status(200)
-              .send({ message: "COMPLAINT IS SUCCESSFULLY ASSIGNED!" });
+        Complaint.updateOne({ _id: complaintId }, { status: "ASSIGNED" }).exec(
+          (err, complaint) => {
+            if (err) {
+              res.status(500).send({ message: err.message });
+            } else {
+              res
+                .status(200)
+                .send({ message: "COMPLAINT IS SUCCESSFULLY ASSIGNED!" });
+            }
           }
-        });
+        );
       }
     });
   } catch (err) {
