@@ -195,7 +195,7 @@ exports.getDeptDashboardAnalytics = (req, res) => {
 exports.getServiceProviderDashboardAnalytics = (req, res) => {
   try {
     const spUserId = req.params.id;
-    SP.findOne({ userId: spUserId })
+    SP.findOne({ user_id: spUserId })
       .populate("assignedComplaints")
       .exec((err, data) => {
         if (err) {
