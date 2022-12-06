@@ -2137,3 +2137,27 @@ exports.assignComplaintManually = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+
+/*
+=============================================================================
+|                   LEADERBOARD & GAMIFICATION ROUTES                       |
+=============================================================================
+*/
+
+exports.getServiceProviders = (req, res) => {
+  try {
+    SP.find({})
+      .sort({ averageRating: -1 })
+      .populate("user_id")
+      .exec((err, sps) => {
+        if (err) {
+          res.status(500).send({ message: err.message });
+        } else {
+          res.status(200).send(sps);
+        }
+      });
+  } catch (err) {
+    console.error("ERROR: " + err.message);
+    res.status(500).send({ message: err.message });
+  }
+};

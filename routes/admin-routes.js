@@ -135,4 +135,7 @@ adminRouter.post(
   adminController.assignComplaintManually
 );
 
+// LEADERBOARD & GAMIFICATION ROUTES
+adminRouter.get("/get/serviceproviders", adminController.getServiceProviders);
+
 module.exports = adminRouter;
