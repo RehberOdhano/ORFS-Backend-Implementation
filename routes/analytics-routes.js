@@ -24,5 +24,9 @@ analyticsRouter.get(
   "/department-analytics/:id",
   analyticsController.getDeptDashboardAnalytics
 );
+analyticsRouter.get(
+  "/serviceprovider/dashboard/:id",
+  analyticsController.getServiceProviderDashboardAnalytics
+);
 
 module.exports = analyticsRouter;

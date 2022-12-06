@@ -187,4 +187,41 @@ exports.getDeptDashboardAnalytics = (req, res) => {
 };
 
 // serviceprovider dashboard analytics
-exports;
+exports.getServiceProviderDashboardAnalytics = (req, res) => {
+  try {
+    const spUserId = req.params.id;
+    SP.findOne({ userId: spUserId })
+      .populate("assignedComplaints")
+      .exec((err, data) => {
+        if (err) {
+          res.status(500).send({ message: err.message });
+        } else {
+          let resolvedComplaints = 0;
+          data.assignedComplaints.forEach((complaint) => {
+            if (complaint.status === "RESOLVED") resolvedComplaints++;
+          });
+          const successRate =
+            data.assignedComplaints.length > 0
+              ? (resolvedComplaints / data.assignedComplaints.length) * 100
+              : 0;
+          const analyticsObj = {
+            successStatus: {
+              text: `${successRate}%`,
+              value: successRate,
+            },
+            totalComplaints: data.assignedComplaints.length,
+            resolvedComplaints: resolvedComplaints,
+            unresolvedComplaints:
+              data.assignedComplaints.length - resolvedComplaints,
+            level: data.level,
+            points: data.points,
+            averageRating: data.averageRating,
+          };
+          res.status(200).send(analyticsObj);
+        }
+      });
+  } catch (error) {
+    console.log("ERROR: " + error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
