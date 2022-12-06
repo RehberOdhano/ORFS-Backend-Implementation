@@ -4,7 +4,7 @@ const Conversation = require("../models/conversation");
 exports.createNewConversation = (req, res) => {
   try {
     Conversation.findOne({
-      memebers: { $in: [req.body.senderId, req.body.receiverId] },
+      members: { $all: [req.body.senderId, req.body.receiverId] },
     }).exec(async (err, conversation) => {
       if (err) {
         res.send({
@@ -55,7 +55,7 @@ exports.createNewConversation = (req, res) => {
 exports.getConversation = (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id)
+    console.log(id);
     Conversation.find({ members: { $in: [id] } })
       .populate("members")
       .exec((err, conversation) => {
