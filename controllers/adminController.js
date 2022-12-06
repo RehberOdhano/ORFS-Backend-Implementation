@@ -954,8 +954,6 @@ exports.assignComplaint = (req, res) => {
 exports.getDeptsList = (req, res) => {
   try {
     Department.find({ company_id: req.params.id })
-      // .populate("employees")
-      // .populate("category")
       .populate([
         "category",
         {
