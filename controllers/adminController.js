@@ -975,7 +975,8 @@ exports.getDeptsList = (req, res) => {
             var tempObj = {};
             var totalComplaints = 0,
               resolvedComplaints = 0,
-              unresolvedComplaints = 0;
+              unresolvedComplaints = 0,
+              avgRatingOfDept = 0;
 
             // for each dept, we select it's employees property, which is an array,
             // and for each employee in that array, we select it's assignedComplaints
@@ -984,6 +985,7 @@ exports.getDeptsList = (req, res) => {
             // unresolved complaints respectively...
             dept.employees.forEach((employee) => {
               totalComplaints += employee.assignedComplaints.length;
+              avgRatingOfDept += employee.averageRating;
               employee.assignedComplaints.forEach((assignedComplaint) => {
                 if (assignedComplaint.status === "RESOLVED") {
                   resolvedComplaints++;
@@ -1025,6 +1027,7 @@ exports.getDeptsList = (req, res) => {
 
             tempObj.department = dept;
             tempObj.complaintsAnalytics = graphData;
+            tempObj.averageRatingOfDept = avgRatingOfDept;
             deptAnalytics.push(tempObj);
           });
 

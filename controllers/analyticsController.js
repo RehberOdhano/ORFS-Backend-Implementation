@@ -141,7 +141,6 @@ exports.getAdminDashboardAnalytics = (req, res) => {
 exports.getDeptDashboardAnalytics = (req, res) => {
   try {
     const company_id = req.params.id;
-    var analytics = {};
     Department.find({ company_id: company_id })
       .populate("employees")
       .exec((err, departments) => {
@@ -170,10 +169,16 @@ exports.getDeptDashboardAnalytics = (req, res) => {
             numOfDepartments++;
           }
 
-          analytics.numberOfDepartments = numOfDepartments;
-          analytics.numberOfServiceProviders = numOfServiceProviders;
-          analytics.averageRating = count !== 0 ? totalRating / count : 0;
-          console.log(analytics);
+          const averageRating = count !== 0 ? (totalRating / count) * 100 : 0;
+          const analytics = {
+            numberOfDepartments: numOfDepartments,
+            numberOfServiceProviders: numOfServiceProviders,
+            deptSuccessRate: {
+              text: `${averageRating}%`,
+              value: averageRating,
+            },
+          };
+
           res.send({
             status: 200,
             success: true,
