@@ -954,8 +954,19 @@ exports.assignComplaint = (req, res) => {
 exports.getDeptsList = (req, res) => {
   try {
     Department.find({ company_id: req.params.id })
-      .populate("employees")
-      .populate("category")
+      // .populate("employees")
+      // .populate("category")
+      .populate([
+        "category",
+        {
+          path: "employees",
+          model: "ServiceProvider",
+          populate: {
+            path: "assignedComplaints",
+            model: "Complaint",
+          },
+        },
+      ])
       .exec((err, depts) => {
         if (err) {
           res.send({
@@ -986,6 +997,7 @@ exports.getDeptsList = (req, res) => {
             dept.employees.forEach((employee) => {
               totalComplaints += employee.assignedComplaints.length;
               avgRatingOfDept += employee.averageRating;
+              // console.log(employee.assignedComplaints + "\n");
               employee.assignedComplaints.forEach((assignedComplaint) => {
                 if (assignedComplaint.status === "RESOLVED") {
                   resolvedComplaints++;
