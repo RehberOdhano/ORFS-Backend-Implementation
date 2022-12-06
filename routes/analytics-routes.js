@@ -29,4 +29,9 @@ analyticsRouter.get(
   analyticsController.getServiceProviderDashboardAnalytics
 );
 
+analyticsRouter.get(
+  "/complaints/:id",
+  analyticsController.getComplaintsAnalytics
+);
+
 module.exports = analyticsRouter;

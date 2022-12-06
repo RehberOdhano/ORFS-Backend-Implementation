@@ -230,3 +230,57 @@ exports.getServiceProviderDashboardAnalytics = (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
+exports.getComplaintsAnalytics = (req, res) => {
+  try {
+    Complaint.find({ company_id: req.params.id })
+      // .lean()
+      // .populate([
+      //   "category",
+      //   "rating",
+      //   {
+      //     path: "assignedTo",
+      //     populate: {
+      //       path: "user_id",
+      //       model: "User",
+      //     },
+      //   },
+      //   {
+      //     path: "complainee_id",
+      //     model: "User",
+      //     select: ["name", "email", "pfp"],
+      //   },
+      // ])
+      .exec((err, complaints) => {
+        if (err) {
+          res.status(500).send({ message: err.message });
+        } else {
+          let resolvedComplaints = 0,
+            unAssignedComplaints = 0;
+          complaints.forEach((complaint) => {
+            if (complaint.status === "RESOLVED") resolvedComplaints++;
+            if (complaint.status === "UNASSIGNED") unAssignedComplaints++;
+          });
+
+          const resolvedPercentage =
+            complaints.length > 0
+              ? (resolvedComplaints / complaints.length) * 100
+              : 0;
+          const analytics = {
+            resolvedComplaintsStatus: {
+              text: `${resolvedPercentage}%`,
+              value: resolvedPercentage,
+            },
+            totalComplaints: complaints.length,
+            unResolvedComplaints: complaints.length - resolvedComplaints,
+            resolvedComplaints: resolvedComplaints,
+            unAssignedComplaints: unAssignedComplaints,
+          };
+          res.status(200).send(analytics);
+        }
+      });
+  } catch (err) {
+    console.error("ERROR: " + err.message);
+    res.status(500).send({ message: err.message });
+  }
+};
