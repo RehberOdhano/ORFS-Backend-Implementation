@@ -136,6 +136,9 @@ adminRouter.post(
 );
 
 // LEADERBOARD & GAMIFICATION ROUTES
-adminRouter.get("/get/serviceproviders", adminController.getServiceProviders);
+adminRouter.get(
+  "/get/serviceproviders/:id",
+  adminController.getServiceProviders
+);
 
 module.exports = adminRouter;

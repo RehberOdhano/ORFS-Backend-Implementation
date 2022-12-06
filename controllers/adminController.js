@@ -2146,7 +2146,7 @@ exports.assignComplaintManually = async (req, res) => {
 
 exports.getServiceProviders = (req, res) => {
   try {
-    SP.find({})
+    SP.find({ company_id: req.params.id })
       .sort({ averageRating: -1 })
       .populate("user_id")
       .exec((err, sps) => {
