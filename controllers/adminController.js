@@ -2149,6 +2149,7 @@ exports.getServiceProviders = (req, res) => {
     SP.find({ company_id: req.params.id })
       .sort({ averageRating: -1 })
       .populate("user_id")
+      .populate("department")
       .exec((err, sps) => {
         if (err) {
           res.status(500).send({ message: err.message });

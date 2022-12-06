@@ -66,9 +66,6 @@ def trainLSVCModelAndGetPrediction(complaint):
     
     return res
 
-# The route() function of the Flask class is a decorator,
-# which tells the application which URL should call
-# the associated function.
 
 @app.route('/predict/<complaint>', methods=['POST'])
 def predict(complaint):
