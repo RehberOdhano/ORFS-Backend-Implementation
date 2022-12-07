@@ -70,7 +70,11 @@ def trainLSVCModelAndGetPrediction(complaint):
 @app.route('/predict/<complaint>', methods=['POST'])
 def predict(complaint):
     prediction = trainLSVCModelAndGetPrediction(complaint);
+<<<<<<< HEAD
     print(prediction)
+=======
+    print("prediction: ", prediction);
+>>>>>>> 448121bc53d1cc925672eadd79344424f9aa3c72
     return make_response(prediction[0], 200)
 
 # main driver function
