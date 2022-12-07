@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 def loadDataSet():
     # loading dataset
-    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\dataset.csv'))
+    df = pd.DataFrame(pd.read_csv(r'C:\FYP\BACKEND\Flask-Server\dataset.csv'))
     df = df.loc[:,["CATEGORY", "COMPLAINT"]]
     return df
 
@@ -63,13 +63,14 @@ def trainLSVCModelAndGetPrediction(complaint):
     tfidf_vectorizer_vectors = fitted_vectorizer.transform(X_train)
     model = LinearSVC().fit(tfidf_vectorizer_vectors, y_train)
     res = model.predict(fitted_vectorizer.transform([complaint]))
-    
+
     return res
 
 
 @app.route('/predict/<complaint>', methods=['POST'])
 def predict(complaint):
     prediction = trainLSVCModelAndGetPrediction(complaint);
+    print(prediction)
     return make_response(prediction[0], 200)
 
 # main driver function

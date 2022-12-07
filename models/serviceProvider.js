@@ -30,10 +30,10 @@ const service_providers_schema = mongoose.Schema(
       type: Number,
     },
     level: {
-      progress: { type: Number, default: 0 },
-      level_count: { type: Number, default: 0 },
+      progress: { type: Number },
+      level_count: { type: Number},
     },
-    points: { type: Number, default: 0 },
+    points: { type: Number },
   },
   { versionKey: false }
 );

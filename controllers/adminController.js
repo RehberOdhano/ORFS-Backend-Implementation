@@ -2056,12 +2056,13 @@ exports.getRecommendedSPs = async (req, res) => {
       }
     );
     const categoryTitle = await response.text();
+    console.log('title: ' + categoryTitle)
     Category.findOne({ title: categoryTitle }).exec(async (err, category) => {
       if (err) {
         res.status(500).send({ message: err.message });
       } else {
         const categoryId = category._id;
-        Department.findOne({ category: categoryId })
+        Department.findOne({ category: {$in: [categoryId]} })
           .populate([
             {
               path: "employees",
@@ -2073,18 +2074,21 @@ exports.getRecommendedSPs = async (req, res) => {
             },
           ])
           .exec((err, data) => {
+            console.log('data', data)
             if (err) {
               res.status(500).send({ message: err.message });
             } else if (!data) {
               res
                 .status(201)
                 .send({ message: "NO RECOMMENDATIONS ARE FOUND!" });
-            } else if (
-              data.employees.length >= 1 &&
-              data.employees.length <= 3
-            ) {
-              return data.employees;
-            } else {
+            } 
+            // else if (
+            //   data.employees.length >= 1 &&
+            //   data.employees.length <= 3
+            // ) {
+            //   res.send(data.employees);
+            // }
+             else {
               const employees = data.employees;
               // 1. sorting the employees based on number of assigned complaints
               // sortinh using bubble sort... will use more efficient algorithm later... :)
@@ -2109,6 +2113,7 @@ exports.getRecommendedSPs = async (req, res) => {
                 employees: [employees[0], employees[1], employees[2]],
                 category: category,
               };
+              console.log('response: ', resObj)
               res.status(200).send(resObj);
             }
           });
