@@ -2056,22 +2056,16 @@ exports.getRecommendedSPs = async (req, res) => {
       }
     );
     const categoryTitle = await response.text();
-<<<<<<< HEAD
-    console.log('title: ' + categoryTitle)
-=======
+    console.log("title: " + categoryTitle);
     console.log(`category title: ${categoryTitle}`);
->>>>>>> 448121bc53d1cc925672eadd79344424f9aa3c72
     Category.findOne({ title: categoryTitle }).exec(async (err, category) => {
       if (err) {
         res.status(500).send({ message: err.message });
       } else {
         const categoryId = category._id;
-<<<<<<< HEAD
-        Department.findOne({ category: {$in: [categoryId]} })
-=======
+        Department.findOne({ category: { $in: [categoryId] } });
         console.log(`categoryId: ${categoryId}`);
         Department.findOne({ category: { $in: [categoryId] } })
->>>>>>> 448121bc53d1cc925672eadd79344424f9aa3c72
           .populate([
             {
               path: "employees",
@@ -2083,27 +2077,14 @@ exports.getRecommendedSPs = async (req, res) => {
             },
           ])
           .exec((err, data) => {
-<<<<<<< HEAD
-            console.log('data', data)
-=======
+            console.log("data", data);
             console.log("before if: " + data);
->>>>>>> 448121bc53d1cc925672eadd79344424f9aa3c72
             if (err) {
               res.status(500).send({ message: err.message });
             } else if (!data) {
               res
                 .status(201)
                 .send({ message: "NO RECOMMENDATIONS ARE FOUND!" });
-<<<<<<< HEAD
-            } 
-            // else if (
-            //   data.employees.length >= 1 &&
-            //   data.employees.length <= 3
-            // ) {
-            //   res.send(data.employees);
-            // }
-             else {
-=======
             } else if (
               data.employees.length >= 1 &&
               data.employees.length <= 3
@@ -2112,7 +2093,6 @@ exports.getRecommendedSPs = async (req, res) => {
               res.status(200).send(data.employees);
             } else {
               console.log("else: " + data);
->>>>>>> 448121bc53d1cc925672eadd79344424f9aa3c72
               const employees = data.employees;
               // 1. sorting the employees based on number of assigned complaints
               // sorting using bubble sort... will use more efficient algorithm later... :)
@@ -2142,7 +2122,7 @@ exports.getRecommendedSPs = async (req, res) => {
                 employees: [employees[0], employees[1], employees[2]],
                 category: category,
               };
-              console.log('response: ', resObj)
+              console.log("response: ", resObj);
               res.status(200).send(resObj);
             }
           });
