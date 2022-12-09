@@ -120,7 +120,7 @@ adminRouter.get(
 // );
 
 // ZOOM - AUDIO/VIDEO CHAT ROUTES
-adminRouter.post("/create-meeting", adminController.createZoomMeeting);
+// adminRouter.post("/create-meeting", adminController.createZoomMeeting);
 
 // TWILIO - AUDIO/VIDEO CHAT ROUTES
 // adminRouter.post("/create-meeting", adminController.createTwilioMeeting);

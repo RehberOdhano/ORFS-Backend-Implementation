@@ -1974,50 +1974,44 @@ exports.getCurrentSubscription = (req, res) => {
 // 1. generates a sdkJWT
 // 2. gets user token or ZAK(Zoom Access Token)
 // 3. send the response back to the client
-exports.createZoomMeeting = (req, res) => {
-  try {
-    const { role } = req.body;
-    const meetingNumber = Math.floor(10000 + Math.random() * 9999);
-    const iat = Math.round((new Date().getTime() - 30000) / 1000);
-    const exp = iat + 60 * 60 * 2;
-    const oHeader = { alg: "HS256", typ: "JWT" };
+// exports.createZoomMeeting = (req, res) => {
+//   try {
+//     const { role } = req.body;
+//     const meetingNumber = Math.floor(10000 + Math.random() * 9999);
+//     const iat = Math.round((new Date().getTime() - 30000) / 1000);
+//     const exp = iat + 60 * 60 * 2;
+//     const oHeader = { alg: "HS256", typ: "JWT" };
 
-    const oPayload = {
-      sdkKey: process.env.SDK_KEY,
-      mn: meetingNumber,
-      role: role,
-      iat: iat,
-      exp: exp,
-      appKey: process.env.SDK_SECRET_KEY,
-      tokenExp: iat + 60 * 60 * 2,
-    };
+//     const oPayload = {
+//       sdkKey: process.env.SDK_KEY,
+//       mn: meetingNumber,
+//       role: role,
+//       iat: iat,
+//       exp: exp,
+//       appKey: process.env.SDK_SECRET_KEY,
+//       tokenExp: iat + 60 * 60 * 2,
+//     };
 
-    const sHeader = JSON.stringify(oHeader);
-    const sPayload = JSON.stringify(oPayload);
-    const sdkJWT = KJUR.jws.JWS.sign(
-      "HS256",
-      sHeader,
-      sPayload,
-      process.env.SDK_SECRET_KEY
-    );
-    console.log(sdkJWT);
+//     const sHeader = JSON.stringify(oHeader);
+//     const sPayload = JSON.stringify(oPayload);
+//     const sdkJWT = KJUR.jws.JWS.sign(
+//       "HS256",
+//       sHeader,
+//       sPayload,
+//       process.env.SDK_SECRET_KEY
+//     );
+//     console.log(sdkJWT);
 
-    res.send({
-      status: 200,
-      success: true,
-      sdkJWT: sdkJWT,
-    });
-  } catch (error) {
-    console.error("ERROR: " + error.message);
-    res.status(500).send({ message: error.message });
-  }
-};
-
-/*
-=============================================================================
-|                      TWILIO: AUDIO/VIDEO CHAT ROUTES                      |
-=============================================================================
-*/
+//     res.send({
+//       status: 200,
+//       success: true,
+//       sdkJWT: sdkJWT,
+//     });
+//   } catch (error) {
+//     console.error("ERROR: " + error.message);
+//     res.status(500).send({ message: error.message });
+//   }
+// };
 
 /*
 =============================================================================
@@ -2077,8 +2071,6 @@ exports.getRecommendedSPs = async (req, res) => {
             },
           ])
           .exec((err, data) => {
-            console.log("data", data);
-            console.log("before if: " + data);
             if (err) {
               res.status(500).send({ message: err.message });
             } else if (!data) {
@@ -2089,10 +2081,10 @@ exports.getRecommendedSPs = async (req, res) => {
               data.employees.length >= 1 &&
               data.employees.length <= 3
             ) {
-              console.log("else if: " + data);
-              res.status(200).send(data.employees);
+              res
+                .status(200)
+                .send({ category: category, serviceproviders: data.employees });
             } else {
-              console.log("else: " + data);
               const employees = data.employees;
               // 1. sorting the employees based on number of assigned complaints
               // sorting using bubble sort... will use more efficient algorithm later... :)
