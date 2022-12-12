@@ -2050,76 +2050,77 @@ exports.getRecommendedSPs = async (req, res) => {
       }
     );
     const categoryTitle = await response.text();
-    console.log("title: " + categoryTitle);
-    console.log(`category title: ${categoryTitle}`);
-    Category.findOne({ title: categoryTitle }).exec(async (err, category) => {
-      if (err) {
-        res.status(500).send({ message: err.message });
-      } else {
-        const categoryId = category._id;
-        Department.findOne({ category: { $in: [categoryId] } });
-        console.log(`categoryId: ${categoryId}`);
-        Department.findOne({ category: { $in: [categoryId] } })
-          .populate([
-            {
-              path: "employees",
-              model: "ServiceProvider",
-              populate: {
-                path: "user_id",
-                mode: "User",
-              },
-            },
-          ])
-          .exec((err, data) => {
-            if (err) {
-              res.status(500).send({ message: err.message });
-            } else if (!data) {
-              res
-                .status(201)
-                .send({ message: "NO RECOMMENDATIONS ARE FOUND!" });
-            } else if (
-              data.employees.length >= 1 &&
-              data.employees.length <= 3
-            ) {
-              res
-                .status(200)
-                .send({ category: category, serviceproviders: data.employees });
-            } else {
-              const employees = data.employees;
-              // 1. sorting the employees based on number of assigned complaints
-              // sorting using bubble sort... will use more efficient algorithm later... :)
-              var tempObj;
-              for (var i = 0; i < employees.length; i++) {
-                for (var j = i + 1; j < employees.length; j++) {
-                  if (
-                    employees[i].assignedComplaints.length <
-                    employees[j].assignedComplaints.length
-                  ) {
-                    tempObj = employees[i];
-                    employees[i] = employees[j];
-                    employees[j] = tempObj;
-                  }
-                }
-              }
-              console.log("sort based on assigned complaints: ", employees);
-              // 2. sorting the employees based on the average rating
-              // employees.sort((emp1, emp2) => {
-              //   return emp1.averageRating < emp2.averageRating;
-              // });
-              employees.sort(
-                (emp1, emp2) => emp2.averageRating - emp1.averageRating
-              );
-              console.log("sort based on average rating: ", employees);
-              const resObj = {
-                employees: [employees[0], employees[1], employees[2]],
-                category: category,
-              };
-              console.log("response: ", resObj);
-              res.status(200).send(resObj);
-            }
-          });
-      }
-    });
+    // console.log("title: " + categoryTitle);
+    res.send(categoryTitle);
+    // console.log(`category title: ${categoryTitle}`);
+    // Category.findOne({ title: categoryTitle }).exec(async (err, category) => {
+    //   if (err) {
+    //     res.status(500).send({ message: err.message });
+    //   } else {
+    //     const categoryId = category._id;
+    //     Department.findOne({ category: { $in: [categoryId] } });
+    //     console.log(`categoryId: ${categoryId}`);
+    //     Department.findOne({ category: { $in: [categoryId] } })
+    //       .populate([
+    //         {
+    //           path: "employees",
+    //           model: "ServiceProvider",
+    //           populate: {
+    //             path: "user_id",
+    //             mode: "User",
+    //           },
+    //         },
+    //       ])
+    //       .exec((err, data) => {
+    //         if (err) {
+    //           res.status(500).send({ message: err.message });
+    //         } else if (!data) {
+    //           res
+    //             .status(201)
+    //             .send({ message: "NO RECOMMENDATIONS ARE FOUND!" });
+    //         } else if (
+    //           data.employees.length >= 1 &&
+    //           data.employees.length <= 3
+    //         ) {
+    //           res
+    //             .status(200)
+    //             .send({ category: category, serviceproviders: data.employees });
+    //         } else {
+    //           const employees = data.employees;
+    //           // 1. sorting the employees based on number of assigned complaints
+    //           // sorting using bubble sort... will use more efficient algorithm later... :)
+    //           var tempObj;
+    //           for (var i = 0; i < employees.length; i++) {
+    //             for (var j = i + 1; j < employees.length; j++) {
+    //               if (
+    //                 employees[i].assignedComplaints.length <
+    //                 employees[j].assignedComplaints.length
+    //               ) {
+    //                 tempObj = employees[i];
+    //                 employees[i] = employees[j];
+    //                 employees[j] = tempObj;
+    //               }
+    //             }
+    //           }
+    //           console.log("sort based on assigned complaints: ", employees);
+    //           // 2. sorting the employees based on the average rating
+    //           // employees.sort((emp1, emp2) => {
+    //           //   return emp1.averageRating < emp2.averageRating;
+    //           // });
+    //           employees.sort(
+    //             (emp1, emp2) => emp2.averageRating - emp1.averageRating
+    //           );
+    //           console.log("sort based on average rating: ", employees);
+    //           const resObj = {
+    //             employees: [employees[0], employees[1], employees[2]],
+    //             category: category,
+    //           };
+    //           console.log("response: ", resObj);
+    //           res.status(200).send(resObj);
+    //         }
+    //       });
+    //   }
+    // });
   } catch (err) {
     console.error("ERROR: " + err.message);
     res.status(500).send({ message: err.message });
