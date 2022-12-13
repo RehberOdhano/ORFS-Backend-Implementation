@@ -22,7 +22,7 @@ def trainLSVCModelAndGetPrediction(complaint):
     df2['category_id'] = df2['CATEGORY'].factorize()[0]
     
     # removing the duplicates
-    # df2[['CATEGORY', 'category_id']].drop_duplicates()
+    df2[['CATEGORY', 'category_id']].drop_duplicates()
     
     # text processing using TfidfVectorizer
     tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5, ngram_range=(1, 2), stop_words='english')
@@ -72,26 +72,20 @@ def processEmail(email):
 
 def checkWhetherEmailSpamOrNot(email):
     # loading the dataset and storing it in a dataframe using pandas
-    df = pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\spam-dataset.csv')
-    
-    # selecting/extracting only the two columns
-    df = df[['Category', 'Message']]
-    
-    # we'll have to convert the category & message columns into numbers
-    # because ML models understand only numbers not strings...
-
-    # first, we'll convert the spam/ham to a number 1/0 in the category column
-    df['spam'] = df['Category'].apply(lambda x : 1 if x == 'spam' or x == 1 else 0)
+    df = pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\spam-emails-dataset.csv')
     
     # check for the duplicates and remove them
     df.drop_duplicates(inplace = True)
+    
+    # # downloading the stopword packages using nltk
+    # nltk.download('stopwords')
 
     # splitting the samples into 80% train and 20% test datasets respectively... setting the test size to 20%
     X_train, X_test, y_train, y_test = train_test_split(df.Message, df.spam, test_size=0.20, random_state = 0)
 
     # creating a classifier using the pipeline
     clf = Pipeline([
-        ('vectorizer', CountVectorizer(analyzer=processEmail)), # step-1: convert the text into a vector
+        ('vectorizer', CountVectorizer()), # step-1: convert the text into a vector
         ('nb', MultinomialNB()) # step-2: then apply the MultinomialNB
     ])
     
