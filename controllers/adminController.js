@@ -2179,3 +2179,25 @@ exports.getServiceProviders = (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+
+/*
+=============================================================================
+|                                EQA ROUTES                                 |
+=============================================================================
+*/
+
+exports.detectSpamEmail = async (req, res) => {
+  try {
+    const response = await fetch(`http://localhost:5000/detect/spam/email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: req.body.email }),
+    });
+    const isSpam = await response.text();
+    console.log(isSpam);
+    res.status(200).send(isSpam);
+  } catch (err) {
+    console.error("ERROR: " + err.message);
+    res.status(500).send({ message: err.message });
+  }
+};

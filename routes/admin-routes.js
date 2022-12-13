@@ -141,4 +141,7 @@ adminRouter.get(
   adminController.getServiceProviders
 );
 
+// EQA ROUTES
+adminRouter.post("/detect/spam/email", adminController.detectSpamEmail);
+
 module.exports = adminRouter;
