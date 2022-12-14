@@ -399,7 +399,7 @@ exports.deleteSpecificUser = (req, res) => {
                                 res.send({
                                   status: 500,
                                   success: false,
-                                  message: err.message,
+                                  message: "stuck here",
                                 });
                               } else {
                                 console.log(serviceproviders);
@@ -2084,7 +2084,7 @@ exports.getRecommendedSPs = async (req, res) => {
             ) {
               res.status(200).send({
                 category: category,
-                serviceproviders: data.employees,
+                employees: data.employees,
               });
             } else {
               const employees = data.employees;

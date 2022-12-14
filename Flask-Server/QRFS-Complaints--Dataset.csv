@@ -1,69 +1,159 @@
-﻿CATEGORY,COMPLAINT
-Hardware Issues,"The projector in room 203 is not working, the projector is not turning on. Nothing happens when I press the power button, there is no display."
-Management Issue Issues,The university portal is not working. I could not upload the assignment.
-Hardware Issues, The mic in the conference room is not working. The mic is not picking up any sound. Please check this.
+CATEGORY,COMPLAINT
+Hardware Issue,"The projector in room 203 is not working, the projector is not turning on. Nothing happens when I press the power button, there is no display."
+Software Issue,The university portal is not working. I could not upload the assignment.
+Hardware Issue,The mic in the conference room is not working. The mic is not picking up any sound. Please check this.
 Maintenance and Cleaning Issue,The water taps in the bathroom on the first floor is leaking. Please fix this.
-Scenery and Environment,The university campus is not well maintained. There are a lot of garbage and litter spread across the campus.
-Maintenance and Cleaning Issue, Seats in the class 106 and 107 are broken and need to be replaced.
-Hardware Issue, The HDMI cable is broken and is not working. The wire needs to be replaced.
-Software Issue, The coputers in lab Cl7 are really slow and does not have required software installed. Please fix this.
-Maintenance and Cleaning Issue, The pathway in front of the Rector's building is destroyed and needs to be repaired. there are alot of bumps and holes in the pathway.
-Hardware Issue, The street lights in the university campus are not working in the evening. Please fix this.
-Maintenance and Cleaning Issue, Bathroom urinals are not working. Please fix this.
-Maintenance and Cleaning Issue, No water supply in the bathroom on the second floor.
-Hardware Issue, No tissue paper in the bathroom on the Third floor.
-Hardware Issue, The speakers in the class rooms 207 and 210 are not working. Please fix this.
-Network Issue, Internet is not working in the university campus. The network is speed is really slow.
-Maintainance and Cleaning Issue, The workstations in the library are not working properly. The keyboards are missing keys and the Operating system is outdated.
-Network Issue, The ethernet cables in the graduate lab are not working and most of cables are broken.
-Network Issue, The computers in lab CL5 are not connected to the network. Please fix this.
-Hardware Issue, The projector in room G07 turned off in the middle of the class. Give us a new projector.
-Maintenance and Cleaning Issue, There in no water supply to the drinking fountain on the first floor.
-Maintenance and Cleaning Issue, The lights in the classroom 101 and 103 are not working. Please fix this.
-Software Issues,"My university CMS is misbehaving, it is not showing my students or classes. I cannot see the attendance of my students on the portal"
-Hardware Issues,"The projector is not turning on. Nothing happens when I press the power button, there is no display."
-Hardware Issues,My CPU is running a bit hot. The company provided machine im using overheats and dies on me while im working on intensive tasks
+Maintenance and Cleaning Issue,The university campus is not well maintained. There are a lot of garbage and litter spread across the campus.
+Maintenance and Cleaning Issue,Seats in the class 106 and 107 are broken and need to be replaced.
+Hardware Issue,The HDMI cable is broken and is not working. The wire needs to be replaced.
+Software Issue,The computers in lab Cl7 are really slow and does not have required software installed. Please fix this.
+Maintenance and Cleaning Issue,The pathway in front of the Rector's building is destroyed and needs to be repaired. there are alot of bumps and holes in the pathway.
+Hardware Issue,The street lights in the university campus are not working in the evening. Please fix this.
+Maintenance and Cleaning Issue,Bathroom urinals are not working. Please fix this.
+Maintenance and Cleaning Issue,No water supply in the bathroom on the second floor.
+Maintenance and Cleaning Issue,No tissue paper in the bathroom on the Third floor.
+Hardware Issue,The speakers in the class rooms 207 and 210 are not working. Please fix this.
+Network Issue,Internet is not working in the university campus. The network speed is really slow.
+Hardware Issue,The workstations in the library are not working properly. The keyboards are missing keys and the Operating system is outdated.
+Hardware Issue,The ethernet cables in the graduate lab are not working and most of cables are broken.
+Network Issue,The computers in lab CL5 are not connected to the network. Please fix this.
+Hardware Issue,The projector in room G07 turned off in the middle of the class. Give us a new projector.
+Maintenance and Cleaning Issue,There in no water supply to the drinking fountain on the first floor.
+Hardware Issue,The lights in the classroom 101 and 103 are not working. Please fix this.
+Software Issue,"My university CMS is misbehaving, it is not showing my students or classes. I cannot see the attendance of my students on the portal"
+Hardware Issue,My CPU is running a bit hot. The company provided machine im using overheats and dies on me while im working on intensive tasks
 Maintenance and Cleaning Issue,"Classroom 203 is extremely dirty, there is dust on the tables and litter spread across the floor. Please check this."
-Scheduling and Management Issue Issues,"No classroom is available at the time slot allocated for my class, please fix this timing issue"
-Hardware Issues,My university laptop is not charging. The light does not turn on when i plug it in to the wall socket.
-Network Issues,"The portal is very slow in loading, i have tried different network connections but the portal always loads after 5-6 minutes on a refresh."
-Hardware Issues,"Lab PC # 4 is not turning on. Please come and check, the PC is needed for lab assignments"
-Network Issues,"The internet is not working in Lab # 12, there is ""limited connectivity"" being shown on the PCs."
-Hardware Issues,"The charging socket in my office is not working, the office is located on the first floor of the CS department. The socket does not turn on and the visual indicator does not show any signs of it being turned on or off either"
-Software Issues,The university portal does not give any response when downloading attendances. The web portal freezes when i click on the attendance sheet download button
-Scheduling and Management Issue Issues,"Class timings haven't been finalized yet so I don't know which time to conduct my class at, students are concerned about lack of punctuality regarding timing of classes"
-Network Issues,"Internet wifi is down, I cannot connect to the network using both phone and laptop."
-Network Issues,"The lan cable in project lab is not working, there is limited connectivity being shown when i plug it in to my laptop. The internet in that entire lab is cut off as of now"
-Scheduling and Management Issue Issues,"There is a clash in two mid-term papers which the students are concerned about, two course exams are scheduled at the same timeslot and both of these courses are being offered in the same semester. Kindly see if you can change the schedule of any one of the exams"
+Scheduling and Management Issue,"No classroom is available at the time slot allocated for my class, please fix this timing issue"
+Hardware Issue,My university laptop is not charging. The light does not turn on when i plug it in to the wall socket.
+Network Issue,"The portal is very slow in loading, i have tried different network connections but the portal always loads after 5-6 minutes on a refresh."
+Hardware Issue,"Lab PC # 4 is not turning on. Please come and check, the PC is needed for lab assignments"
+Network Issue,"The internet is not working in Lab # 12, there is ""limited connectivity"" being shown on the PCs."
+Hardware Issue,"The charging socket in my office is not working, the office is located on the first floor of the CS department. The socket does not turn on and the visual indicator does not show any signs of it being turned on or off either"
+Software Issue,The university portal does not give any response when downloading attendances. The web portal freezes when i click on the attendance sheet download button
+Scheduling and Management Issue,"Class timings haven't been finalized yet so I don't know which time to conduct my class at, students are concerned about lack of punctuality regarding timing of classes"
+Network Issue,"Internet wifi is down, I cannot connect to the network using both phone and laptop."
+Network Issue,"The lan cable in project lab is not working, there is limited connectivity being shown when i plug it in to my laptop. The internet in that entire lab is cut off as of now"
+Scheduling and Management Issue,"There is a clash in two mid-term papers which the students are concerned about, two course exams are scheduled at the same timeslot and both of these courses are being offered in the same semester. Kindly see if you can change the schedule of any one of the exams"
 Maintenance and Cleaning Issue,The bathroom on the second floor near faculty room does not have water supply to it. There is also a door hinge broken in one of the stalls
-Hardware Issues,"AC is not functional in room 201, it turns on but there is no cooling coming from the vents."
+Hardware Issue,"AC is not functional in room 201, it turns on but there is no cooling coming from the vents."
 Maintenance and Cleaning Issue,There is a pipe broken in front of the physics building where there is massive water leakage in the immediate area
-Maintenance and Cleaning Issue,The resolution of the projector in Room 206 is too dim. Most of the power sockets I 2md floor needs to be changed.
-Maintenance and Cleaning Issue,The AC/blowers in the class rooms donot work (often)
-Network Issues,The internet connections are too slow
-Hardware Issues,The projectors during the FYP evaluations donot connect to the students laptops
-Hardware Issues,Notes written on the glass boards installed on the ground floor class rooms are not visible from the back.
-Software Issues,"My university FYP portal does not have proper push notification functionality. I have to login and preview submissions myself , which waste a lot of time. "
-Network Issues,My university Ethernet connection does not work properly and disconnects everytime I try to view lectures.
-Maintenance and Cleaning Issue,"In university Cs Department , 2nd floor Boys washroom , some of the doors does not close properly fix them. "
-Maintenance and Cleaning Issue,"My university parking facility is not good , there is only one parking lot and it is not enough, most of the time it is full and I have to park somewhere else which is risky"
-Maintenance and Cleaning Issue,"My university parking lot does not have any shade , due to which my car becomes very hot in peak summer."
-Maintenance and Cleaning Issue,In CS department the heater is not working in room G-08 fix it.
+Hardware Issue,The resolution of the projector in Room 206 is too dim. Most of the power sockets on 2nd floor needs to be changed.
+Hardware Issue,The AC/blowers in the class rooms donot work (often)
+Network Issue,The internet connections are too slow
+Hardware Issue,The projectors during the FYP evaluations donot connect to the students laptops
+Hardware Issue,Notes written on the glass boards installed on the ground floor class rooms are not visible from the back.
+Software Issue,"My university FYP portal does not have proper push notification functionality. I have to login and preview submissions myself , which waste a lot of time."
+Network Issue,My university Ethernet connection does not work properly and disconnects everytime I try to view lectures.
+Maintenance and Cleaning Issue,"In university Cs Department , 2nd floor Boys washroom , some of the doors does not close properly fix them."
+Hardware Issue,In CS department the heater is not working in room G-08 fix it.
 Maintenance and Cleaning Issue,"In CS department, white board of many rooms are in bad condition , its hard to read from them properly."
-Network Issues,"Many project labs in CS department does not have good speed due to which in my FYP presentation the internet was not working properly and was very slow , wasting committee's time"
-Software Issues,"CUI portal does not have a email functionality for alerts , which makes me loose one assignment as I was not notified when it was published."
-Maintenance and Cleaning Issue,"Main gate which is closer to parking lot of university is closed for students , we have to walk to the second gate which is little bit far, makes me late for classes"
-Maintenance and Cleaning Issue,"Most of the Charging ports in many rooms are not working , teacher's cannot charge their laptops while presenting."
-Maintenance and Cleaning Issue,"In graduate lab 4th floor, there is only one charging socket beside table which is usually occupied"
-Maintenance and Cleaning Issue,"University café  items are highly priced, even common items of same rate in items are expensive , not convinient for student"
+Network Issue,"Many project labs in CS department does not have good speed due to which in my FYP presentation the internet was not working properly and was very slow , wasting committee's time"
+Software Issue,"CUI portal does not have a email functionality for alerts , which makes me loose one assignment as I was not notified when it was published."
+Scheduling and Management Issue,"Main gate which is closer to parking lot of university is closed for students , we have to walk to the second gate which is little bit far, makes me late for classes"
+Hardware Issue,"Most of the Charging ports in many rooms are not working , teacher's cannot charge their laptops while presenting."
+Hardware Issue,"In graduate lab 4th floor, there is only one charging socket beside table which is usually occupied"
+Scheduling and Management Issue,"University café items are highly priced, even common items of same rate in items are expensive , not convenient for student"
 Maintenance and Cleaning Issue,University café does not have a good quality food to eat. Most of things are not fresh
-Network Issues,"Mobile network does not work inside the café , because of that we cannot send documents to printer for printing them."
-Software Issues,"CS department , printing machine is not working fix it."
+Network Issue,"Mobile network does not work inside the café , because of that we cannot send documents to printer for printing them."
+Hardware Issue,"CS department , printing machine is not working fix it."
 Maintenance and Cleaning Issue,There is no soap at the sink in boys washroom 2nd floor.
-Software Issues,The machines in CL-04 lab are not powerful enough for some softwares to run that are important for CS students. 
-Maintenance and Cleaning Issue,Ethernet cables in Project lab 3 are broken replace them immediately 
-Management Issue,There is no proper place to play football in Sports complex
-Maintenance and Cleaning Issue ,Water purifier in CS department does not work and most of the time it is bitter in taste.
-Management Issue,"There is only one tuck shop in CS department, we have to come all the way down from 4th floor to buy something."
-Management Issue,"Teachers of Cs Department put a lot of pressure , in assignment and quizes , due to which students cannot self learn and frustrated most of the time."
-Maintenance and Cleaning Issue,"The Road of G-10/3 street 50  has many pot holes , Car shocks are destroyed."
+Hardware Issue,The machines in CL-04 lab are not powerful enough for some softwares to run that are important for CS students.
+Hardware Issue,Ethernet cables in Project lab 3 are broken replace them immediately
+Scheduling and Management Issue,There is no proper place to play football in Sports complex
+Hardware Issue,Water purifier in CS department does not work and most of the time it is bitter in taste.
+Scheduling and Management Issue,"There is only one tuck shop in CS department, we have to come all the way down from 4th floor to buy something."
+Scheduling and Management Issue,All classes of BEN-2 are at odd times in the evening.
+Scheduling and Management Issue,There are no free slots if we want to arrange makeup class.
+Scheduling and Management Issue,I wanted to improve a course but couldn't due to full clash of timings in all the section of that subject.
+Network Issue,The university internet doesn't work or it is often slow.
+Hardware Issue,The projectors don't get connected to every type of laptop.
+Hardware Issue,The projector often doesn't work in class 304.
+Software Issue,Our student portal isn't strong enough and many students hack it to increase their marks.
+Maintenance and Cleaning Issue,Washrooms are not properly cleaned.
+Maintenance and Cleaning Issue,"In evening time, classes are very filthy."
+Scheduling and Management Issue,Gate 1 is closed which makes us walk more and we are not even informed about the reason
+Maintenance and Cleaning Issue,Washrooms of N-block are very filthy.
+Hardware Issue,Watercoolers of N-block and BBA department don't work properly.
+Hardware Issue,Air conditioners don't work in summer.
+Scheduling and Management Issue,There are no heaters in majority of the classes.
+Hardware Issue,Neither air conditioners work nor there are fans in many classes which makes harder to survive in summers.
+Scheduling and Management Issue,"All the buses arrive either at 7:30 am or 10:30 am, so the students have to come early even if they have classes in evening."
+Scheduling and Management Issue,Buses timings are not beneficial for everyone.
+Scheduling and Management Issue,Food quantity is also very low.
+Scheduling and Management Issue,"Printers are now only in café, so there is a huge line if you want to print out something."
+Maintenance and Cleaning Issue,Food quality is also not good.
+Hardware Issue,"There is a power issue in the room 110, there is no electricity being supplied which means no lights or fans are working. Not even the projector."
+Maintenance and Cleaning Issue,"Bathroom is very dirty on second floor, there is also a water leakage"
+Network Issue,Internet is not working on my university provided laptop
+Software Issue,the portal is stuck when I try to log in to it
+Maintenance and Cleaning Issue,Heaters are not working in room 210.
+Hardware issue,Many presentation rooms don't have hdmi cable. So we caanot connect our laptops to the projectors.
+Scheduling and Management Issue,We are not allowed to use gate 1
+Network Issue,The mongoDB is blocked in the university internet
+Maintenance and Cleaning Issue,The coolers are very dirty
+Hardware Issue,The speakers in the room G08 is not working
+Hardware Issue,Many ethernet cables in project lab are not working.
+Scheduling and Management Issue,There is no proper place for keeping bags in the library.
+Hardware Issue,Cameras in the main gates are not working.
+Maintenance and Cleaning Issue,Chairs in the project lab are not comfortable. We cannot work for long time.
+Hardware Issue,There are no charging ports in the classrooms. We cannot charge our laptops.
+Hardware Issue,PCs in the labs are very slow. They take too much time to open.
+Hardware Issue,Charging ports in the area near teachers rooms are not working.
+Hardware Issue,ATM machines are not working in the student affairs building.
+Network Issue,Wifi is not working in the café
+Scheduling and Management Issue,There are very limited rackets in the sport area
+Scheduling and Management Issue,There is no area for playing football.
+Hardware Issue,Water cooler in ground floor of CS is not working.
+Maintenance and Cleaning Issue,The roof of the washroom in first floor of CS is leaking.
+Hardware Issue,PCs in CL8 don't have softwares that we need for completing our tasks.
+Hardware Issue,PCs in CL5 are outdated. They are very slow.
+Network Issue,Internet is extremely slow and some mobile network signals are also weak in the department due to which students face issues during presentation.
+Hardware Issue,Lift in the department are mostly out of service which cause inconvinince for people.
+Hardware Issue,Heater of room 205 is not working.
+Hardware Issue,Fans in room 108 are not working
+Scheduling and Management Issue,No generator system for the café during loadshedding
+Scheduling and Management Issue,It takes a lot of time to get one thing from café because only one person is their on the counter to take order.
+Scheduling and Management Issue,no printer in any department
+Network Issue,No internet in lab 6 that’s why it's diffcult to work on system and upload assignments
+Maintenance and Cleaning Issue,seats are uncomfortable and in room 105 some seats are broken.
+Hardware Issue,sockets not working in room 110
+Maintenance and Cleaning Issue,pipe broken in 1st floor washroom causing leakage.
+Scheduling and Management Issue,No cameras outside of main entrance of library.
+Maintenance and Cleaning Issue,Half of the Whiteboard is broken of class 112.
+Hardware Issue,class room changed because of projector not working but class attendant don't know that and thinks teacher is not taking the class.
+Scheduling and Management Issue,No hostels for boys available.
+Scheduling and Management Issue,Hostel for girls is so small that only small number of students can avail the facility and rest have to look for hostels outside.
+Hardware Issue,Systems processor are too outdated in most of the labs of department.
+Maintenance and Cleaning Issue,seats in all classrooms needs to be repaired.
+Maintenance and Cleaning Issue,Walls of 112 having drawings on them made by students.
+Scheduling and Management Issue,No auditorium in whole university to have a big event.
+Hardware Issue,Old projectors are too slow mostly not working .
+Maintenance and Cleaning Issue,Some seats are completely broken or screws are hanging which can injur anyone.
+Scheduling and Management Issue,No printer available in department.
+Maintenance and Cleaning Issue,no one to keep check if students are eating meals inside classroom and leavng the mess there.
+Scheduling and Management Issue,no common rooms for students if they want to sit in deparmtent in free time.
+Scheduling and Management Issue,no consulting available for students who are not sure with credit hours they are done with or picking new courses.
+Scheduling and Management Issue,only one teacher available for most core courses of the degree.
+Hardware Issue,mics not working during seminar in hall G-08
+Scheduling and Management Issue,Lab attendants don't have knowledge of softwares needed by students to work on during the semester.
+Scheduling and Management Issue,No football available in sports complex office.
+Hardware Issue,water cooler not working on second floor
+Maintenance and Cleaning Issue,windows not opening in room 206.
+Maintenance and Cleaning Issue,class room 211 was not cleaned before closing .
+Hardware Issue,mounted fans are not working in most of the classes.
+Scheduling and Management Issue,terminal date sheet is not made by keeping in mind the course repeaters and some students have too exams on same day.
+Maintenance and Cleaning Issue,no dustbin in front of tuck shop on ground floor.
+Maintenance and Cleaning Issue,Chairs are broken in many labs. They need to be replaced.
+Network Issue,There are often no internet in the labs so we cannot do our lab assignments.
+Hardware Issue,The AC of cl8 is not working and the lab was very hot during the summer season.
+Network Issue,MongoDb is blocked on ethernet so we cannot connect to mongoDb while using ethernet.
+Hardware Issue,The heating system of G08 is not working.
+Scheduling and Management Issue,There is no football ground. So the students often play in basketball court.
+Scheduling and Management Issue,There are not enough equipment for the students to play
+Maintenance and Cleaning Issue,The water coolers are placed outside of the washrooms. Their places should be changed.
+Hardware Issue,Pcs in the labs are very outdated they need to be updated.
+Software Issue,The cms portal doesn't open on result day due to heavy load.
+Software Issue,The Fyp portal is not user friendly and it is very hard to understand.
+Software Issue,The website is not user-friendly.
+Maintenance and Cleaning Issue,The computer labs are not well-maintained and have outdated equipment
+Software Issue,The learning management system (LMS) is not reliable and often experiences downtime

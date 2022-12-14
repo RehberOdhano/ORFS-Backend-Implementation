@@ -13,7 +13,7 @@ import string
 def trainLSVCModelAndGetPrediction(complaint):
 
     # loading dataset & extracting the two columns
-    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\QRFS-Complaints--Dataset.csv'))
+    df = pd.DataFrame(pd.read_csv(r'F:\FYP (IMPLEMENTATION)\BACKEND\Flask-Server\QRFS-Complaints--Dataset.csv'))
     df = df.loc[:, ["CATEGORY", "COMPLAINT"]]
 
     # Because the computation is time consuming (in terms of CPU), the data was sampled
