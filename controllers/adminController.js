@@ -363,7 +363,7 @@ exports.deleteSpecificUser = (req, res) => {
         if (user.role === "COMPLAINEE") {
           Complainee.findOne({ user_id: user._id })
             .populate("complaints")
-            .exec((err, complaints) => {
+            .exec((err, complainee) => {
               if (err) {
                 res.send({
                   status: 500,
@@ -371,7 +371,7 @@ exports.deleteSpecificUser = (req, res) => {
                   message: err.message,
                 });
               } else {
-                console.log(complaints);
+                console.log(complainee);
                 Complainee.deleteOne({ user_id: user._id }).exec(
                   (err, response) => {
                     if (err) {
@@ -392,8 +392,10 @@ exports.deleteSpecificUser = (req, res) => {
                             message: err.message,
                           });
                         } else {
-                          if (complaints !== null || complaints.length > 0) {
-                            Complaint.deleteMany({ _id: { $in: complaints } })
+                          if (complainee.complaints.length > 0) {
+                            Complaint.deleteMany({
+                              _id: { $in: complainee.complaints },
+                            })
                               .populate("assignedTo")
                               .exec((err, serviceproviders) => {
                                 if (err) {
@@ -408,7 +410,9 @@ exports.deleteSpecificUser = (req, res) => {
                                     { user_id: { $in: { serviceproviders } } },
                                     {
                                       $pull: {
-                                        assignComplaints: { $in: complaints },
+                                        assignComplaints: {
+                                          $in: complainee.complaints,
+                                        },
                                       },
                                     }
                                   ).exec((err, result) => {
