@@ -2048,11 +2048,14 @@ exports.getRecommendedSPs = async (req, res) => {
       body: JSON.stringify({ complaint: req.body.complaint }),
     });
     const categoryTitle = await response.text();
-    console.log("title: " + categoryTitle);
     console.log(`category title: ${categoryTitle}`);
     Category.findOne({ title: categoryTitle }).exec(async (err, category) => {
       if (err) {
         res.status(500).send({ message: err.message });
+      } else if (category === null || !category) {
+        res.status(201).send({
+          message: "CATEGORY WITH THIS TITLE ISN'T CREATED IN THE SYSTEM!",
+        });
       } else {
         const categoryId = category._id;
         Department.findOne({ category: { $in: [categoryId] } });
@@ -2079,9 +2082,10 @@ exports.getRecommendedSPs = async (req, res) => {
               data.employees.length >= 1 &&
               data.employees.length <= 3
             ) {
-              res
-                .status(200)
-                .send({ category: category, serviceproviders: data.employees });
+              res.status(200).send({
+                category: category,
+                serviceproviders: data.employees,
+              });
             } else {
               const employees = data.employees;
               // 1. sorting the employees based on number of assigned complaints
