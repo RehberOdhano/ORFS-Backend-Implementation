@@ -448,7 +448,7 @@ exports.deleteSpecificUser = (req, res) => {
               }
             });
         } else {
-          SP.findOne({ user_id: userID })
+          SP.findOneAndDelete({ user_id: userID })
             .populate("assignedComplaints")
             .exec((err, data) => {
               if (err) {
@@ -459,22 +459,22 @@ exports.deleteSpecificUser = (req, res) => {
                 });
               } else {
                 console.log("here", data);
-                if (data.assignedComplaints.length > 0) {
-                  Complaint.updateMany(
-                    { assignedTo: userID },
-                    { assignedTo: null }
-                  ).exec((err, updatedComplaints) => {
-                    if (err) {
-                      res.send({
-                        status: 500,
-                        success: false,
-                        message: err.message,
-                      });
-                    } else {
-                      Customer.updateOne(
-                        { _id: company_id },
-                        { $pull: { employees: userID } }
-                      ).exec((err, updatedCustomer) => {
+                Customer.updateOne(
+                  { _id: company_id },
+                  { $pull: { employees: userID } }
+                ).exec((err, updatedCustomer) => {
+                  if (err) {
+                    res.send({
+                      status: 500,
+                      success: false,
+                      message: err.message,
+                    });
+                  } else {
+                    if (data.assignedComplaints.length > 0) {
+                      Complaint.updateMany(
+                        { assignedTo: userID },
+                        { assignedTo: null }
+                      ).exec((err, updatedComplaints) => {
                         if (err) {
                           res.send({
                             status: 500,
@@ -489,15 +489,16 @@ exports.deleteSpecificUser = (req, res) => {
                           });
                         }
                       });
+                    } else {
+                      console.log("good");
+                      res.send({
+                        status: 200,
+                        success: true,
+                        message: "USER IS SUCCESSFULLY DELETED!",
+                      });
                     }
-                  });
-                } else {
-                  res.send({
-                    status: 200,
-                    success: true,
-                    message: "USER IS SUCCESSFULLY DELETED!",
-                  });
-                }
+                  }
+                });
               }
             });
         }
