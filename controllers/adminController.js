@@ -448,58 +448,58 @@ exports.deleteSpecificUser = (req, res) => {
               }
             });
         } else {
-          SP.findByIdAndDelete({ user_id: userID }, (err, sp) => {
-            if (err) {
-              res.send({
-                status: 500,
-                success: false,
-                message: err.message,
-              });
-            } else {
-              if (
-                sp.assignedComplaints !== null ||
-                sp.assignedComplaints.length > 0
-              ) {
-                Complaint.updateMany(
-                  { assignedTo: userID },
-                  { assignedTo: null }
-                ).exec((err, updatedComplaints) => {
-                  if (err) {
-                    res.send({
-                      status: 500,
-                      success: false,
-                      message: err.message,
-                    });
-                  } else {
-                    Customer.updateOne(
-                      { _id: company_id },
-                      { $pull: { employees: userID } }
-                    ).exec((err, updatedCustomer) => {
-                      if (err) {
-                        res.send({
-                          status: 500,
-                          success: false,
-                          message: err.message,
-                        });
-                      } else {
-                        res.send({
-                          status: 200,
-                          success: true,
-                          message: "USER IS SUCCESSFULLY DELETED!",
-                        });
-                      }
-                    });
-                  }
+          SP.findOne({ user_id: userID })
+            .populate("assignedComplaints")
+            .exec((err, data) => {
+              if (err) {
+                res.send({
+                  status: 500,
+                  success: false,
+                  message: err.message,
                 });
               } else {
-                res.send({
-                  status: 200,
-                  success: true,
-                  message: "USER IS SUCCESSFULLY DELETED!",
-                });
+                console.log("here", data);
+                if (data.assignedComplaints.length > 0) {
+                  Complaint.updateMany(
+                    { assignedTo: userID },
+                    { assignedTo: null }
+                  ).exec((err, updatedComplaints) => {
+                    if (err) {
+                      res.send({
+                        status: 500,
+                        success: false,
+                        message: err.message,
+                      });
+                    } else {
+                      Customer.updateOne(
+                        { _id: company_id },
+                        { $pull: { employees: userID } }
+                      ).exec((err, updatedCustomer) => {
+                        if (err) {
+                          res.send({
+                            status: 500,
+                            success: false,
+                            message: err.message,
+                          });
+                        } else {
+                          res.send({
+                            status: 200,
+                            success: true,
+                            message: "USER IS SUCCESSFULLY DELETED!",
+                          });
+                        }
+                      });
+                    }
+                  });
+                } else {
+                  res.send({
+                    status: 200,
+                    success: true,
+                    message: "USER IS SUCCESSFULLY DELETED!",
+                  });
+                }
               }
-            }
-          });
+            });
         }
       }
     });
