@@ -48,6 +48,6 @@ superAdminRouter.get(
 
 // KNOWLEDGEBASE ROUTES
 superAdminRouter.post("/add/guide", superAdminController.addGuide);
-superAdminRouter.post("/get/guides", superAdminController.getGuides);
+superAdminRouter.get("/get/guides", superAdminController.getGuides);
 
 module.exports = superAdminRouter;

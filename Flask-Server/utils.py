@@ -26,8 +26,7 @@ def trainLSVCModelAndGetPrediction(complaint):
     df2[['CATEGORY', 'category_id']].drop_duplicates()
 
     # text processing using TfidfVectorizer
-    tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5,
-                            ngram_range=(1, 2), stop_words='english')
+    tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5, ngram_range=(1, 2), stop_words='english')
 
     # We transform each complaint into a vector
     features = tfidf.fit_transform(df2.COMPLAINT).toarray()
