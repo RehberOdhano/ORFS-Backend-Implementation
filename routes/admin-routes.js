@@ -126,7 +126,7 @@ adminRouter.get(
 // adminRouter.post("/create-meeting", adminController.createTwilioMeeting);
 
 // KNOWLEDGEBASE ROUTES
-adminRouter.post("/add/guide", adminController.getGuides);
+adminRouter.get("/get/guides", adminController.getGuides);
 
 // RECOMMENDER SYSTEM ROUTES
 adminRouter.post("/get-recommendations", adminController.getRecommendedSPs);
