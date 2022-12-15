@@ -350,7 +350,7 @@ exports.deleteSpecificUser = (req, res) => {
   try {
     const userID = req.params.id;
     console.log(userID);
-    User.findByIdAndDelete({ _id: userID }, function (err, user) {
+    User.findByIdAndDelete({ _id: userID }, (err, user) => {
       if (err) {
         res.send({
           status: 500,
@@ -448,7 +448,7 @@ exports.deleteSpecificUser = (req, res) => {
               }
             });
         } else {
-          SP.findByIdAndDelete({ user_id: userID }).exec((err, sp) => {
+          SP.findByIdAndDelete({ user_id: userID }, (err, sp) => {
             if (err) {
               res.send({
                 status: 500,
