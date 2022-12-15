@@ -17,7 +17,7 @@ const adminController = require("../controllers/adminController");
 adminRouter.get("/users/all/:id", adminController.getUsersList);
 // adminRouter.get("/users/:id", adminController.getSpecificUser);
 adminRouter.post("/users/add/:id", adminController.addSpecificUser);
-adminRouter.post("/users/multiple/add/:id", adminController.addMultipleUsers);
+adminRouter.post("/users/multiple/add", adminController.addMultipleUsers);
 adminRouter.put("/users/update/:id", adminController.updateSpecificUser);
 adminRouter.put("/users/update/status/:id", adminController.updateUserStatus);
 adminRouter.delete("/users/delete/:id", adminController.deleteSpecificUser);
