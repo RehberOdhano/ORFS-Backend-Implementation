@@ -75,7 +75,7 @@ def processEmail(email):
 
 def checkWhetherEmailSpamOrNot(email):
     # loading the dataset and storing it in a dataframe using pandas
-    df = pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\spam-emails-dataset.csv')
+    df = pd.read_csv(r'F:\FYP (IMPLEMENTATION)\BACKEND\Flask-Server\spam-emails-dataset.csv')
 
     # check for the duplicates and remove them
     df.drop_duplicates(inplace=True)
