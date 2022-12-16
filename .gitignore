@@ -110,3 +110,6 @@ jest-stare
 
 # public foler
 public
+
+# python files
+Flask-Server\__pycache__
