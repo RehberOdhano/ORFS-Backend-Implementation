@@ -1,0 +1,160 @@
+,CATEGORY,COMPLAINT,category_id
+0,Hardware Issue,projector room work projector turn noth happen press power button display,0
+1,Software Issue,univers portal work could upload assign,1
+2,Hardware Issue,mic confer room work mic pick sound plea check,0
+3,Maintenance and Cleaning Issue,water tap bathroom first floor leak plea fix,2
+4,Maintenance and Cleaning Issue,univers campu well maintain lot garbag litter spread across campu,2
+5,Maintenance and Cleaning Issue,seat class broken need replac,2
+6,Hardware Issue,hdmi cabl broken work wire need replac,0
+7,Software Issue,comput lab realli slow requir softwar instal plea fix,1
+8,Maintenance and Cleaning Issue,pathway front rector build destroy need repair alot bump hole pathway,2
+9,Hardware Issue,street light univers campu work even plea fix,0
+10,Maintenance and Cleaning Issue,bathroom urin work plea fix,2
+11,Maintenance and Cleaning Issue,water suppli bathroom second floor,2
+12,Maintenance and Cleaning Issue,tissu paper bathroom third floor,2
+13,Hardware Issue,speaker class room work plea fix,0
+14,Network Issue,internet work univers campu network speed realli slow,3
+15,Hardware Issue,workstat librari work properli keyboard miss key oper system outdat,0
+16,Hardware Issue,ethernet cabl graduat lab work cabl broken,0
+17,Network Issue,comput lab connect network plea fix,3
+18,Hardware Issue,projector room turn middl class give u new projector,0
+19,Maintenance and Cleaning Issue,water suppli drink fountain first floor,2
+20,Hardware Issue,light classroom work plea fix,0
+21,Software Issue,univers cm misbehav show student class see attend student portal,1
+22,Hardware Issue,cpu run bit hot compani provid machin im use overheat die im work intens task,0
+23,Maintenance and Cleaning Issue,classroom extrem dirti dust tabl litter spread across floor plea check,2
+24,Scheduling and Management Issue,classroom avail time slot alloc class plea fix time issu,4
+25,Hardware Issue,univers laptop charg light turn plug wall socket,0
+26,Network Issue,portal slow load tri differ network connect portal alway load minut refresh,3
+27,Hardware Issue,lab pc turn plea come check pc need lab assign,0
+28,Network Issue,internet work lab limit connect shown pc,3
+29,Hardware Issue,charg socket offic work offic locat first floor c depart socket turn visual indic show sign turn either,0
+30,Software Issue,univers portal give respons download attend web portal freez click attend sheet download button,1
+31,Scheduling and Management Issue,class time final yet know time conduct class student concern lack punctual regard time class,4
+32,Network Issue,internet wifi connect network use phone laptop,3
+33,Network Issue,lan cabl project lab work limit connect shown plug laptop internet entir lab cut,3
+34,Scheduling and Management Issue,clash two paper student concern two cours exam schedul timeslot cours offer semest kindli see chang schedul one exam,4
+35,Maintenance and Cleaning Issue,bathroom second floor near faculti room water suppli also door hing broken one stall,2
+36,Hardware Issue,ac function room turn cool come vent,0
+37,Maintenance and Cleaning Issue,pipe broken front physic build massiv water leakag immedi area,2
+38,Hardware Issue,resolut projector room dim power socket floor need chang,0
+39,Hardware Issue,class room donot work often,0
+40,Network Issue,internet connect slow,3
+41,Hardware Issue,projector fyp evalu donot connect student laptop,0
+42,Hardware Issue,note written glass board instal ground floor class room visibl back,0
+43,Software Issue,univers fyp portal proper push notif function login preview submiss wast lot time,1
+44,Network Issue,univers ethernet connect work properli disconnect everytim tri view lectur,3
+45,Maintenance and Cleaning Issue,univers c depart floor boy washroom door close properli fix,2
+46,Hardware Issue,c depart heater work room fix,0
+47,Maintenance and Cleaning Issue,c depart white board mani room bad condit hard read properli,2
+48,Network Issue,mani project lab c depart good speed due fyp present internet work properli slow wast committe time,3
+49,Software Issue,cui portal email function alert make loo one assign notifi publish,1
+50,Scheduling and Management Issue,main gate closer park lot univers close student walk second gate littl bit far make late class,4
+51,Hardware Issue,charg port mani room work teacher charg laptop present,0
+52,Hardware Issue,graduat lab floor one charg socket besid tabl usual occupi,0
+53,Scheduling and Management Issue,univers café item highli price even common item rate item expens conveni student,4
+54,Maintenance and Cleaning Issue,univers café good qualiti food eat thing fresh,2
+55,Network Issue,mobil network work insid café send document printer print,3
+56,Hardware Issue,c depart print machin work fix,0
+57,Maintenance and Cleaning Issue,soap sink boy washroom floor,2
+58,Hardware Issue,machin lab power enough softwar run import c student,0
+59,Hardware Issue,ethernet cabl project lab broken replac immedi,0
+60,Scheduling and Management Issue,proper place play footbal sport complex,4
+61,Hardware Issue,water purifi c depart work time bitter tast,0
+62,Scheduling and Management Issue,one tuck shop c depart come way floor buy someth,4
+63,Scheduling and Management Issue,class odd time even,4
+64,Scheduling and Management Issue,free slot want arrang makeup class,4
+65,Scheduling and Management Issue,want improv cours could due full clash time section subject,4
+66,Network Issue,univers internet work often slow,3
+67,Hardware Issue,projector get connect everi type laptop,0
+68,Hardware Issue,projector often work class,0
+69,Software Issue,student portal strong enough mani student hack increas mark,1
+70,Maintenance and Cleaning Issue,washroom properli clean,2
+71,Maintenance and Cleaning Issue,even time class filthi,2
+72,Scheduling and Management Issue,gate close make u walk even inform reason,4
+73,Maintenance and Cleaning Issue,washroom filthi,2
+74,Hardware Issue,watercool bba depart work properli,0
+75,Hardware Issue,air condition work summer,0
+76,Scheduling and Management Issue,heater major class,4
+77,Hardware Issue,neither air condition work fan mani class make harder surviv summer,0
+78,Scheduling and Management Issue,buse arriv either student come earli even class even,4
+79,Scheduling and Management Issue,buse time benefici everyon,4
+80,Scheduling and Management Issue,food quantiti also low,4
+81,Scheduling and Management Issue,printer café huge line want print someth,4
+82,Maintenance and Cleaning Issue,food qualiti also good,2
+83,Hardware Issue,power issu room electr suppli mean light fan work even projector,0
+84,Maintenance and Cleaning Issue,bathroom dirti second floor also water leakag,2
+85,Network Issue,internet work univers provid laptop,3
+86,Software Issue,portal stuck tri log,1
+87,Maintenance and Cleaning Issue,heater work room,2
+88,Hardware issue,mani present room hdmi cabl caanot connect laptop projector,5
+89,Scheduling and Management Issue,allow use gate,4
+90,Network Issue,mongodb block univers internet,3
+91,Maintenance and Cleaning Issue,cooler dirti,2
+92,Hardware Issue,speaker room work,0
+93,Hardware Issue,mani ethernet cabl project lab work,0
+94,Scheduling and Management Issue,proper place keep bag librari,4
+95,Hardware Issue,camera main gate work,0
+96,Maintenance and Cleaning Issue,chair project lab comfort work long time,2
+97,Hardware Issue,charg port classroom charg laptop,0
+98,Hardware Issue,pc lab slow take much time open,0
+99,Hardware Issue,charg port area near teacher room work,0
+100,Hardware Issue,atm machin work student affair build,0
+101,Network Issue,wifi work café,3
+102,Scheduling and Management Issue,limit racket sport area,4
+103,Scheduling and Management Issue,area play footbal,4
+104,Hardware Issue,water cooler ground floor c work,0
+105,Maintenance and Cleaning Issue,roof washroom first floor c leak,2
+106,Hardware Issue,pc softwar need complet task,0
+107,Hardware Issue,pc outdat slow,0
+108,Network Issue,internet extrem slow mobil network signal also weak depart due student face issu present,3
+109,Hardware Issue,lift depart mostli servic caus inconvininc peopl,0
+110,Hardware Issue,heater room work,0
+111,Hardware Issue,fan room work,0
+112,Scheduling and Management Issue,gener system café loadshed,4
+113,Scheduling and Management Issue,take lot time get one thing café one person counter take order,4
+114,Scheduling and Management Issue,printer depart,4
+115,Network Issue,internet lab diffcult work system upload assign,3
+116,Maintenance and Cleaning Issue,seat uncomfort room seat broken,2
+117,Hardware Issue,socket work room,0
+118,Maintenance and Cleaning Issue,pipe broken floor washroom caus leakag,2
+119,Scheduling and Management Issue,camera outsid main entranc librari,4
+120,Maintenance and Cleaning Issue,half whiteboard broken class,2
+121,Hardware Issue,class room chang projector work class attend know think teacher take class,0
+122,Scheduling and Management Issue,hostel boy avail,4
+123,Scheduling and Management Issue,hostel girl small small number student avail facil rest look hostel outsid,4
+124,Hardware Issue,system processor outdat lab depart,0
+125,Maintenance and Cleaning Issue,seat classroom need repair,2
+126,Maintenance and Cleaning Issue,wall draw made student,2
+127,Scheduling and Management Issue,auditorium whole univers big event,4
+128,Hardware Issue,old projector slow mostli work,0
+129,Maintenance and Cleaning Issue,seat complet broken screw hang injur anyon,2
+130,Scheduling and Management Issue,printer avail depart,4
+131,Maintenance and Cleaning Issue,one keep check student eat meal insid classroom leavng mess,2
+132,Scheduling and Management Issue,common room student want sit deparmt free time,4
+133,Scheduling and Management Issue,consult avail student sure credit hour done pick new cours,4
+134,Scheduling and Management Issue,one teacher avail core cours degre,4
+135,Hardware Issue,mic work seminar hall,0
+136,Scheduling and Management Issue,lab attend knowledg softwar need student work semest,4
+137,Scheduling and Management Issue,footbal avail sport complex offic,4
+138,Hardware Issue,water cooler work second floor,0
+139,Maintenance and Cleaning Issue,window open room,2
+140,Maintenance and Cleaning Issue,class room clean close,2
+141,Hardware Issue,mount fan work class,0
+142,Scheduling and Management Issue,termin date sheet made keep mind cours repeat student exam day,4
+143,Maintenance and Cleaning Issue,dustbin front tuck shop ground floor,2
+144,Maintenance and Cleaning Issue,chair broken mani lab need replac,2
+145,Network Issue,often internet lab lab assign,3
+146,Hardware Issue,ac work lab hot summer season,0
+147,Network Issue,mongodb block ethernet connect mongodb use ethernet,3
+148,Hardware Issue,heat system work,0
+149,Scheduling and Management Issue,footbal ground student often play basketbal court,4
+150,Scheduling and Management Issue,enough equip student play,4
+151,Maintenance and Cleaning Issue,water cooler place outsid washroom place chang,2
+152,Hardware Issue,pc lab outdat need updat,0
+153,Software Issue,cm portal open result day due heavi load,1
+154,Software Issue,fyp portal user friendli hard understand,1
+155,Software Issue,websit,1
+156,Maintenance and Cleaning Issue,comput lab outdat equip,2
+157,Software Issue,learn manag system lm reliabl often experi downtim,1
+158,Maintenance and Cleaning Issue,excav work done outsid c depart sinc quit dig done lawn result overal ugli aesthet walk entranc depart hinder,2

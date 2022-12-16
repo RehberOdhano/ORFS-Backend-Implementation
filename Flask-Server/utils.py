@@ -1,86 +1,83 @@
 # Importing the required modules
 # import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.svm import LinearSVC
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
-from nltk.corpus import stopwords
-import string
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+# from sklearn.metrics import accuracy_score
 
+# Joblib is the replacement of pickle as it is more efficient on objects 
+# that carry large numpy arrays...
+import joblib
 
-def trainLSVCModelAndGetPrediction(complaint):
+from helper import processComplaint, stemSentence, lemmatizedSentence, concat_words, processEmail
 
+# will retrain the model if the dataset change
+def trainModel():
     # loading dataset & extracting the two columns
-    df = pd.DataFrame(pd.read_csv(r'F:\FYP (IMPLEMENTATION)\BACKEND\Flask-Server\QRFS-Complaints--Dataset.csv'))
-    df = df.loc[:, ["CATEGORY", "COMPLAINT"]]
-
-    # Because the computation is time consuming (in terms of CPU), the data was sampled
-    df2 = df.sample(100, random_state=1, replace=True).copy()
+    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\QRFS-Complaints--Dataset.csv'))
 
     # Creating a new column 'category_id' with encoded categories
-    df2['category_id'] = df2['CATEGORY'].factorize()[0]
+    df['category_id'] = df['CATEGORY'].factorize()[0]
 
-    # removing the duplicates
-    df2[['CATEGORY', 'category_id']].drop_duplicates()
-
-    # text processing using TfidfVectorizer
-    tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5, ngram_range=(1, 2), stop_words='english')
-
-    # We transform each complaint into a vector
-    features = tfidf.fit_transform(df2.COMPLAINT).toarray()
-    labels = df2.category_id
-
+    # check for duplicates and removing them
+    df.drop_duplicates(inplace=True)
+    
+    # processing the complaints and storing the processed complaints in the database...
+    for i in range(len(df)):
+        words = processComplaint(df.iloc[i, df.columns.get_loc('COMPLAINT')])
+        # print('words: ', words)
+        processed_complaint = ' '.join(filter(lambda x: x if x is not None else '', words))
+        # print('processed_complaint: ', processed_complaint)
+        stemmedSentence = stemSentence(processed_complaint)
+        # print('stemmed sentence: ', stemmedSentence)
+        lemmatizedWords = lemmatizedSentence(stemmedSentence)
+        # print('lemmatized words: ', lemmatizedWords)
+        complaint = concat_words(lemmatizedWords)
+        df.iloc[i, df.columns.get_loc('COMPLAINT')] = complaint
+        # print('complaint: ', complaint)
+        
+    # saving the processed and cleaned dataset
+    df.to_csv('./complaints_processed.csv')
+    
+    df['COMPLAINT'].isnull().sum()
+    
+    # cleaning the dataframe
+    df = df.dropna()
+    
     # splitting the dataset - 80% training & 20% test datasets respectively...
     # Column ‘Complaint’ will be our X or the input and the Category
     # is out Y or the output.
-    X = df2['COMPLAINT']  # Collection of documents
-    y = df2['CATEGORY']  # Target or the labels we want to predict
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+    X = df['COMPLAINT'] # Collection of complaints
+    y = df['CATEGORY'] # Target or the labels we want to predict
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=0)
+    # X1, X2, y1, y2 = train_test_split(X_train, y_train, test_size=0.20, random_state=0)
 
-    # training the model
-    X_train, X_test, y_train, y_test, indices_train, indices_test = train_test_split(features, labels, df2.index, test_size=0.25, random_state=1)
-    model = LinearSVC()
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
+    # creating a pipeline and training the model
+    clf = Pipeline([
+        ('vectorizer', CountVectorizer()), # step-1: convert the text into a vector
+        ('nb', MultinomialNB()) # step-2: then apply the MultinomialNB
+    ])
+    
+    clf.fit(X_train, y_train)
+    
+    # saving the trained model
+    joblib.dump(clf, "./recommender.joblib")
 
-    # predict the output/target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
-    tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5,ngram_range=(1, 2), stop_words='english')
-    fitted_vectorizer = tfidf.fit(X_train)
-    tfidf_vectorizer_vectors = fitted_vectorizer.transform(X_train)
-    model = LinearSVC().fit(tfidf_vectorizer_vectors, y_train)
-    res = model.predict(fitted_vectorizer.transform([complaint]))
-
+def getPrediction(complaint):
+    # loading the saved model
+    model = joblib.load("./recommender.joblib")
+    
+    res = model.predict([complaint])
     return res
 
-# custom function which will process the text
-def processEmail(email):
-
-    # stop words in english
-    stop_words = set(stopwords.words('english'))
-
-    # step-01: remove punctuation marks
-    noPuncText = [char for char in email if char not in string.punctuation]
-    noPuncText = ''.join(noPuncText)
-
-    # step-02: remove stopwords
-    cleanWords = [word for word in noPuncText.split() if word.lower() not in stop_words]
-
-    # step-03: return a list of clean text words
-    return cleanWords
-
-
-def checkWhetherEmailSpamOrNot(email):
+def trainModelSpamDataset():
     # loading the dataset and storing it in a dataframe using pandas
     df = pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\spam-emails-dataset.csv')
 
     # check for the duplicates and remove them
     df.drop_duplicates(inplace=True)
-
-    # # downloading the stopword packages using nltk
-    # nltk.download('stopwords')
 
     # splitting the samples into 80% train and 20% test datasets respectively... setting the test size to 20%
     X_train, X_test, y_train, y_test = train_test_split(df.Message, df.spam, test_size=0.20, random_state=0)
@@ -96,11 +93,18 @@ def checkWhetherEmailSpamOrNot(email):
     # we converted that text into a matrix and then train the model on that
     # matrix values..
     clf.fit(X_train, y_train)
-
-    # predict
-    result = clf.predict([email])
-
+    
     # measuring the accuracy of the classifier
     accuracy = clf.score(X_test, y_test) * 100
+    
+    print('Accuracy: ', accuracy)
+    
+    # saving the trained model
+    joblib.dump(clf, "./spam-checker.joblib")
 
-    return (result, accuracy)
+
+def checkWhetherEmailSpamOrNot(email):
+    model = joblib.load("./spam-checker.joblib")
+    res = model.predict([email])
+    return res
+
