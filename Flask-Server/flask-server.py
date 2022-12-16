@@ -13,7 +13,7 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     complaint = (request.get_json())['complaint']
-    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\QRFS-Complaints--Dataset.csv'))
+    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\data\QRFS-Complaints--Dataset.csv'))
     rows = df.shape[0]
     if(rows - MAX_COMPLAINTS >= 100):
         print(rows)
@@ -31,7 +31,7 @@ def predict():
 @app.route('/detect/spam/email', methods=['POST'])
 def detectSpamEmail():    
     email = (request.get_json())['email']
-    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\QRFS-Complaints--Dataset.csv'))
+    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\data\spam-emails-dataset.csv'))
     rows = df.shape[0]
 
     if(rows - MAX_EMAILS >= 100):

@@ -15,7 +15,7 @@ from helper import processComplaint, stemSentence, lemmatizedSentence, concat_wo
 # will retrain the model if the dataset change
 def trainModel():
     # loading dataset & extracting the two columns
-    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\QRFS-Complaints--Dataset.csv'))
+    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\data\QRFS-Complaints--Dataset.csv'))
 
     # Creating a new column 'category_id' with encoded categories
     df['category_id'] = df['CATEGORY'].factorize()[0]
@@ -38,7 +38,7 @@ def trainModel():
         # print('complaint: ', complaint)
         
     # saving the processed and cleaned dataset
-    df.to_csv('./complaints_processed.csv')
+    df.to_csv('./data/complaints_processed.csv')
     
     df['COMPLAINT'].isnull().sum()
     
@@ -62,18 +62,18 @@ def trainModel():
     clf.fit(X_train, y_train)
     
     # saving the trained model
-    joblib.dump(clf, "./recommender.joblib")
+    joblib.dump(clf, "./ml-models/recommender.joblib")
 
 def getPrediction(complaint):
     # loading the saved model
-    model = joblib.load("./recommender.joblib")
+    model = joblib.load("./ml-models/recommender.joblib")
     
     res = model.predict([complaint])
     return res
 
 def trainModelSpamDataset():
     # loading the dataset and storing it in a dataframe using pandas
-    df = pd.read_csv(r'F:\FYP (IMPLEMENTATION)\BACKEND\Flask-Server\spam-emails-dataset.csv')
+    df = pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\data\spam-emails-dataset.csv')
 
     # check for the duplicates and remove them
     df.drop_duplicates(inplace=True)
@@ -99,11 +99,11 @@ def trainModelSpamDataset():
     print('Accuracy: ', accuracy)
     
     # saving the trained model
-    joblib.dump(clf, "./spam-checker.joblib")
+    joblib.dump(clf, "./ml-models/spam-checker.joblib")
 
 
 def checkWhetherEmailSpamOrNot(email):
-    model = joblib.load("./spam-checker.joblib")
+    model = joblib.load("./ml-models/spam-checker.joblib")
     res = model.predict([email])
     return res
 
