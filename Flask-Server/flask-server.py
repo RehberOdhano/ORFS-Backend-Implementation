@@ -4,7 +4,7 @@ from utils import getPrediction, checkWhetherEmailSpamOrNot, trainModel, trainMo
 import pandas as pd
 
 MAX_COMPLAINTS = 159
-MAX_EMAILS = 5000
+MAX_EMAILS = 5727
 
 # Flask constructor takes the name of
 # current module (__name__) as argument.

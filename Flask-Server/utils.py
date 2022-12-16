@@ -1,5 +1,4 @@
 # Importing the required modules
-# import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -74,7 +73,7 @@ def getPrediction(complaint):
 
 def trainModelSpamDataset():
     # loading the dataset and storing it in a dataframe using pandas
-    df = pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\spam-emails-dataset.csv')
+    df = pd.read_csv(r'F:\FYP (IMPLEMENTATION)\BACKEND\Flask-Server\spam-emails-dataset.csv')
 
     # check for the duplicates and remove them
     df.drop_duplicates(inplace=True)
