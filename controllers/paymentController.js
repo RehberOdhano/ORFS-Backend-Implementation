@@ -44,7 +44,11 @@ exports.addPaymentIntent = (req, res) => {
                     currency: "usd",
                     payment_method: id,
                 });
-                [livemode, id, object, created].forEach(e => delete paymentIntent[e]);
+                // [livemode, id, object, created].forEach(e => delete paymentIntent[e]);
+                delete paymentIntent.livemode;
+                delete paymentIntent.id;
+                delete paymentIntent.object;
+                delete paymentIntent.created;
                 console.log(paymentIntent);
                 res.json(paymentIntent);
             }
