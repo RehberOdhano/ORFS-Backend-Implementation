@@ -9,7 +9,7 @@ exports.initiatePayment = (req, res) => {
     try {
         const companyId = req.params.id;
         const { subscriptionId, duration } = req.body;
-        const amount = duration === 3 ? 300 : duration === 6 ? 500 : duration === 12 ? 1000 : 0;
+        const amount = duration == 3 ? 300 : duration == 6 ? 500 : duration == 12 ? 1000 : 0;
         const paymentObj = {
             companyId: companyId,
             subscriptionId: subscriptionId,
@@ -32,20 +32,23 @@ exports.initiatePayment = (req, res) => {
 }
 
 // STRIPE: PAYEMENT INTENT
-exports.addPaymentIntent = async(req, res) => {
+exports.addPaymentIntent = (req, res) => {
     try {
-        const { id } = req.body;
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: 100,
-            currency: "usd",
-            payment_method: id,
-        });
-        delete paymentIntent.livemode;
-        delete paymentIntent.id;
-        delete paymentIntent.object;
-        delete paymentIntent.created;
-        console.log(paymentIntent);
-        res.json(paymentIntent);
+        const { id, paymentId } = req.body;
+        Payment.findOne({ _id: paymentId }).exec(async(err, payment) => {
+            if (err) {
+                res.status(500).send({ message: err.message });
+            } else {
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: payment.amount,
+                    currency: "usd",
+                    payment_method: id,
+                });
+                [livemode, id, object, created].forEach(e => delete paymentIntent[e]);
+                console.log(paymentIntent);
+                res.json(paymentIntent);
+            }
+        })
     } catch (err) {
         console.error("ERROR:" + err.message);
     }
