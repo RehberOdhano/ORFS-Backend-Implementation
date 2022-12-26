@@ -18,9 +18,7 @@ exports.initiatePayment = (req, res) => {
             success: false
         }
         console.log("paymentObj: " + paymentObj)
-        Payment.create({
-            paymentObj
-        }, (err, payment) => {
+        Payment.create(paymentObj, (err, payment) => {
             if (err) {
                 res.status(500).send({ message: err.message });
             } else {
