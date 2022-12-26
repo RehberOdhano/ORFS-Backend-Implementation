@@ -8,7 +8,8 @@ const paymentRouter = express.Router();
 const paymentController = require("../controllers/paymentController");
 
 // PAYMENT USING STRIPE - TESTING
-paymentRouter.post("/initiate/payement:id", paymentController.initiatePayment);
+paymentRouter.post("/initiate/payment/:id", paymentController.initiatePayment);
 paymentRouter.post("/paymentIntent", paymentController.addPaymentIntent);
+paymentRouter.put("/confirm/payment", paymentController.confirmPayment);
 
 module.exports = paymentRouter;
