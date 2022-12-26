@@ -55,7 +55,7 @@ exports.addPaymentIntent = async(req, res) => {
 exports.confirmPayment = (req, res) => {
     try {
         const paymentId = req.params.id;
-        Payment.updateOne({ _id: paymentId }).exec((err, payment) => {
+        Payment.updateOne({ _id: paymentId }, { success: true }).exec((err, payment) => {
             if (err) {
                 res.status(500).send({ message: err.message });
             } else {
