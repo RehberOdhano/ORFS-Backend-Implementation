@@ -2,6 +2,7 @@
 from flask import Flask, make_response, request  # for flask server
 from utils import getPrediction, checkWhetherEmailSpamOrNot, trainModel, trainModelSpamDataset
 import pandas as pd
+from decouple import config
 
 MAX_COMPLAINTS = 159
 MAX_EMAILS = 5727
@@ -13,7 +14,8 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     complaint = (request.get_json())['complaint']
-    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\data\QRFS-Complaints--Dataset.csv'))
+    print(config('COMPLAINTS_DATASET_PATH'))
+    df = pd.DataFrame(pd.read_csv(config('COMPLAINTS_DATASET_PATH')))
     rows = df.shape[0]
     if(rows - MAX_COMPLAINTS >= 100):
         print(rows)
@@ -31,7 +33,7 @@ def predict():
 @app.route('/detect/spam/email', methods=['POST'])
 def detectSpamEmail():    
     email = (request.get_json())['email']
-    df = pd.DataFrame(pd.read_csv(r'F:\CUI\QRFS-FYP\Backend Implementation\Flask-Server\data\spam-emails-dataset.csv'))
+    df = pd.DataFrame(pd.read_csv(config('SPAM_EMAILS_DATASET')))
     rows = df.shape[0]
 
     if(rows - MAX_EMAILS >= 100):

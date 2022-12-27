@@ -158,3 +158,227 @@
 156,Maintenance and Cleaning Issue,comput lab outdat equip,2
 157,Software Issue,learn manag system lm reliabl often experi downtim,1
 158,Maintenance and Cleaning Issue,excav work done outsid c depart sinc quit dig done lawn result overal ugli aesthet walk entranc depart hinder,2
+159,Hardware Issue,projector show blank display room vga port work sinc laptop detect connect,0
+160,Hardware Issue,hdmi vga connector project lab broken wire expo sometim work,0
+161,Maintenance and Cleaning Issue,liquid handwash stock staff bathroom second floor ee depart,2
+162,Scheduling and Management Issue,fyp project sheet yet student awar present due,4
+163,Software Issue,lm show zero record student system,1
+164,Software Issue,univers card identif recogn teacher card,1
+165,Maintenance and Cleaning Issue,sever unattend water leak bathroom c depart floor caus lot spillag seep onto stair health hazard,2
+166,Network Issue,net connect staff room academ block,3
+167,Network Issue,wifi signal ground floor lab c depart,3
+168,Hardware Issue,projector bright low room,0
+169,Scheduling and Management Issue,break class prayer lunch,4
+170,Software Issue,pc number boot switch comput stuck load screen,1
+171,Hardware Issue,mous work pc,0
+172,Hardware Issue,haier lab screen hdmi outlet,0
+173,Maintenance and Cleaning Issue,graduat lab work station dusti unpleas work,2
+174,Network Issue,internet speed slow eudorom,3
+175,Network Issue,rang wifi router uni limit,3
+176,Software Issue,cuport token expir quickli sign,1
+177,Software Issue,cuport friendli use often time feel broken,1
+178,Hardware Issue,screen haier lab work power button look broken,0
+179,Software Issue,pc lab requir softwar code given lab,1
+180,Network Issue,wifi work properli fyp evalu week,3
+181,Maintenance and Cleaning Issue,male toilet floor c depart malfunct tap caus loss water,2
+182,Network Issue,net cui bad,3
+183,Network Issue,comput lab floor problem network internet pc,3
+184,Maintenance and Cleaning Issue,campu masjid entranc dirt pile infront,2
+185,Maintenance and Cleaning Issue,ee depart room window open,2
+186,Software Issue,fyp portal let sign,1
+187,Network Issue,cafeteria wifi router instal zero way connect internet cafeteria,3
+188,Maintenance and Cleaning Issue,project lab broken desk near door,2
+189,Maintenance and Cleaning Issue,open manhol way academ block cafeteria,2
+190,Scheduling and Management Issue,clash two class section,4
+191,Scheduling and Management Issue,duster pen avail class third floor c depart,4
+192,Hardware Issue,printer work faculti offic ground floor,0
+193,Hardware Issue,offic landlin work floor faculti c,0
+194,Software Issue,comput infect malwar viru like use cpu intenst,1
+195,Software Issue,softwar comput outdat need updat,1
+196,Software Issue,comput experienc problem compat differ softwar program,1
+197,Software Issue,comput experienc difficulti hardwar driver prevent certain devic function properli,1
+198,Software Issue,comput experienc problem softwar licens activ,1
+199,Software Issue,secur vulner softwar could compromis comput secur,1
+200,Software Issue,softwar infect trojan give hacker access comput person inform,1
+201,Software Issue,softwar infect worm replic spread comput network,1
+202,Software Issue,softwar infect keylogg record keystrok captur sensit inform password,1
+203,Software Issue,softwar infect backdoor allow unauthor access comput,1
+204,Software Issue,softwar infect adwar display unwant intrus advertis,1
+205,Software Issue,softwar infect rootkit give attack access comput low level allow perform malici action,1
+206,Software Issue,softwar experienc issu stabil due bug code,1
+207,Software Issue,softwar allow user access avail tool featur,1
+208,Software Issue,softwar crash freez attempt work larg file project,1
+209,Software Issue,softwar experienc issu render playback visual effect,1
+210,Software Issue,softwar experienc slow render time take long complet render process,1
+211,Software Issue,softwar use avail resourc comput render process caus slow perform,1
+212,Software Issue,oper system experienc compat issu program devic,1
+213,Software Issue,edg browser experienc issu display render web page correctli,1
+214,Software Issue,gpu render photoshop work properli final,1
+215,Software Issue,premier pro timelin sequenc glitch extern dedic gpu,1
+216,Software Issue,softwar experienc issu perform optim virtual realiti applic,1
+217,Software Issue,softwar experienc issu compat graphic driver certain program game,1
+218,Software Issue,frame rate drop significantli caus perform bug game,1
+219,Software Issue,premier pro crash tri import certain type medium file high resolut video audio complex mix channel caus crash bug relat medium file compat,1
+220,Network Issue,wifi busi block work,3
+221,Hardware Issue,comput room m turn,0
+222,Hardware Issue,projector room b work error shown power button press,0
+223,Maintenance and Cleaning Issue,girl common room busi block lot broken podium stack make room congest,2
+224,Scheduling and Management Issue,room b alot makeup class free given time,4
+225,Software Issue,lm portal load,1
+226,Software Issue,ca upload assign onto lm portal submit assign button work,1
+227,Maintenance and Cleaning Issue,room m need clean lot chew bubbl gum stuck bottom tabl,2
+228,Hardware Issue,socket b work,0
+229,Maintenance and Cleaning Issue,curtain b rip let sunlight,2
+230,Maintenance and Cleaning Issue,light girl common room work bulb need chang,2
+231,Network Issue,wifi room b connect comput give limit connect error,3
+232,Scheduling and Management Issue,time slot given class free room plea fix time schedul,4
+233,Hardware Issue,variou comput oc lab m offic,0
+234,Maintenance and Cleaning Issue,bench outsid gymnasium broken,2
+235,Maintenance and Cleaning Issue,one stair toward bite bean café broken chip caus peopl trip fall result injuri plea fix,2
+236,Maintenance and Cleaning Issue,construct outsid innov center caus lot disturb machin nois hinder class,2
+237,Hardware Issue,cpu room m issu give overh error caus restart shut,0
+238,Hardware Issue,one monitor librari back side cubic turn,0
+239,Network Issue,hostel wifi slow disconnect,3
+240,Network Issue,call center dialer indic call connect,3
+241,Software Issue,dialer hang mid call disrupt flow call,1
+242,Hardware Issue,hmdi cabl oc lab broken,0
+243,Maintenance and Cleaning Issue,sink tap broken boy washroom,2
+244,Scheduling and Management Issue,room nc free given time slot,4
+245,Maintenance and Cleaning Issue,nc build intern heat work entir block extrem chilli,2
+246,Hardware Issue,power socket chine lab broken mount come wall intern wire poke wall,0
+247,Network Issue,internet connect room xc ca download lectur lm class,3
+248,Software Issue,lm portal server,1
+249,Maintenance and Cleaning Issue,water water cooler dirti filter need replac,2
+250,Scheduling and Management Issue,room alot class hl alreadi use anoth class,4
+251,Maintenance and Cleaning Issue,bench hl broken space student sit class,2
+252,Hardware Issue,id card scanner main entranc scan card give error even multipl tri,0
+253,Scheduling and Management Issue,fee default show lm even though proof paid fee shown account offic,4
+254,Maintenance and Cleaning Issue,water suppli nc floor boy washroom,2
+255,Maintenance and Cleaning Issue,b build floor boy washroom broken urin,2
+256,Hardware Issue,chine lab screen show screen connect laptop,0
+257,Network Issue,graduat comput connect ethernet cabl faster internet speed need access onlin databas research paper thesi take age load wifi connect slow work speed,3
+258,Maintenance and Cleaning Issue,ac geolog lab seem blow air cool lab rather suffoc lab even,2
+259,Scheduling and Management Issue,intern econom dominick salvator includ trade polici cours avail librari,4
+260,Hardware Issue,vga cabl miss room se,0
+261,Software Issue,b photocopi laptop extrem slow may due excess data store hard disk usag,1
+262,Network Issue,wifi connect avail basement,3
+263,Maintenance and Cleaning Issue,elev usual work class hour,2
+264,Scheduling and Management Issue,delay notic holiday class conduct onlin cancel,4
+265,Scheduling and Management Issue,bell indic given male staff enter exit girl hostel,4
+266,Scheduling and Management Issue,prior notic givien male staff go insid girl hostel long period time repair work,4
+267,Maintenance and Cleaning Issue,mic chine lab pick sound,2
+268,Maintenance and Cleaning Issue,sound come speaker nc faint even volum highest,2
+269,Maintenance and Cleaning Issue,mani tabl xc protrud nail hazerd student,2
+270,Maintenance and Cleaning Issue,wit stand mock court chip break middl,2
+271,Maintenance and Cleaning Issue,auditorium mic turn,2
+272,Scheduling and Management Issue,seminar schedul confilict seminar alot time pm ran littl late alot time seminar suppos start pm delay till pm due,4
+273,Scheduling and Management Issue,boy basketbal practic ran late pm conflict girl gym time start pm sinc gym close pm girl abl use gym,4
+274,Network Issue,internet connect faculti offic past week,3
+275,Maintenance and Cleaning Issue,xc café extrem congest,2
+276,Scheduling and Management Issue,student smoke universti primesi camera blindspot,4
+277,Scheduling and Management Issue,proper food avail cafe,4
+278,Scheduling and Management Issue,stationari store insid univers equip necessari materi,4
+279,Scheduling and Management Issue,enough pc shop insid uni caus overcrowd exam time everi student need print admit slip,4
+280,Maintenance and Cleaning Issue,tissu roll avail insid washroom,2
+281,Hardware Issue,projector ee lab never work,0
+282,Software Issue,pc c lab relev softwar instal,1
+283,Scheduling and Management Issue,netflix youtub block hostel wifi,4
+284,Scheduling and Management Issue,medium lab comput adob suit instal,4
+285,Network Issue,wifi connect process eduroam extrem lengthi usual requir help depart,3
+286,Network Issue,internet error connect ground floor wifi,3
+287,Software Issue,finger print scanner faculti clock scan thumb print,1
+288,Scheduling and Management Issue,bedsid tabl still provid hostel room,4
+289,Scheduling and Management Issue,cupboard lock broken,4
+290,Maintenance and Cleaning Issue,dim light insid room give headach tri studi light,2
+291,Maintenance and Cleaning Issue,fan dimmer affect fan speed,2
+292,Hardware Issue,atm machin number pad key recogn key press,0
+293,Scheduling and Management Issue,atm machin usual cash,4
+294,Maintenance and Cleaning Issue,found hair rice pm café oc basement,2
+295,Maintenance and Cleaning Issue,nc build washroom alway dirti alway water overflow ther ground aw smell,2
+296,Scheduling and Management Issue,main econom cours exam schedul day time,4
+297,Maintenance and Cleaning Issue,mirror xc floor girl washroom crack,2
+298,Maintenance and Cleaning Issue,window room xc glass caus hot air come insid summer cold air winter sever month sinc like plea fix immedi,2
+299,Scheduling and Management Issue,often time bodi avail admin offic,4
+300,Maintenance and Cleaning Issue,girl masjid clean start smell,2
+301,Maintenance and Cleaning Issue,roof girl common room xc build leak,2
+302,Software Issue,mostli lab pc overload excess data make realli slow,1
+303,Hardware Issue,power socket given center round tabl m work wire connect power suppli student unabl use laptop class,0
+304,Maintenance and Cleaning Issue,tap washroom broken cold water suppli,2
+305,Maintenance and Cleaning Issue,muslim shower leak everi washroom,2
+306,Maintenance and Cleaning Issue,geezer hostel girl get sick use cold water,2
+307,Scheduling and Management Issue,singl wash machin avail use,4
+308,Hardware Issue,enough socket avail c lab power student laptop,0
+309,Maintenance and Cleaning Issue,bed room broken,2
+310,Scheduling and Management Issue,class conduct consecut long hour hour minim break extrem exhaust student unabl understand taught,4
+311,Hardware Issue,screen haier lab show display,0
+312,Maintenance and Cleaning Issue,cafe entranc water spillag washroom nearbi,2
+313,Software Issue,softwar crash tri edit manipul certain type medium degre video caus crash bug relat capabl softwar,1
+314,Software Issue,softwar poor user interfac design make softwar difficult navig use,1
+315,Software Issue,softewar lack document support make difficult user troubleshoot issu learn use softwar,1
+316,Software Issue,softwar lack backward compat prevent user access import file use softwar invest,1
+317,Software Issue,softwar bug glitch caus problem perform comput applic lead frustrat user experi,1
+318,Software Issue,softwar limit support certain languag region make difficult user area use softwar effect,1
+319,Software Issue,softwar depend internet connect caus problem user area limit unreli internet access,1
+320,Software Issue,softwar requir high level resourc memori process power caus problem older comput,1
+321,Software Issue,softwar updat patch sometim caus problem properli test compat certain configur,1
+322,Software Issue,softwar inconsist perform slow load time caus problem softwar lead frustrat reduc product,1
+323,Software Issue,window slow boot time poor perform caus problem user product,1
+324,Software Issue,poorli design oper system difficult troubleshoot resolv problem,1
+325,Scheduling and Management Issue,univers sport team experienc problem fund,4
+326,Hardware Issue,hardwar conflict occur multipl devic connect comput caus problem perform stabil,0
+327,Hardware Issue,monitor display black screen,0
+328,Hardware Issue,motherboard experienc problem,0
+329,Hardware Issue,cpu turn give error display,0
+330,Hardware Issue,drive lab comput read disc,0
+331,Hardware Issue,comput make strang nois,0
+332,Hardware Issue,comput crash freez frequent,0
+333,Network Issue,comput lab experienc issu vpn connect,3
+334,Network Issue,univers network experienc problem connect certain area build,3
+335,Software Issue,cyberpunk game artifici intellig npc charact behav errat enemi react expect,1
+336,Software Issue,game use way much virtual memori run extrem poorl older graphic card,1
+337,Network Issue,router network experienc secur risk unsecur public wifi,3
+338,Network Issue,network experienc secur risk unsecur iot devic,3
+339,Network Issue,univers wifi password work credenti provid give incorrect credenti error,3
+340,Network Issue,network experienc secur vulner hardwar softwar,3
+341,Network Issue,system experienc problem secur audit ass,3
+343,Network Issue,univers remot access experienc issu,3
+344,Network Issue,univers network rout experienc issu,3
+345,Network Issue,univers network experienc secur risk unsecur servic applic,3
+346,Scheduling and Management Issue,includ relev elect cours,4
+347,Scheduling and Management Issue,cricket kit must compulsori order play cricket,4
+348,Scheduling and Management Issue,bu fee much student afford bu,4
+351,Scheduling and Management Issue,univers sport team experienc problem equip,4
+352,Scheduling and Management Issue,sport team experienc problem player moral,4
+353,Scheduling and Management Issue,sport team experienc problem fund,4
+354,Scheduling and Management Issue,sport team experienc problem player recruit,4
+355,Scheduling and Management Issue,sport team experienc problem team cohes,4
+356,Maintenance and Cleaning Issue,male toilet floor c depart malfunct tap caus loss water also comput lab floor problem network internet pc,2
+357,Maintenance and Cleaning Issue,room doesnt work light,2
+358,Hardware Issue,classroom ground floor ac work,0
+359,Maintenance and Cleaning Issue,dusti faculti cafe,2
+360,Maintenance and Cleaning Issue,unclean offic ground floor dust gather everywher c depart,2
+361,Scheduling and Management Issue,career expo date clash quizz assign deadlin,4
+362,Software Issue,fyp portal load,1
+363,Scheduling and Management Issue,project present chair seat arrang student stand outsid room hour end,4
+364,Network Issue,mobil signal lab ground floor signal rang extend could instal would help,3
+365,Hardware Issue,charg socket availab project lab ground floor,0
+366,Maintenance and Cleaning Issue,washroom door fell bba depart second floor,2
+367,Software Issue,compani work assign portal work,1
+368,Hardware Issue,coffe machin broken faculti offic,0
+369,Hardware Issue,vend machin stuck work,0
+370,Maintenance and Cleaning Issue,flush second floor bathroom near gate work,2
+371,Maintenance and Cleaning Issue,soap contain empti,2
+372,Maintenance and Cleaning Issue,mop empti bucket floor classroom,2
+373,Network Issue,univers internet block access document site sinc http certif expir,3
+374,Network Issue,printer arent work wifi detect network inspect,3
+375,Hardware Issue,printer paper,0
+376,Scheduling and Management Issue,landlin extens set yet new offic,4
+377,Hardware Issue,compani provid laptop batteri swollen work,0
+378,Network Issue,pc lab internet connect,3
+379,Scheduling and Management Issue,cafe c depart constantli miner water,4
+380,Scheduling and Management Issue,cafe ee depart pen copi,4
+381,Hardware Issue,ram detect pc,0
+382,Hardware Issue,hard drive make loud whizz sound pc,0
+383,Hardware Issue,unlock cpu wo hit clock speed even overclock,0
+384,Hardware Issue,pc malfunct say memori detect system,0
+385,Scheduling and Management Issue,chair avail main cafeteria build,4
