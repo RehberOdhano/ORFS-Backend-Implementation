@@ -113,3 +113,6 @@ public
 
 # python files
 Flask-Server\__pycache__
+
+# redis
+dump.rdb

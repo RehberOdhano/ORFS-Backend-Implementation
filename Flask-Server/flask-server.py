@@ -4,7 +4,7 @@ from utils import getPrediction, checkWhetherEmailSpamOrNot, trainModel, trainMo
 import pandas as pd
 from decouple import config
 
-MAX_COMPLAINTS = 159
+MAX_COMPLAINTS = 500
 MAX_EMAILS = 5727
 
 # Flask constructor takes the name of
@@ -14,8 +14,7 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     complaint = (request.get_json())['complaint']
-    print(config('COMPLAINTS_DATASET_PATH'))
-    df = pd.DataFrame(pd.read_csv(config('COMPLAINTS_DATASET_PATH')))
+    df = pd.DataFrame(pd.read_csv(config('COMPLAINTS_DATASET')))
     rows = df.shape[0]
     if(rows - MAX_COMPLAINTS >= 100):
         print(rows)
